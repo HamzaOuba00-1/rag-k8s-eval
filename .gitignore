@@ -1,0 +1,25 @@
+# Environnement
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Secrets
+.env
+
+# Données volumineuses (se régénèrent via ingestion.py / chunking.py / indexing.py)
+data/raw/
+data/processed/
+data/index/
+*.faiss
+*.index
+
+# Notebooks checkpoints
+.ipynb_checkpoints/
+
+# Résultats bruts volumineux (les réponses complètes + contextes) :
+# on garde les résumés/tableaux (summary_*.json, comparison.*), on exclut
+# les runs bruts (run_*.jsonl, scores_*.csv) qui sont gros et régénérables.
+results/run_*.jsonl
+results/scores_*.csv
+eval/questions_candidates.jsonl

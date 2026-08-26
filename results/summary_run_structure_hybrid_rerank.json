@@ -1,0 +1,10 @@
+{
+  "run_name": "run_structure_hybrid_rerank",
+  "n_factual": 10,
+  "n_impossible": 0,
+  "faithfulness": 0.875,
+  "answer_relevancy": 0.750034455934078,
+  "context_precision": 0.938749999944809,
+  "context_recall": 1.0,
+  "refusal_rate": null
+}

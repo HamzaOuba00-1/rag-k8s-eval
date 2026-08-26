@@ -1,0 +1,2858 @@
+[
+  {
+    "doc_id": "doc_0000",
+    "title": "Concepts",
+    "source_path": "content\\en\\docs\\concepts\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts//",
+    "n_chars": 309
+  },
+  {
+    "doc_id": "doc_0001",
+    "title": "About cgroup v2",
+    "source_path": "content\\en\\docs\\concepts\\architecture\\cgroups.md",
+    "source_url": "https://kubernetes.io/docs/concepts/architecture/cgroups/",
+    "n_chars": 6881
+  },
+  {
+    "doc_id": "doc_0002",
+    "title": "Cloud Controller Manager",
+    "source_path": "content\\en\\docs\\concepts\\architecture\\cloud-controller.md",
+    "source_url": "https://kubernetes.io/docs/concepts/architecture/cloud-controller/",
+    "n_chars": 6605
+  },
+  {
+    "doc_id": "doc_0003",
+    "title": "Communication between Nodes and the Control Plane",
+    "source_path": "content\\en\\docs\\concepts\\architecture\\control-plane-node-communication.md",
+    "source_url": "https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/",
+    "n_chars": 6899
+  },
+  {
+    "doc_id": "doc_0004",
+    "title": "Controllers",
+    "source_path": "content\\en\\docs\\concepts\\architecture\\controller.md",
+    "source_url": "https://kubernetes.io/docs/concepts/architecture/controller/",
+    "n_chars": 7225
+  },
+  {
+    "doc_id": "doc_0005",
+    "title": "Garbage Collection",
+    "source_path": "content\\en\\docs\\concepts\\architecture\\garbage-collection.md",
+    "source_url": "https://kubernetes.io/docs/concepts/architecture/garbage-collection/",
+    "n_chars": 10677
+  },
+  {
+    "doc_id": "doc_0006",
+    "title": "Leases",
+    "source_path": "content\\en\\docs\\concepts\\architecture\\leases.md",
+    "source_url": "https://kubernetes.io/docs/concepts/architecture/leases/",
+    "n_chars": 5824
+  },
+  {
+    "doc_id": "doc_0007",
+    "title": "Mixed Version Proxy",
+    "source_path": "content\\en\\docs\\concepts\\architecture\\mixed-version-proxy.md",
+    "source_url": "https://kubernetes.io/docs/concepts/architecture/mixed-version-proxy/",
+    "n_chars": 7018
+  },
+  {
+    "doc_id": "doc_0008",
+    "title": "Nodes",
+    "source_path": "content\\en\\docs\\concepts\\architecture\\nodes.md",
+    "source_url": "https://kubernetes.io/docs/concepts/architecture/nodes/",
+    "n_chars": 14742
+  },
+  {
+    "doc_id": "doc_0009",
+    "title": "Kubernetes Self-Healing",
+    "source_path": "content\\en\\docs\\concepts\\architecture\\self-healing.md",
+    "source_url": "https://kubernetes.io/docs/concepts/architecture/self-healing/",
+    "n_chars": 2520
+  },
+  {
+    "doc_id": "doc_0010",
+    "title": "Cluster Architecture",
+    "source_path": "content\\en\\docs\\concepts\\architecture\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/architecture//",
+    "n_chars": 9958
+  },
+  {
+    "doc_id": "doc_0011",
+    "title": "Installing Addons",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\addons.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration/addons/",
+    "n_chars": 7538
+  },
+  {
+    "doc_id": "doc_0012",
+    "title": "Admission Webhook Good Practices",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\admission-webhooks-good-practices.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration/admission-webhooks-good-practices/",
+    "n_chars": 30168
+  },
+  {
+    "doc_id": "doc_0014",
+    "title": "Compatibility Version For Kubernetes Control Plane Components",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\compatibility-version.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration/compatibility-version/",
+    "n_chars": 1158
+  },
+  {
+    "doc_id": "doc_0015",
+    "title": "Coordinated Leader Election",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\coordinated-leader-election.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration/coordinated-leader-election/",
+    "n_chars": 5083
+  },
+  {
+    "doc_id": "doc_0016",
+    "title": "Good practices for Dynamic Resource Allocation as a Cluster Admin",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\dra.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration/dra/",
+    "n_chars": 10427
+  },
+  {
+    "doc_id": "doc_0017",
+    "title": "API Priority and Fairness",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\flow-control.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration/flow-control/",
+    "n_chars": 42446
+  },
+  {
+    "doc_id": "doc_0018",
+    "title": "Metrics for Kubernetes Object States",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\kube-state-metrics.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration/kube-state-metrics/",
+    "n_chars": 2355
+  },
+  {
+    "doc_id": "doc_0019",
+    "title": "Logging Architecture",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\logging.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration/logging/",
+    "n_chars": 17241
+  },
+  {
+    "doc_id": "doc_0020",
+    "title": "Cluster Networking",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\networking.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration/networking/",
+    "n_chars": 4402
+  },
+  {
+    "doc_id": "doc_0021",
+    "title": "Node Autoscaling",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\node-autoscaling.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration/node-autoscaling/",
+    "n_chars": 15103
+  },
+  {
+    "doc_id": "doc_0022",
+    "title": "Node Shutdowns",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\node-shutdown.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration/node-shutdown/",
+    "n_chars": 15751
+  },
+  {
+    "doc_id": "doc_0023",
+    "title": "Observability",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\observability.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration/observability/",
+    "n_chars": 9649
+  },
+  {
+    "doc_id": "doc_0024",
+    "title": "Proxies in Kubernetes",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\proxies.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration/proxies/",
+    "n_chars": 2254
+  },
+  {
+    "doc_id": "doc_0025",
+    "title": "Swap memory management",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\swap-memory-management.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration/swap-memory-management/",
+    "n_chars": 20389
+  },
+  {
+    "doc_id": "doc_0026",
+    "title": "System Logs",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\system-logs.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration/system-logs/",
+    "n_chars": 14743
+  },
+  {
+    "doc_id": "doc_0027",
+    "title": "Metrics For Kubernetes System Components",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\system-metrics.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration/system-metrics/",
+    "n_chars": 14961
+  },
+  {
+    "doc_id": "doc_0028",
+    "title": "Traces For Kubernetes System Components",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\system-traces.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration/system-traces/",
+    "n_chars": 6095
+  },
+  {
+    "doc_id": "doc_0029",
+    "title": "Cluster Administration",
+    "source_path": "content\\en\\docs\\concepts\\cluster-administration\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/cluster-administration//",
+    "n_chars": 4206
+  },
+  {
+    "doc_id": "doc_0030",
+    "title": "ConfigMaps",
+    "source_path": "content\\en\\docs\\concepts\\configuration\\configmap.md",
+    "source_url": "https://kubernetes.io/docs/concepts/configuration/configmap/",
+    "n_chars": 12818
+  },
+  {
+    "doc_id": "doc_0031",
+    "title": "Resource Management for Pods and Containers",
+    "source_path": "content\\en\\docs\\concepts\\configuration\\manage-resources-containers.md",
+    "source_url": "https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+    "n_chars": 33099
+  },
+  {
+    "doc_id": "doc_0032",
+    "title": "Organizing Cluster Access Using kubeconfig Files",
+    "source_path": "content\\en\\docs\\concepts\\configuration\\organize-cluster-access-kubeconfig.md",
+    "source_url": "https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/",
+    "n_chars": 6798
+  },
+  {
+    "doc_id": "doc_0033",
+    "title": "Secrets",
+    "source_path": "content\\en\\docs\\concepts\\configuration\\secret.md",
+    "source_url": "https://kubernetes.io/docs/concepts/configuration/secret/",
+    "n_chars": 32624
+  },
+  {
+    "doc_id": "doc_0034",
+    "title": "Resource Management for Windows nodes",
+    "source_path": "content\\en\\docs\\concepts\\configuration\\windows-resource-management.md",
+    "source_url": "https://kubernetes.io/docs/concepts/configuration/windows-resource-management/",
+    "n_chars": 3669
+  },
+  {
+    "doc_id": "doc_0036",
+    "title": "Container Environment",
+    "source_path": "content\\en\\docs\\concepts\\containers\\container-environment.md",
+    "source_url": "https://kubernetes.io/docs/concepts/containers/container-environment/",
+    "n_chars": 2106
+  },
+  {
+    "doc_id": "doc_0037",
+    "title": "Container Lifecycle Hooks",
+    "source_path": "content\\en\\docs\\concepts\\containers\\container-lifecycle-hooks.md",
+    "source_url": "https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/",
+    "n_chars": 7733
+  },
+  {
+    "doc_id": "doc_0038",
+    "title": "Container Runtime Interface (CRI)",
+    "source_path": "content\\en\\docs\\concepts\\containers\\cri.md",
+    "source_url": "https://kubernetes.io/docs/concepts/containers/cri/",
+    "n_chars": 2873
+  },
+  {
+    "doc_id": "doc_0039",
+    "title": "Images",
+    "source_path": "content\\en\\docs\\concepts\\containers\\images.md",
+    "source_url": "https://kubernetes.io/docs/concepts/containers/images/",
+    "n_chars": 28747
+  },
+  {
+    "doc_id": "doc_0040",
+    "title": "Runtime Class",
+    "source_path": "content\\en\\docs\\concepts\\containers\\runtime-class.md",
+    "source_url": "https://kubernetes.io/docs/concepts/containers/runtime-class/",
+    "n_chars": 7119
+  },
+  {
+    "doc_id": "doc_0041",
+    "title": "Containers",
+    "source_path": "content\\en\\docs\\concepts\\containers\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/containers//",
+    "n_chars": 2028
+  },
+  {
+    "doc_id": "doc_0042",
+    "title": "Operator pattern",
+    "source_path": "content\\en\\docs\\concepts\\extend-kubernetes\\operator.md",
+    "source_url": "https://kubernetes.io/docs/concepts/extend-kubernetes/operator/",
+    "n_chars": 6641
+  },
+  {
+    "doc_id": "doc_0043",
+    "title": "Extending Kubernetes",
+    "source_path": "content\\en\\docs\\concepts\\extend-kubernetes\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/extend-kubernetes//",
+    "n_chars": 17576
+  },
+  {
+    "doc_id": "doc_0044",
+    "title": "Kubernetes Components",
+    "source_path": "content\\en\\docs\\concepts\\overview\\components.md",
+    "source_url": "https://kubernetes.io/docs/concepts/overview/components/",
+    "n_chars": 3067
+  },
+  {
+    "doc_id": "doc_0045",
+    "title": "The kubectl command-line tool",
+    "source_path": "content\\en\\docs\\concepts\\overview\\kubectl.md",
+    "source_url": "https://kubernetes.io/docs/concepts/overview/kubectl/",
+    "n_chars": 5132
+  },
+  {
+    "doc_id": "doc_0046",
+    "title": "The Kubernetes API",
+    "source_path": "content\\en\\docs\\concepts\\overview\\kubernetes-api.md",
+    "source_url": "https://kubernetes.io/docs/concepts/overview/kubernetes-api/",
+    "n_chars": 14989
+  },
+  {
+    "doc_id": "doc_0047",
+    "title": "Overview",
+    "source_path": "content\\en\\docs\\concepts\\overview\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/overview//",
+    "n_chars": 9945
+  },
+  {
+    "doc_id": "doc_0048",
+    "title": "Limit Ranges",
+    "source_path": "content\\en\\docs\\concepts\\policy\\limit-range.md",
+    "source_url": "https://kubernetes.io/docs/concepts/policy/limit-range/",
+    "n_chars": 6771
+  },
+  {
+    "doc_id": "doc_0049",
+    "title": "Process ID Limits And Reservations",
+    "source_path": "content\\en\\docs\\concepts\\policy\\pid-limiting.md",
+    "source_url": "https://kubernetes.io/docs/concepts/policy/pid-limiting/",
+    "n_chars": 5687
+  },
+  {
+    "doc_id": "doc_0050",
+    "title": "Resource Quotas",
+    "source_path": "content\\en\\docs\\concepts\\policy\\resource-quotas.md",
+    "source_url": "https://kubernetes.io/docs/concepts/policy/resource-quotas/",
+    "n_chars": 30926
+  },
+  {
+    "doc_id": "doc_0051",
+    "title": "Policies",
+    "source_path": "content\\en\\docs\\concepts\\policy\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/policy//",
+    "n_chars": 3848
+  },
+  {
+    "doc_id": "doc_0052",
+    "title": "API-initiated Eviction",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\api-eviction.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/api-eviction/",
+    "n_chars": 4961
+  },
+  {
+    "doc_id": "doc_0053",
+    "title": "Assigning Pods to Nodes",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\assign-pod-node.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/",
+    "n_chars": 32460
+  },
+  {
+    "doc_id": "doc_0054",
+    "title": "Dynamic Resource Allocation",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\dynamic-resource-allocation.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/",
+    "n_chars": 72919
+  },
+  {
+    "doc_id": "doc_0055",
+    "title": "Gang Scheduling",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\gang-scheduling.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/gang-scheduling/",
+    "n_chars": 2563
+  },
+  {
+    "doc_id": "doc_0056",
+    "title": "Kubernetes Scheduler",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\kube-scheduler.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/",
+    "n_chars": 4845
+  },
+  {
+    "doc_id": "doc_0057",
+    "title": "Node Declared Features",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\node-declared-features.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/node-declared-features/",
+    "n_chars": 2709
+  },
+  {
+    "doc_id": "doc_0058",
+    "title": "Node-pressure Eviction",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\node-pressure-eviction.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/node-pressure-eviction/",
+    "n_chars": 28129
+  },
+  {
+    "doc_id": "doc_0059",
+    "title": "Pod Overhead",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\pod-overhead.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/pod-overhead/",
+    "n_chars": 7233
+  },
+  {
+    "doc_id": "doc_0060",
+    "title": "Pod Priority and Preemption",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\pod-priority-preemption.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/",
+    "n_chars": 17258
+  },
+  {
+    "doc_id": "doc_0061",
+    "title": "Pod Scheduling Readiness",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\pod-scheduling-readiness.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/pod-scheduling-readiness/",
+    "n_chars": 5009
+  },
+  {
+    "doc_id": "doc_0062",
+    "title": "PodGroup Scheduling",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\podgroup-scheduling.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/podgroup-scheduling/",
+    "n_chars": 8811
+  },
+  {
+    "doc_id": "doc_0063",
+    "title": "Resource Bin Packing",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\resource-bin-packing.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/resource-bin-packing/",
+    "n_chars": 8531
+  },
+  {
+    "doc_id": "doc_0064",
+    "title": "Scheduler Performance Tuning",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\scheduler-perf-tuning.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/scheduler-perf-tuning/",
+    "n_chars": 8452
+  },
+  {
+    "doc_id": "doc_0065",
+    "title": "Scheduling Framework",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\scheduling-framework.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/scheduling-framework/",
+    "n_chars": 11737
+  },
+  {
+    "doc_id": "doc_0066",
+    "title": "Taints and Tolerations",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\taint-and-toleration.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/",
+    "n_chars": 18728
+  },
+  {
+    "doc_id": "doc_0067",
+    "title": "Topology-Aware Workload Scheduling",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\topology-aware-scheduling.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/topology-aware-scheduling/",
+    "n_chars": 3378
+  },
+  {
+    "doc_id": "doc_0068",
+    "title": "Pod Topology Spread Constraints",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\topology-spread-constraints.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/",
+    "n_chars": 28939
+  },
+  {
+    "doc_id": "doc_0069",
+    "title": "Workload-Aware Preemption",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\workload-aware-preemption.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction/workload-aware-preemption/",
+    "n_chars": 3280
+  },
+  {
+    "doc_id": "doc_0070",
+    "title": "Scheduling, Preemption and Eviction",
+    "source_path": "content\\en\\docs\\concepts\\scheduling-eviction\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/scheduling-eviction//",
+    "n_chars": 2245
+  },
+  {
+    "doc_id": "doc_0071",
+    "title": "Kubernetes API Server Bypass Risks",
+    "source_path": "content\\en\\docs\\concepts\\security\\api-server-bypass-risks.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/api-server-bypass-risks/",
+    "n_chars": 8588
+  },
+  {
+    "doc_id": "doc_0072",
+    "title": "Application Security Checklist",
+    "source_path": "content\\en\\docs\\concepts\\security\\application-security-checklist.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/application-security-checklist/",
+    "n_chars": 6364
+  },
+  {
+    "doc_id": "doc_0073",
+    "title": "Cloud Native Security and Kubernetes",
+    "source_path": "content\\en\\docs\\concepts\\security\\cloud-native-security.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/cloud-native-security/",
+    "n_chars": 11459
+  },
+  {
+    "doc_id": "doc_0074",
+    "title": "Controlling Access to the Kubernetes API",
+    "source_path": "content\\en\\docs\\concepts\\security\\controlling-access.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/controlling-access/",
+    "n_chars": 8247
+  },
+  {
+    "doc_id": "doc_0075",
+    "title": "Linux kernel security constraints for Pods and containers",
+    "source_path": "content\\en\\docs\\concepts\\security\\linux-kernel-security-constraints.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/linux-kernel-security-constraints/",
+    "n_chars": 14594
+  },
+  {
+    "doc_id": "doc_0076",
+    "title": "Security For Linux Nodes",
+    "source_path": "content\\en\\docs\\concepts\\security\\linux-security.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/linux-security/",
+    "n_chars": 968
+  },
+  {
+    "doc_id": "doc_0077",
+    "title": "Multi-tenancy",
+    "source_path": "content\\en\\docs\\concepts\\security\\multi-tenancy.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/multi-tenancy/",
+    "n_chars": 29426
+  },
+  {
+    "doc_id": "doc_0078",
+    "title": "Pod Security Admission",
+    "source_path": "content\\en\\docs\\concepts\\security\\pod-security-admission.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/pod-security-admission/",
+    "n_chars": 7412
+  },
+  {
+    "doc_id": "doc_0079",
+    "title": "Pod Security Policies",
+    "source_path": "content\\en\\docs\\concepts\\security\\pod-security-policy.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/pod-security-policy/",
+    "n_chars": 992
+  },
+  {
+    "doc_id": "doc_0080",
+    "title": "Pod Security Standards",
+    "source_path": "content\\en\\docs\\concepts\\security\\pod-security-standards.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/pod-security-standards/",
+    "n_chars": 24749
+  },
+  {
+    "doc_id": "doc_0081",
+    "title": "Role Based Access Control Good Practices",
+    "source_path": "content\\en\\docs\\concepts\\security\\rbac-good-practices.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/rbac-good-practices/",
+    "n_chars": 11945
+  },
+  {
+    "doc_id": "doc_0082",
+    "title": "Good practices for Kubernetes Secrets",
+    "source_path": "content\\en\\docs\\concepts\\security\\secrets-good-practices.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/secrets-good-practices/",
+    "n_chars": 4996
+  },
+  {
+    "doc_id": "doc_0083",
+    "title": "Security Checklist",
+    "source_path": "content\\en\\docs\\concepts\\security\\security-checklist.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/security-checklist/",
+    "n_chars": 22834
+  },
+  {
+    "doc_id": "doc_0084",
+    "title": "Service Accounts",
+    "source_path": "content\\en\\docs\\concepts\\security\\service-accounts.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/service-accounts/",
+    "n_chars": 18247
+  },
+  {
+    "doc_id": "doc_0085",
+    "title": "Security For Windows Nodes",
+    "source_path": "content\\en\\docs\\concepts\\security\\windows-security.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/windows-security/",
+    "n_chars": 2425
+  },
+  {
+    "doc_id": "doc_0086",
+    "title": "Security",
+    "source_path": "content\\en\\docs\\concepts\\security\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security//",
+    "n_chars": 6241
+  },
+  {
+    "doc_id": "doc_0087",
+    "title": "Service ClusterIP allocation",
+    "source_path": "content\\en\\docs\\concepts\\services-networking\\cluster-ip-allocation.md",
+    "source_url": "https://kubernetes.io/docs/concepts/services-networking/cluster-ip-allocation/",
+    "n_chars": 4583
+  },
+  {
+    "doc_id": "doc_0088",
+    "title": "DNS for Services and Pods",
+    "source_path": "content\\en\\docs\\concepts\\services-networking\\dns-pod-service.md",
+    "source_url": "https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/",
+    "n_chars": 14927
+  },
+  {
+    "doc_id": "doc_0089",
+    "title": "IPv4/IPv6 dual-stack",
+    "source_path": "content\\en\\docs\\concepts\\services-networking\\dual-stack.md",
+    "source_url": "https://kubernetes.io/docs/concepts/services-networking/dual-stack/",
+    "n_chars": 12112
+  },
+  {
+    "doc_id": "doc_0090",
+    "title": "EndpointSlices",
+    "source_path": "content\\en\\docs\\concepts\\services-networking\\endpoint-slices.md",
+    "source_url": "https://kubernetes.io/docs/concepts/services-networking/endpoint-slices/",
+    "n_chars": 9421
+  },
+  {
+    "doc_id": "doc_0091",
+    "title": "Gateway API",
+    "source_path": "content\\en\\docs\\concepts\\services-networking\\gateway.md",
+    "source_url": "https://kubernetes.io/docs/concepts/services-networking/gateway/",
+    "n_chars": 12090
+  },
+  {
+    "doc_id": "doc_0092",
+    "title": "Ingress Controllers",
+    "source_path": "content\\en\\docs\\concepts\\services-networking\\ingress-controllers.md",
+    "source_url": "https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/",
+    "n_chars": 8203
+  },
+  {
+    "doc_id": "doc_0093",
+    "title": "Ingress",
+    "source_path": "content\\en\\docs\\concepts\\services-networking\\ingress.md",
+    "source_url": "https://kubernetes.io/docs/concepts/services-networking/ingress/",
+    "n_chars": 28522
+  },
+  {
+    "doc_id": "doc_0094",
+    "title": "Network Policies",
+    "source_path": "content\\en\\docs\\concepts\\services-networking\\network-policies.md",
+    "source_url": "https://kubernetes.io/docs/concepts/services-networking/network-policies/",
+    "n_chars": 22569
+  },
+  {
+    "doc_id": "doc_0095",
+    "title": "Service Internal Traffic Policy",
+    "source_path": "content\\en\\docs\\concepts\\services-networking\\service-traffic-policy.md",
+    "source_url": "https://kubernetes.io/docs/concepts/services-networking/service-traffic-policy/",
+    "n_chars": 1915
+  },
+  {
+    "doc_id": "doc_0096",
+    "title": "Service",
+    "source_path": "content\\en\\docs\\concepts\\services-networking\\service.md",
+    "source_url": "https://kubernetes.io/docs/concepts/services-networking/service/",
+    "n_chars": 44700
+  },
+  {
+    "doc_id": "doc_0097",
+    "title": "Topology Aware Routing",
+    "source_path": "content\\en\\docs\\concepts\\services-networking\\topology-aware-routing.md",
+    "source_url": "https://kubernetes.io/docs/concepts/services-networking/topology-aware-routing/",
+    "n_chars": 8339
+  },
+  {
+    "doc_id": "doc_0098",
+    "title": "Networking on Windows",
+    "source_path": "content\\en\\docs\\concepts\\services-networking\\windows-networking.md",
+    "source_url": "https://kubernetes.io/docs/concepts/services-networking/windows-networking/",
+    "n_chars": 12724
+  },
+  {
+    "doc_id": "doc_0099",
+    "title": "Services, Load Balancing, and Networking",
+    "source_path": "content\\en\\docs\\concepts\\services-networking\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/services-networking//",
+    "n_chars": 5638
+  },
+  {
+    "doc_id": "doc_0100",
+    "title": "Dynamic Volume Provisioning",
+    "source_path": "content\\en\\docs\\concepts\\storage\\dynamic-provisioning.md",
+    "source_url": "https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/",
+    "n_chars": 4994
+  },
+  {
+    "doc_id": "doc_0101",
+    "title": "Local ephemeral storage",
+    "source_path": "content\\en\\docs\\concepts\\storage\\ephemeral-storage.md",
+    "source_url": "https://kubernetes.io/docs/concepts/storage/ephemeral-storage/",
+    "n_chars": 12718
+  },
+  {
+    "doc_id": "doc_0102",
+    "title": "Ephemeral Volumes",
+    "source_path": "content\\en\\docs\\concepts\\storage\\ephemeral-volumes.md",
+    "source_url": "https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/",
+    "n_chars": 11486
+  },
+  {
+    "doc_id": "doc_0103",
+    "title": "Persistent Volumes",
+    "source_path": "content\\en\\docs\\concepts\\storage\\persistent-volumes.md",
+    "source_url": "https://kubernetes.io/docs/concepts/storage/persistent-volumes/",
+    "n_chars": 50775
+  },
+  {
+    "doc_id": "doc_0104",
+    "title": "Projected Volumes",
+    "source_path": "content\\en\\docs\\concepts\\storage\\projected-volumes.md",
+    "source_url": "https://kubernetes.io/docs/concepts/storage/projected-volumes/",
+    "n_chars": 12807
+  },
+  {
+    "doc_id": "doc_0105",
+    "title": "Storage Capacity",
+    "source_path": "content\\en\\docs\\concepts\\storage\\storage-capacity.md",
+    "source_url": "https://kubernetes.io/docs/concepts/storage/storage-capacity/",
+    "n_chars": 4621
+  },
+  {
+    "doc_id": "doc_0106",
+    "title": "Storage Classes",
+    "source_path": "content\\en\\docs\\concepts\\storage\\storage-classes.md",
+    "source_url": "https://kubernetes.io/docs/concepts/storage/storage-classes/",
+    "n_chars": 23079
+  },
+  {
+    "doc_id": "doc_0107",
+    "title": "Node-specific Volume Limits",
+    "source_path": "content\\en\\docs\\concepts\\storage\\storage-limits.md",
+    "source_url": "https://kubernetes.io/docs/concepts/storage/storage-limits/",
+    "n_chars": 6059
+  },
+  {
+    "doc_id": "doc_0108",
+    "title": "Volume Attributes Classes",
+    "source_path": "content\\en\\docs\\concepts\\storage\\volume-attributes-classes.md",
+    "source_url": "https://kubernetes.io/docs/concepts/storage/volume-attributes-classes/",
+    "n_chars": 4633
+  },
+  {
+    "doc_id": "doc_0109",
+    "title": "Volume Health Monitoring",
+    "source_path": "content\\en\\docs\\concepts\\storage\\volume-health-monitoring.md",
+    "source_url": "https://kubernetes.io/docs/concepts/storage/volume-health-monitoring/",
+    "n_chars": 2465
+  },
+  {
+    "doc_id": "doc_0110",
+    "title": "Volume Populators and Data Sources",
+    "source_path": "content\\en\\docs\\concepts\\storage\\volume-populators-and-data-sources.md",
+    "source_url": "https://kubernetes.io/docs/concepts/storage/volume-populators-and-data-sources/",
+    "n_chars": 7703
+  },
+  {
+    "doc_id": "doc_0111",
+    "title": "CSI Volume Cloning",
+    "source_path": "content\\en\\docs\\concepts\\storage\\volume-pvc-datasource.md",
+    "source_url": "https://kubernetes.io/docs/concepts/storage/volume-pvc-datasource/",
+    "n_chars": 3049
+  },
+  {
+    "doc_id": "doc_0112",
+    "title": "Volume Snapshot Classes",
+    "source_path": "content\\en\\docs\\concepts\\storage\\volume-snapshot-classes.md",
+    "source_url": "https://kubernetes.io/docs/concepts/storage/volume-snapshot-classes/",
+    "n_chars": 3577
+  },
+  {
+    "doc_id": "doc_0113",
+    "title": "Volume Snapshots",
+    "source_path": "content\\en\\docs\\concepts\\storage\\volume-snapshots.md",
+    "source_url": "https://kubernetes.io/docs/concepts/storage/volume-snapshots/",
+    "n_chars": 10675
+  },
+  {
+    "doc_id": "doc_0114",
+    "title": "Volumes",
+    "source_path": "content\\en\\docs\\concepts\\storage\\volumes.md",
+    "source_url": "https://kubernetes.io/docs/concepts/storage/volumes/",
+    "n_chars": 49922
+  },
+  {
+    "doc_id": "doc_0115",
+    "title": "Windows Storage",
+    "source_path": "content\\en\\docs\\concepts\\storage\\windows-storage.md",
+    "source_url": "https://kubernetes.io/docs/concepts/storage/windows-storage/",
+    "n_chars": 2840
+  },
+  {
+    "doc_id": "doc_0117",
+    "title": "Windows containers in Kubernetes",
+    "source_path": "content\\en\\docs\\concepts\\windows\\intro.md",
+    "source_url": "https://kubernetes.io/docs/concepts/windows/intro/",
+    "n_chars": 21689
+  },
+  {
+    "doc_id": "doc_0118",
+    "title": "Guide for Running Windows Containers in Kubernetes",
+    "source_path": "content\\en\\docs\\concepts\\windows\\user-guide.md",
+    "source_url": "https://kubernetes.io/docs/concepts/windows/user-guide/",
+    "n_chars": 12975
+  },
+  {
+    "doc_id": "doc_0119",
+    "title": "Windows in Kubernetes",
+    "source_path": "content\\en\\docs\\concepts\\windows\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/windows//",
+    "n_chars": 1473
+  },
+  {
+    "doc_id": "doc_0120",
+    "title": "Autoscaling Workloads",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\autoscaling.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/autoscaling/",
+    "n_chars": 6337
+  },
+  {
+    "doc_id": "doc_0121",
+    "title": "Managing Workloads",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\management.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/management/",
+    "n_chars": 15714
+  },
+  {
+    "doc_id": "doc_0122",
+    "title": "Resource managers",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\resource-managers.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/resource-managers/",
+    "n_chars": 27473
+  },
+  {
+    "doc_id": "doc_0123",
+    "title": "Workloads",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads//",
+    "n_chars": 6101
+  },
+  {
+    "doc_id": "doc_0124",
+    "title": "Kubernetes API Aggregation Layer",
+    "source_path": "content\\en\\docs\\concepts\\extend-kubernetes\\api-extension\\apiserver-aggregation.md",
+    "source_url": "https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/apiserver-aggregation/",
+    "n_chars": 2669
+  },
+  {
+    "doc_id": "doc_0125",
+    "title": "Custom Resources",
+    "source_path": "content\\en\\docs\\concepts\\extend-kubernetes\\api-extension\\custom-resources.md",
+    "source_url": "https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/",
+    "n_chars": 21572
+  },
+  {
+    "doc_id": "doc_0126",
+    "title": "Extending the Kubernetes API",
+    "source_path": "content\\en\\docs\\concepts\\extend-kubernetes\\api-extension\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension//",
+    "n_chars": 1040
+  },
+  {
+    "doc_id": "doc_0127",
+    "title": "Device Plugins",
+    "source_path": "content\\en\\docs\\concepts\\extend-kubernetes\\compute-storage-net\\device-plugins.md",
+    "source_url": "https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/",
+    "n_chars": 23835
+  },
+  {
+    "doc_id": "doc_0128",
+    "title": "Network Plugins",
+    "source_path": "content\\en\\docs\\concepts\\extend-kubernetes\\compute-storage-net\\network-plugins.md",
+    "source_url": "https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/",
+    "n_chars": 5703
+  },
+  {
+    "doc_id": "doc_0129",
+    "title": "Compute, Storage, and Networking Extensions",
+    "source_path": "content\\en\\docs\\concepts\\extend-kubernetes\\compute-storage-net\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net//",
+    "n_chars": 2251
+  },
+  {
+    "doc_id": "doc_0130",
+    "title": "Annotations",
+    "source_path": "content\\en\\docs\\concepts\\overview\\working-with-objects\\annotations.md",
+    "source_url": "https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/",
+    "n_chars": 4393
+  },
+  {
+    "doc_id": "doc_0131",
+    "title": "Recommended Labels",
+    "source_path": "content\\en\\docs\\concepts\\overview\\working-with-objects\\common-labels.md",
+    "source_url": "https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/",
+    "n_chars": 5890
+  },
+  {
+    "doc_id": "doc_0132",
+    "title": "Field Selectors",
+    "source_path": "content\\en\\docs\\concepts\\overview\\working-with-objects\\field-selectors.md",
+    "source_url": "https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/",
+    "n_chars": 6657
+  },
+  {
+    "doc_id": "doc_0133",
+    "title": "Finalizers",
+    "source_path": "content\\en\\docs\\concepts\\overview\\working-with-objects\\finalizers.md",
+    "source_url": "https://kubernetes.io/docs/concepts/overview/working-with-objects/finalizers/",
+    "n_chars": 5104
+  },
+  {
+    "doc_id": "doc_0134",
+    "title": "Labels and Selectors",
+    "source_path": "content\\en\\docs\\concepts\\overview\\working-with-objects\\labels.md",
+    "source_url": "https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/",
+    "n_chars": 15417
+  },
+  {
+    "doc_id": "doc_0135",
+    "title": "Object Names and IDs",
+    "source_path": "content\\en\\docs\\concepts\\overview\\working-with-objects\\names.md",
+    "source_url": "https://kubernetes.io/docs/concepts/overview/working-with-objects/names/",
+    "n_chars": 5005
+  },
+  {
+    "doc_id": "doc_0136",
+    "title": "Namespaces",
+    "source_path": "content\\en\\docs\\concepts\\overview\\working-with-objects\\namespaces.md",
+    "source_url": "https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+    "n_chars": 6254
+  },
+  {
+    "doc_id": "doc_0137",
+    "title": "Kubernetes Object Management",
+    "source_path": "content\\en\\docs\\concepts\\overview\\working-with-objects\\object-management.md",
+    "source_url": "https://kubernetes.io/docs/concepts/overview/working-with-objects/object-management/",
+    "n_chars": 6868
+  },
+  {
+    "doc_id": "doc_0138",
+    "title": "Owners and Dependents",
+    "source_path": "content\\en\\docs\\concepts\\overview\\working-with-objects\\owners-dependents.md",
+    "source_url": "https://kubernetes.io/docs/concepts/overview/working-with-objects/owners-dependents/",
+    "n_chars": 5172
+  },
+  {
+    "doc_id": "doc_0139",
+    "title": "Storage Versions",
+    "source_path": "content\\en\\docs\\concepts\\overview\\working-with-objects\\storage-version.md",
+    "source_url": "https://kubernetes.io/docs/concepts/overview/working-with-objects/storage-version/",
+    "n_chars": 7378
+  },
+  {
+    "doc_id": "doc_0140",
+    "title": "Objects In Kubernetes",
+    "source_path": "content\\en\\docs\\concepts\\overview\\working-with-objects\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/overview/working-with-objects//",
+    "n_chars": 8128
+  },
+  {
+    "doc_id": "doc_0141",
+    "title": "Hardening Guide - Authentication Mechanisms",
+    "source_path": "content\\en\\docs\\concepts\\security\\hardening-guide\\authentication-mechanisms.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/hardening-guide/authentication-mechanisms/",
+    "n_chars": 8934
+  },
+  {
+    "doc_id": "doc_0142",
+    "title": "Hardening Guide - Dynamic Resource Allocation",
+    "source_path": "content\\en\\docs\\concepts\\security\\hardening-guide\\dynamic-resource-allocation.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/hardening-guide/dynamic-resource-allocation/",
+    "n_chars": 3733
+  },
+  {
+    "doc_id": "doc_0143",
+    "title": "Hardening Guide - Scheduler Configuration",
+    "source_path": "content\\en\\docs\\concepts\\security\\hardening-guide\\scheduler.md",
+    "source_url": "https://kubernetes.io/docs/concepts/security/hardening-guide/scheduler/",
+    "n_chars": 6085
+  },
+  {
+    "doc_id": "doc_0144",
+    "title": "Horizontal Pod Autoscaling",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\autoscaling\\horizontal-pod-autoscale.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/autoscaling/horizontal-pod-autoscale/",
+    "n_chars": 32403
+  },
+  {
+    "doc_id": "doc_0145",
+    "title": "Vertical Pod Autoscaling",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\autoscaling\\vertical-pod-autoscale.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/autoscaling/vertical-pod-autoscale/",
+    "n_chars": 13982
+  },
+  {
+    "doc_id": "doc_0146",
+    "title": "CronJob",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\controllers\\cron-jobs.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/",
+    "n_chars": 13646
+  },
+  {
+    "doc_id": "doc_0147",
+    "title": "DaemonSet",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\controllers\\daemonset.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/",
+    "n_chars": 14449
+  },
+  {
+    "doc_id": "doc_0148",
+    "title": "Deployments",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\controllers\\deployment.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/",
+    "n_chars": 58918
+  },
+  {
+    "doc_id": "doc_0149",
+    "title": "Jobs",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\controllers\\job.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/controllers/job/",
+    "n_chars": 62110
+  },
+  {
+    "doc_id": "doc_0150",
+    "title": "ReplicaSet",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\controllers\\replicaset.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/",
+    "n_chars": 18621
+  },
+  {
+    "doc_id": "doc_0151",
+    "title": "ReplicationController",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\controllers\\replicationcontroller.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller/",
+    "n_chars": 18474
+  },
+  {
+    "doc_id": "doc_0152",
+    "title": "StatefulSets",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\controllers\\statefulset.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/",
+    "n_chars": 26054
+  },
+  {
+    "doc_id": "doc_0153",
+    "title": "Automatic Cleanup for Finished Jobs",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\controllers\\ttlafterfinished.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/controllers/ttlafterfinished/",
+    "n_chars": 3806
+  },
+  {
+    "doc_id": "doc_0154",
+    "title": "Workload Management",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\controllers\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/controllers//",
+    "n_chars": 3433
+  },
+  {
+    "doc_id": "doc_0155",
+    "title": "PodGroup Lifecycle",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\podgroup-api\\lifecycle.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/podgroup-api/lifecycle/",
+    "n_chars": 3466
+  },
+  {
+    "doc_id": "doc_0156",
+    "title": "PodGroup API",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\podgroup-api\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/podgroup-api//",
+    "n_chars": 6769
+  },
+  {
+    "doc_id": "doc_0157",
+    "title": "Advanced Pod Configuration",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\pods\\advanced-pod-config.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/pods/advanced-pod-config/",
+    "n_chars": 9365
+  },
+  {
+    "doc_id": "doc_0158",
+    "title": "Disruptions",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\pods\\disruptions.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/pods/disruptions/",
+    "n_chars": 16596
+  },
+  {
+    "doc_id": "doc_0159",
+    "title": "Downward API",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\pods\\downward-api.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/pods/downward-api/",
+    "n_chars": 5552
+  },
+  {
+    "doc_id": "doc_0160",
+    "title": "Ephemeral Containers",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\pods\\ephemeral-containers.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/",
+    "n_chars": 3269
+  },
+  {
+    "doc_id": "doc_0161",
+    "title": "Init Containers",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\pods\\init-containers.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/pods/init-containers/",
+    "n_chars": 15628
+  },
+  {
+    "doc_id": "doc_0162",
+    "title": "Pod Conditions",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\pods\\pod-condition.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/pods/pod-condition/",
+    "n_chars": 14539
+  },
+  {
+    "doc_id": "doc_0163",
+    "title": "Pod Hostname",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\pods\\pod-hostname.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/pods/pod-hostname/",
+    "n_chars": 5003
+  },
+  {
+    "doc_id": "doc_0164",
+    "title": "Pod Lifecycle",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\pods\\pod-lifecycle.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/",
+    "n_chars": 56631
+  },
+  {
+    "doc_id": "doc_0165",
+    "title": "Pod Quality of Service Classes",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\pods\\pod-qos.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/pods/pod-qos/",
+    "n_chars": 9133
+  },
+  {
+    "doc_id": "doc_0166",
+    "title": "Liveness, Readiness, and Startup Probes",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\pods\\probes.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/pods/probes/",
+    "n_chars": 21104
+  },
+  {
+    "doc_id": "doc_0167",
+    "title": "Scheduling Group",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\pods\\scheduling-group.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/pods/scheduling-group/",
+    "n_chars": 2327
+  },
+  {
+    "doc_id": "doc_0168",
+    "title": "Sidecar Containers",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\pods\\sidecar-containers.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/pods/sidecar-containers/",
+    "n_chars": 8917
+  },
+  {
+    "doc_id": "doc_0169",
+    "title": "Static Pods",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\pods\\static-pods.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/pods/static-pods/",
+    "n_chars": 3378
+  },
+  {
+    "doc_id": "doc_0170",
+    "title": "User Namespaces",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\pods\\user-namespaces.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/pods/user-namespaces/",
+    "n_chars": 13953
+  },
+  {
+    "doc_id": "doc_0171",
+    "title": "Pods",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\pods\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/pods//",
+    "n_chars": 25926
+  },
+  {
+    "doc_id": "doc_0172",
+    "title": "Pod Group Disruption and Priority",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\workload-api\\disruption-and-priority.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/workload-api/disruption-and-priority/",
+    "n_chars": 2917
+  },
+  {
+    "doc_id": "doc_0173",
+    "title": "PodGroup Scheduling Policies",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\workload-api\\policies.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/workload-api/policies/",
+    "n_chars": 2818
+  },
+  {
+    "doc_id": "doc_0174",
+    "title": "Topology-Aware Workload Scheduling",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\workload-api\\topology-aware-scheduling.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/workload-api/topology-aware-scheduling/",
+    "n_chars": 4200
+  },
+  {
+    "doc_id": "doc_0175",
+    "title": "Workload API",
+    "source_path": "content\\en\\docs\\concepts\\workloads\\workload-api\\_index.md",
+    "source_url": "https://kubernetes.io/docs/concepts/workloads/workload-api//",
+    "n_chars": 4938
+  },
+  {
+    "doc_id": "doc_0176",
+    "title": "Tasks",
+    "source_path": "content\\en\\docs\\tasks\\_index.md",
+    "source_url": "https://kubernetes.io/docs/tasks//",
+    "n_chars": 334
+  },
+  {
+    "doc_id": "doc_0177",
+    "title": "Access Services Running on Clusters",
+    "source_path": "content\\en\\docs\\tasks\\access-application-cluster\\access-cluster-services.md",
+    "source_url": "https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster-services/",
+    "n_chars": 6907
+  },
+  {
+    "doc_id": "doc_0178",
+    "title": "Accessing Clusters",
+    "source_path": "content\\en\\docs\\tasks\\access-application-cluster\\access-cluster.md",
+    "source_url": "https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/",
+    "n_chars": 9209
+  },
+  {
+    "doc_id": "doc_0179",
+    "title": "Communicate Between Containers in the Same Pod Using a Shared Volume",
+    "source_path": "content\\en\\docs\\tasks\\access-application-cluster\\communicate-containers-same-pod-shared-volume.md",
+    "source_url": "https://kubernetes.io/docs/tasks/access-application-cluster/communicate-containers-same-pod-shared-volume/",
+    "n_chars": 4322
+  },
+  {
+    "doc_id": "doc_0180",
+    "title": "Configure Access to Multiple Clusters",
+    "source_path": "content\\en\\docs\\tasks\\access-application-cluster\\configure-access-multiple-clusters.md",
+    "source_url": "https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/",
+    "n_chars": 12260
+  },
+  {
+    "doc_id": "doc_0181",
+    "title": "Configure DNS for a Cluster",
+    "source_path": "content\\en\\docs\\tasks\\access-application-cluster\\configure-dns-cluster.md",
+    "source_url": "https://kubernetes.io/docs/tasks/access-application-cluster/configure-dns-cluster/",
+    "n_chars": 400
+  },
+  {
+    "doc_id": "doc_0182",
+    "title": "Connect a Frontend to a Backend Using Services",
+    "source_path": "content\\en\\docs\\tasks\\access-application-cluster\\connecting-frontend-backend.md",
+    "source_url": "https://kubernetes.io/docs/tasks/access-application-cluster/connecting-frontend-backend/",
+    "n_chars": 7558
+  },
+  {
+    "doc_id": "doc_0183",
+    "title": "Create an External Load Balancer",
+    "source_path": "content\\en\\docs\\tasks\\access-application-cluster\\create-external-load-balancer.md",
+    "source_url": "https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/",
+    "n_chars": 7305
+  },
+  {
+    "doc_id": "doc_0184",
+    "title": "List All Container Images Running in a Cluster",
+    "source_path": "content\\en\\docs\\tasks\\access-application-cluster\\list-all-running-container-images.md",
+    "source_url": "https://kubernetes.io/docs/tasks/access-application-cluster/list-all-running-container-images/",
+    "n_chars": 3040
+  },
+  {
+    "doc_id": "doc_0185",
+    "title": "Use Port Forwarding to Access Applications in a Cluster",
+    "source_path": "content\\en\\docs\\tasks\\access-application-cluster\\port-forward-access-application-cluster.md",
+    "source_url": "https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/",
+    "n_chars": 5696
+  },
+  {
+    "doc_id": "doc_0186",
+    "title": "Use a Service to Access an Application in a Cluster",
+    "source_path": "content\\en\\docs\\tasks\\access-application-cluster\\service-access-application-cluster.md",
+    "source_url": "https://kubernetes.io/docs/tasks/access-application-cluster/service-access-application-cluster/",
+    "n_chars": 4755
+  },
+  {
+    "doc_id": "doc_0187",
+    "title": "Deploy and Access the Kubernetes Dashboard",
+    "source_path": "content\\en\\docs\\tasks\\access-application-cluster\\web-ui-dashboard.md",
+    "source_url": "https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/",
+    "n_chars": 12485
+  },
+  {
+    "doc_id": "doc_0189",
+    "title": "Access Clusters Using the Kubernetes API",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\access-cluster-api.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/access-cluster-api/",
+    "n_chars": 13436
+  },
+  {
+    "doc_id": "doc_0190",
+    "title": "Generate Certificates Manually",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\certificates.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/certificates/",
+    "n_chars": 8738
+  },
+  {
+    "doc_id": "doc_0191",
+    "title": "Change the default StorageClass",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\change-default-storage-class.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/",
+    "n_chars": 3427
+  },
+  {
+    "doc_id": "doc_0192",
+    "title": "Change the Access Mode of a PersistentVolume to ReadWriteOncePod",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\change-pv-access-mode-readwriteoncepod.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/change-pv-access-mode-readwriteoncepod/",
+    "n_chars": 6218
+  },
+  {
+    "doc_id": "doc_0193",
+    "title": "Change the Reclaim Policy of a PersistentVolume",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\change-pv-reclaim-policy.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/change-pv-reclaim-policy/",
+    "n_chars": 4076
+  },
+  {
+    "doc_id": "doc_0194",
+    "title": "Upgrade A Cluster",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\cluster-upgrade.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/cluster-upgrade/",
+    "n_chars": 4578
+  },
+  {
+    "doc_id": "doc_0195",
+    "title": "Enable Or Disable Feature Gates",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\configure-feature-gates.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/configure-feature-gates/",
+    "n_chars": 7859
+  },
+  {
+    "doc_id": "doc_0196",
+    "title": "Operating etcd clusters for Kubernetes",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\configure-upgrade-etcd.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/",
+    "n_chars": 19840
+  },
+  {
+    "doc_id": "doc_0197",
+    "title": "Migrate Replicated Control Plane To Use Cloud Controller Manager",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\controller-manager-leader-migration.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/controller-manager-leader-migration/",
+    "n_chars": 11502
+  },
+  {
+    "doc_id": "doc_0198",
+    "title": "Using CoreDNS for Service Discovery",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\coredns.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/coredns/",
+    "n_chars": 2835
+  },
+  {
+    "doc_id": "doc_0199",
+    "title": "Control CPU Management Policies on the Node",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\cpu-management-policies.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/cpu-management-policies/",
+    "n_chars": 9093
+  },
+  {
+    "doc_id": "doc_0200",
+    "title": "Declare Network Policy",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\declare-network-policy.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/",
+    "n_chars": 4118
+  },
+  {
+    "doc_id": "doc_0201",
+    "title": "Decrypt Confidential Data that is Already Encrypted at Rest",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\decrypt-data.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/decrypt-data/",
+    "n_chars": 6197
+  },
+  {
+    "doc_id": "doc_0202",
+    "title": "Developing Cloud Controller Manager",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\developing-cloud-controller-manager.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/developing-cloud-controller-manager/",
+    "n_chars": 2169
+  },
+  {
+    "doc_id": "doc_0203",
+    "title": "Customizing DNS Service",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\dns-custom-nameservers.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/",
+    "n_chars": 7445
+  },
+  {
+    "doc_id": "doc_0204",
+    "title": "Debugging DNS Resolution",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\dns-debugging-resolution.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/",
+    "n_chars": 10414
+  },
+  {
+    "doc_id": "doc_0205",
+    "title": "Autoscale the DNS Service in a Cluster",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\dns-horizontal-autoscaling.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/dns-horizontal-autoscaling/",
+    "n_chars": 6994
+  },
+  {
+    "doc_id": "doc_0206",
+    "title": "Enable Or Disable A Kubernetes API",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\enable-disable-api.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/enable-disable-api/",
+    "n_chars": 997
+  },
+  {
+    "doc_id": "doc_0207",
+    "title": "Encrypting Confidential Data at Rest",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\encrypt-data.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/",
+    "n_chars": 30222
+  },
+  {
+    "doc_id": "doc_0208",
+    "title": "Advertise Extended Resources for a Node",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\extended-resource-node.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/extended-resource-node/",
+    "n_chars": 5652
+  },
+  {
+    "doc_id": "doc_0209",
+    "title": "Guaranteed Scheduling For Critical Add-On Pods",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\guaranteed-scheduling-critical-addon-pods.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/",
+    "n_chars": 1218
+  },
+  {
+    "doc_id": "doc_0210",
+    "title": "Harden Dynamic Resource Allocation in Your Cluster",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\hardening-dra.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/hardening-dra/",
+    "n_chars": 3334
+  },
+  {
+    "doc_id": "doc_0211",
+    "title": "IP Masquerade Agent User Guide",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\ip-masq-agent.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/ip-masq-agent/",
+    "n_chars": 7929
+  },
+  {
+    "doc_id": "doc_0212",
+    "title": "Using a KMS provider for data encryption",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\kms-provider.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/kms-provider/",
+    "n_chars": 20547
+  },
+  {
+    "doc_id": "doc_0213",
+    "title": "Set Kubelet Parameters Via A Configuration File",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\kubelet-config-file.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/",
+    "n_chars": 11276
+  },
+  {
+    "doc_id": "doc_0214",
+    "title": "Configure a kubelet image credential provider",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\kubelet-credential-provider.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/kubelet-credential-provider/",
+    "n_chars": 15672
+  },
+  {
+    "doc_id": "doc_0215",
+    "title": "Running Kubernetes Node Components as a Non-root User",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\kubelet-in-userns.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/kubelet-in-userns/",
+    "n_chars": 11575
+  },
+  {
+    "doc_id": "doc_0216",
+    "title": "Limit Storage Consumption",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\limit-storage-consumption.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/limit-storage-consumption/",
+    "n_chars": 2703
+  },
+  {
+    "doc_id": "doc_0217",
+    "title": "Control Memory Management Policies on a Node",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\memory-manager.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/memory-manager/",
+    "n_chars": 13237
+  },
+  {
+    "doc_id": "doc_0218",
+    "title": "Share a Cluster with Namespaces",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\namespaces.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/namespaces/",
+    "n_chars": 11568
+  },
+  {
+    "doc_id": "doc_0219",
+    "title": "Overprovision Node Capacity For A Cluster",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\node-overprovisioning.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/node-overprovisioning/",
+    "n_chars": 5497
+  },
+  {
+    "doc_id": "doc_0220",
+    "title": "Using NodeLocal DNSCache in Kubernetes Clusters",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\nodelocaldns.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/nodelocaldns/",
+    "n_chars": 8302
+  },
+  {
+    "doc_id": "doc_0221",
+    "title": "Configure Quotas for API Objects",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\quota-api-object.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/quota-api-object/",
+    "n_chars": 4971
+  },
+  {
+    "doc_id": "doc_0222",
+    "title": "Reserve Compute Resources for System Daemons",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\reserve-compute-resources.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/",
+    "n_chars": 12057
+  },
+  {
+    "doc_id": "doc_0223",
+    "title": "Cloud Controller Manager Administration",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\running-cloud-controller.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/running-cloud-controller/",
+    "n_chars": 6675
+  },
+  {
+    "doc_id": "doc_0224",
+    "title": "Safely Drain a Node",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\safely-drain-node.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/",
+    "n_chars": 5810
+  },
+  {
+    "doc_id": "doc_0225",
+    "title": "Securing a Cluster",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\securing-a-cluster.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/securing-a-cluster/",
+    "n_chars": 15788
+  },
+  {
+    "doc_id": "doc_0226",
+    "title": "Switching from Polling to CRI Event-based Updates to Container Status",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\switch-to-evented-pleg.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/switch-to-evented-pleg/",
+    "n_chars": 4169
+  },
+  {
+    "doc_id": "doc_0227",
+    "title": "Using sysctls in a Kubernetes Cluster",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\sysctl-cluster.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/",
+    "n_chars": 7030
+  },
+  {
+    "doc_id": "doc_0228",
+    "title": "Control Topology Management Policies on a node",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\topology-manager.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/topology-manager/",
+    "n_chars": 17819
+  },
+  {
+    "doc_id": "doc_0229",
+    "title": "Use Cascading Deletion in a Cluster",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\use-cascading-deletion.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/use-cascading-deletion/",
+    "n_chars": 6062
+  },
+  {
+    "doc_id": "doc_0230",
+    "title": "Verify Signed Kubernetes Artifacts",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\verify-signed-artifacts.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/verify-signed-artifacts/",
+    "n_chars": 4892
+  },
+  {
+    "doc_id": "doc_0232",
+    "title": "Managing Secrets using Configuration File",
+    "source_path": "content\\en\\docs\\tasks\\configmap-secret\\managing-secret-using-config-file.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configmap-secret/managing-secret-using-config-file/",
+    "n_chars": 6460
+  },
+  {
+    "doc_id": "doc_0233",
+    "title": "Managing Secrets using kubectl",
+    "source_path": "content\\en\\docs\\tasks\\configmap-secret\\managing-secret-using-kubectl.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configmap-secret/managing-secret-using-kubectl/",
+    "n_chars": 5243
+  },
+  {
+    "doc_id": "doc_0234",
+    "title": "Managing Secrets using Kustomize",
+    "source_path": "content\\en\\docs\\tasks\\configmap-secret\\managing-secret-using-kustomize.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configmap-secret/managing-secret-using-kustomize/",
+    "n_chars": 3948
+  },
+  {
+    "doc_id": "doc_0236",
+    "title": "Assign CPU Resources to Containers and Pods",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\assign-cpu-resource.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/",
+    "n_chars": 9652
+  },
+  {
+    "doc_id": "doc_0237",
+    "title": "Assign Memory Resources to Containers and Pods",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\assign-memory-resource.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource/",
+    "n_chars": 11754
+  },
+  {
+    "doc_id": "doc_0238",
+    "title": "Assign Pod-level CPU and memory resources",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\assign-pod-level-resources.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/assign-pod-level-resources/",
+    "n_chars": 10221
+  },
+  {
+    "doc_id": "doc_0239",
+    "title": "Assign Pods to Nodes using Node Affinity",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\assign-pods-nodes-using-node-affinity.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity/",
+    "n_chars": 3392
+  },
+  {
+    "doc_id": "doc_0240",
+    "title": "Assign Pods to Nodes",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\assign-pods-nodes.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/",
+    "n_chars": 2887
+  },
+  {
+    "doc_id": "doc_0241",
+    "title": "Attach Handlers to Container Lifecycle Events",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\attach-handler-lifecycle-event.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/",
+    "n_chars": 3200
+  },
+  {
+    "doc_id": "doc_0242",
+    "title": "Configure GMSA for Windows Pods and containers",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\configure-gmsa.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/configure-gmsa/",
+    "n_chars": 13593
+  },
+  {
+    "doc_id": "doc_0243",
+    "title": "Configure Liveness, Readiness and Startup Probes",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\configure-liveness-readiness-startup-probes.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/",
+    "n_chars": 12751
+  },
+  {
+    "doc_id": "doc_0244",
+    "title": "Configure a Pod to Use a ConfigMap",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\configure-pod-configmap.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/",
+    "n_chars": 28768
+  },
+  {
+    "doc_id": "doc_0245",
+    "title": "Configure Pod Initialization",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\configure-pod-initialization.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-initialization/",
+    "n_chars": 2492
+  },
+  {
+    "doc_id": "doc_0246",
+    "title": "Configure a Pod to Use a Projected Volume for Storage",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\configure-projected-volume-storage.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/configure-projected-volume-storage/",
+    "n_chars": 2368
+  },
+  {
+    "doc_id": "doc_0247",
+    "title": "Configure RunAsUserName for Windows pods and containers",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\configure-runasusername.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/configure-runasusername/",
+    "n_chars": 5193
+  },
+  {
+    "doc_id": "doc_0248",
+    "title": "Configure Service Accounts for Pods",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\configure-service-account.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/",
+    "n_chars": 20483
+  },
+  {
+    "doc_id": "doc_0249",
+    "title": "Configure a Pod to Use a Volume for Storage",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\configure-volume-storage.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/configure-volume-storage/",
+    "n_chars": 3874
+  },
+  {
+    "doc_id": "doc_0250",
+    "title": "Create a Windows HostProcess Pod",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\create-hostprocess-pod.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/create-hostprocess-pod/",
+    "n_chars": 12586
+  },
+  {
+    "doc_id": "doc_0251",
+    "title": "Enforce Pod Security Standards by Configuring the Built-in Admission Controller",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\enforce-standards-admission-controller.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/enforce-standards-admission-controller/",
+    "n_chars": 2307
+  },
+  {
+    "doc_id": "doc_0252",
+    "title": "Enforce Pod Security Standards with Namespace Labels",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\enforce-standards-namespace-labels.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/enforce-standards-namespace-labels/",
+    "n_chars": 3531
+  },
+  {
+    "doc_id": "doc_0253",
+    "title": "Assign Extended Resources to a Container",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\extended-resource.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/extended-resource/",
+    "n_chars": 3204
+  },
+  {
+    "doc_id": "doc_0254",
+    "title": "Use an Image Volume With a Pod",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\image-volumes.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/image-volumes/",
+    "n_chars": 2065
+  },
+  {
+    "doc_id": "doc_0255",
+    "title": "Migrate from PodSecurityPolicy to the Built-In PodSecurity Admission Controller",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\migrate-from-psp.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/migrate-from-psp/",
+    "n_chars": 18635
+  },
+  {
+    "doc_id": "doc_0256",
+    "title": "Pull an Image from a Private Registry",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\pull-image-private-registry.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/",
+    "n_chars": 8956
+  },
+  {
+    "doc_id": "doc_0257",
+    "title": "Configure Quality of Service for Pods",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\quality-service-pod.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/",
+    "n_chars": 8054
+  },
+  {
+    "doc_id": "doc_0258",
+    "title": "Resize CPU and Memory Resources assigned to Containers",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\resize-container-resources.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources/",
+    "n_chars": 14237
+  },
+  {
+    "doc_id": "doc_0259",
+    "title": "Resize CPU and Memory Resources assigned to Pods",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\resize-pod-resources.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/resize-pod-resources/",
+    "n_chars": 8647
+  },
+  {
+    "doc_id": "doc_0260",
+    "title": "Configure a Security Context for a Pod or Container",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\security-context.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/security-context/",
+    "n_chars": 32457
+  },
+  {
+    "doc_id": "doc_0261",
+    "title": "Share Process Namespace between Containers in a Pod",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\share-process-namespace.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/",
+    "n_chars": 3483
+  },
+  {
+    "doc_id": "doc_0262",
+    "title": "Create static Pods",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\static-pod.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/",
+    "n_chars": 9432
+  },
+  {
+    "doc_id": "doc_0263",
+    "title": "Translate a Docker Compose File to Kubernetes Resources",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\translate-compose-kubernetes.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/translate-compose-kubernetes/",
+    "n_chars": 16237
+  },
+  {
+    "doc_id": "doc_0264",
+    "title": "Use a User Namespace With a Pod",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\user-namespaces.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/user-namespaces/",
+    "n_chars": 3319
+  },
+  {
+    "doc_id": "doc_0266",
+    "title": "Monitoring, Logging, and Debugging",
+    "source_path": "content\\en\\docs\\tasks\\debug\\_index.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug//",
+    "n_chars": 6638
+  },
+  {
+    "doc_id": "doc_0267",
+    "title": "Extend kubectl with plugins",
+    "source_path": "content\\en\\docs\\tasks\\extend-kubectl\\kubectl-plugins.md",
+    "source_url": "https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/",
+    "n_chars": 14034
+  },
+  {
+    "doc_id": "doc_0268",
+    "title": "Configure the Aggregation Layer",
+    "source_path": "content\\en\\docs\\tasks\\extend-kubernetes\\configure-aggregation-layer.md",
+    "source_url": "https://kubernetes.io/docs/tasks/extend-kubernetes/configure-aggregation-layer/",
+    "n_chars": 16925
+  },
+  {
+    "doc_id": "doc_0269",
+    "title": "Configure Multiple Schedulers",
+    "source_path": "content\\en\\docs\\tasks\\extend-kubernetes\\configure-multiple-schedulers.md",
+    "source_url": "https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/",
+    "n_chars": 8625
+  },
+  {
+    "doc_id": "doc_0270",
+    "title": "Use an HTTP Proxy to Access the Kubernetes API",
+    "source_path": "content\\en\\docs\\tasks\\extend-kubernetes\\http-proxy-access-api.md",
+    "source_url": "https://kubernetes.io/docs/tasks/extend-kubernetes/http-proxy-access-api/",
+    "n_chars": 1923
+  },
+  {
+    "doc_id": "doc_0271",
+    "title": "Set up an Extension API Server",
+    "source_path": "content\\en\\docs\\tasks\\extend-kubernetes\\setup-extension-api-server.md",
+    "source_url": "https://kubernetes.io/docs/tasks/extend-kubernetes/setup-extension-api-server/",
+    "n_chars": 4311
+  },
+  {
+    "doc_id": "doc_0272",
+    "title": "Set up Konnectivity service",
+    "source_path": "content\\en\\docs\\tasks\\extend-kubernetes\\setup-konnectivity.md",
+    "source_url": "https://kubernetes.io/docs/tasks/extend-kubernetes/setup-konnectivity/",
+    "n_chars": 3921
+  },
+  {
+    "doc_id": "doc_0273",
+    "title": "Use a SOCKS5 Proxy to Access the Kubernetes API",
+    "source_path": "content\\en\\docs\\tasks\\extend-kubernetes\\socks5-proxy-access-api.md",
+    "source_url": "https://kubernetes.io/docs/tasks/extend-kubernetes/socks5-proxy-access-api/",
+    "n_chars": 5987
+  },
+  {
+    "doc_id": "doc_0275",
+    "title": "Define a Command and Arguments for a Container",
+    "source_path": "content\\en\\docs\\tasks\\inject-data-application\\define-command-argument-container.md",
+    "source_url": "https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/",
+    "n_chars": 3273
+  },
+  {
+    "doc_id": "doc_0276",
+    "title": "Define Environment Variables for a Container",
+    "source_path": "content\\en\\docs\\tasks\\inject-data-application\\define-environment-variable-container.md",
+    "source_url": "https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/",
+    "n_chars": 4414
+  },
+  {
+    "doc_id": "doc_0277",
+    "title": "Define Environment Variable Values Using An Init Container",
+    "source_path": "content\\en\\docs\\tasks\\inject-data-application\\define-environment-variable-via-file.md",
+    "source_url": "https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-via-file/",
+    "n_chars": 4489
+  },
+  {
+    "doc_id": "doc_0278",
+    "title": "Define Dependent Environment Variables",
+    "source_path": "content\\en\\docs\\tasks\\inject-data-application\\define-interdependent-environment-variables.md",
+    "source_url": "https://kubernetes.io/docs/tasks/inject-data-application/define-interdependent-environment-variables/",
+    "n_chars": 2834
+  },
+  {
+    "doc_id": "doc_0279",
+    "title": "Distribute Credentials Securely Using Secrets",
+    "source_path": "content\\en\\docs\\tasks\\inject-data-application\\distribute-credentials-secure.md",
+    "source_url": "https://kubernetes.io/docs/tasks/inject-data-application/distribute-credentials-secure/",
+    "n_chars": 12739
+  },
+  {
+    "doc_id": "doc_0280",
+    "title": "Expose Pod Information to Containers Through Files",
+    "source_path": "content\\en\\docs\\tasks\\inject-data-application\\downward-api-volume-expose-pod-information.md",
+    "source_url": "https://kubernetes.io/docs/tasks/inject-data-application/downward-api-volume-expose-pod-information/",
+    "n_chars": 6830
+  },
+  {
+    "doc_id": "doc_0281",
+    "title": "Expose Pod Information to Containers Through Environment Variables",
+    "source_path": "content\\en\\docs\\tasks\\inject-data-application\\environment-variable-expose-pod-information.md",
+    "source_url": "https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/",
+    "n_chars": 5472
+  },
+  {
+    "doc_id": "doc_0283",
+    "title": "Running Automated Tasks with a CronJob",
+    "source_path": "content\\en\\docs\\tasks\\job\\automated-tasks-with-cron-jobs.md",
+    "source_url": "https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/",
+    "n_chars": 2882
+  },
+  {
+    "doc_id": "doc_0284",
+    "title": "Coarse Parallel Processing Using a Work Queue",
+    "source_path": "content\\en\\docs\\tasks\\job\\coarse-parallel-processing-work-queue.md",
+    "source_url": "https://kubernetes.io/docs/tasks/job/coarse-parallel-processing-work-queue/",
+    "n_chars": 11819
+  },
+  {
+    "doc_id": "doc_0285",
+    "title": "Fine Parallel Processing Using a Work Queue",
+    "source_path": "content\\en\\docs\\tasks\\job\\fine-parallel-processing-work-queue.md",
+    "source_url": "https://kubernetes.io/docs/tasks/job/fine-parallel-processing-work-queue/",
+    "n_chars": 8484
+  },
+  {
+    "doc_id": "doc_0286",
+    "title": "Indexed Job for Parallel Processing with Static Work Assignment",
+    "source_path": "content\\en\\docs\\tasks\\job\\indexed-parallel-processing-static.md",
+    "source_url": "https://kubernetes.io/docs/tasks/job/indexed-parallel-processing-static/",
+    "n_chars": 6989
+  },
+  {
+    "doc_id": "doc_0287",
+    "title": "Job with Pod-to-Pod Communication",
+    "source_path": "content\\en\\docs\\tasks\\job\\job-with-pod-to-pod-communication.md",
+    "source_url": "https://kubernetes.io/docs/tasks/job/job-with-pod-to-pod-communication/",
+    "n_chars": 4645
+  },
+  {
+    "doc_id": "doc_0288",
+    "title": "Parallel Processing using Expansions",
+    "source_path": "content\\en\\docs\\tasks\\job\\parallel-processing-expansion.md",
+    "source_url": "https://kubernetes.io/docs/tasks/job/parallel-processing-expansion/",
+    "n_chars": 9405
+  },
+  {
+    "doc_id": "doc_0289",
+    "title": "Handling retriable and non-retriable pod failures with Pod failure policy",
+    "source_path": "content\\en\\docs\\tasks\\job\\pod-failure-policy.md",
+    "source_url": "https://kubernetes.io/docs/tasks/job/pod-failure-policy/",
+    "n_chars": 11015
+  },
+  {
+    "doc_id": "doc_0291",
+    "title": "Building a Basic DaemonSet",
+    "source_path": "content\\en\\docs\\tasks\\manage-daemon\\create-daemon-set.md",
+    "source_url": "https://kubernetes.io/docs/tasks/manage-daemon/create-daemon-set/",
+    "n_chars": 2524
+  },
+  {
+    "doc_id": "doc_0292",
+    "title": "Running Pods on Only Some Nodes",
+    "source_path": "content\\en\\docs\\tasks\\manage-daemon\\pods-some-nodes.md",
+    "source_url": "https://kubernetes.io/docs/tasks/manage-daemon/pods-some-nodes/",
+    "n_chars": 2064
+  },
+  {
+    "doc_id": "doc_0293",
+    "title": "Perform a Rollback on a DaemonSet",
+    "source_path": "content\\en\\docs\\tasks\\manage-daemon\\rollback-daemon-set.md",
+    "source_url": "https://kubernetes.io/docs/tasks/manage-daemon/rollback-daemon-set/",
+    "n_chars": 3878
+  },
+  {
+    "doc_id": "doc_0294",
+    "title": "Perform a Rolling Update on a DaemonSet",
+    "source_path": "content\\en\\docs\\tasks\\manage-daemon\\update-daemon-set.md",
+    "source_url": "https://kubernetes.io/docs/tasks/manage-daemon/update-daemon-set/",
+    "n_chars": 6065
+  },
+  {
+    "doc_id": "doc_0296",
+    "title": "Schedule GPUs",
+    "source_path": "content\\en\\docs\\tasks\\manage-gpus\\scheduling-gpus.md",
+    "source_url": "https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/",
+    "n_chars": 4956
+  },
+  {
+    "doc_id": "doc_0297",
+    "title": "Manage HugePages",
+    "source_path": "content\\en\\docs\\tasks\\manage-hugepages\\scheduling-hugepages.md",
+    "source_url": "https://kubernetes.io/docs/tasks/manage-hugepages/scheduling-hugepages/",
+    "n_chars": 3916
+  },
+  {
+    "doc_id": "doc_0298",
+    "title": "Declarative Management of Kubernetes Objects Using Configuration Files",
+    "source_path": "content\\en\\docs\\tasks\\manage-kubernetes-objects\\declarative-config.md",
+    "source_url": "https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/",
+    "n_chars": 38409
+  },
+  {
+    "doc_id": "doc_0299",
+    "title": "Managing Kubernetes Objects Using Imperative Commands",
+    "source_path": "content\\en\\docs\\tasks\\manage-kubernetes-objects\\imperative-command.md",
+    "source_url": "https://kubernetes.io/docs/tasks/manage-kubernetes-objects/imperative-command/",
+    "n_chars": 6576
+  },
+  {
+    "doc_id": "doc_0300",
+    "title": "Imperative Management of Kubernetes Objects Using Configuration Files",
+    "source_path": "content\\en\\docs\\tasks\\manage-kubernetes-objects\\imperative-config.md",
+    "source_url": "https://kubernetes.io/docs/tasks/manage-kubernetes-objects/imperative-config/",
+    "n_chars": 5182
+  },
+  {
+    "doc_id": "doc_0301",
+    "title": "Declarative Management of Kubernetes Objects Using Kustomize",
+    "source_path": "content\\en\\docs\\tasks\\manage-kubernetes-objects\\kustomization.md",
+    "source_url": "https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/",
+    "n_chars": 24374
+  },
+  {
+    "doc_id": "doc_0302",
+    "title": "Migrate Kubernetes Objects Using Storage Version Migration",
+    "source_path": "content\\en\\docs\\tasks\\manage-kubernetes-objects\\storage-version-migration.md",
+    "source_url": "https://kubernetes.io/docs/tasks/manage-kubernetes-objects/storage-version-migration/",
+    "n_chars": 11314
+  },
+  {
+    "doc_id": "doc_0303",
+    "title": "Update API Objects in Place Using kubectl patch",
+    "source_path": "content\\en\\docs\\tasks\\manage-kubernetes-objects\\update-api-object-kubectl-patch.md",
+    "source_url": "https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/",
+    "n_chars": 15796
+  },
+  {
+    "doc_id": "doc_0305",
+    "title": "Adding entries to Pod /etc/hosts with HostAliases",
+    "source_path": "content\\en\\docs\\tasks\\network\\customize-hosts-file-for-pods.md",
+    "source_url": "https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/",
+    "n_chars": 3496
+  },
+  {
+    "doc_id": "doc_0306",
+    "title": "Extend Service IP Ranges",
+    "source_path": "content\\en\\docs\\tasks\\network\\extend-service-ip-ranges.md",
+    "source_url": "https://kubernetes.io/docs/tasks/network/extend-service-ip-ranges/",
+    "n_chars": 8944
+  },
+  {
+    "doc_id": "doc_0307",
+    "title": "Kubernetes Default ServiceCIDR Reconfiguration",
+    "source_path": "content\\en\\docs\\tasks\\network\\reconfigure-default-service-ip-ranges.md",
+    "source_url": "https://kubernetes.io/docs/tasks/network/reconfigure-default-service-ip-ranges/",
+    "n_chars": 6058
+  },
+  {
+    "doc_id": "doc_0308",
+    "title": "Validate IPv4/IPv6 dual-stack",
+    "source_path": "content\\en\\docs\\tasks\\network\\validate-dual-stack.md",
+    "source_url": "https://kubernetes.io/docs/tasks/network/validate-dual-stack/",
+    "n_chars": 7700
+  },
+  {
+    "doc_id": "doc_0310",
+    "title": "Accessing the Kubernetes API from a Pod",
+    "source_path": "content\\en\\docs\\tasks\\run-application\\access-api-from-pod.md",
+    "source_url": "https://kubernetes.io/docs/tasks/run-application/access-api-from-pod/",
+    "n_chars": 4504
+  },
+  {
+    "doc_id": "doc_0311",
+    "title": "Specifying a Disruption Budget for your Application",
+    "source_path": "content\\en\\docs\\tasks\\run-application\\configure-pdb.md",
+    "source_url": "https://kubernetes.io/docs/tasks/run-application/configure-pdb/",
+    "n_chars": 13378
+  },
+  {
+    "doc_id": "doc_0312",
+    "title": "Delete a StatefulSet",
+    "source_path": "content\\en\\docs\\tasks\\run-application\\delete-stateful-set.md",
+    "source_url": "https://kubernetes.io/docs/tasks/run-application/delete-stateful-set/",
+    "n_chars": 2928
+  },
+  {
+    "doc_id": "doc_0313",
+    "title": "Force Delete StatefulSet Pods",
+    "source_path": "content\\en\\docs\\tasks\\run-application\\force-delete-stateful-set-pod.md",
+    "source_url": "https://kubernetes.io/docs/tasks/run-application/force-delete-stateful-set-pod/",
+    "n_chars": 5006
+  },
+  {
+    "doc_id": "doc_0314",
+    "title": "HorizontalPodAutoscaler Walkthrough",
+    "source_path": "content\\en\\docs\\tasks\\run-application\\horizontal-pod-autoscale-walkthrough.md",
+    "source_url": "https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/",
+    "n_chars": 19242
+  },
+  {
+    "doc_id": "doc_0315",
+    "title": "Run a Replicated Stateful Application",
+    "source_path": "content\\en\\docs\\tasks\\run-application\\run-replicated-stateful-application.md",
+    "source_url": "https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/",
+    "n_chars": 18984
+  },
+  {
+    "doc_id": "doc_0316",
+    "title": "Run a Single-Instance Stateful Application",
+    "source_path": "content\\en\\docs\\tasks\\run-application\\run-single-instance-stateful-application.md",
+    "source_url": "https://kubernetes.io/docs/tasks/run-application/run-single-instance-stateful-application/",
+    "n_chars": 6748
+  },
+  {
+    "doc_id": "doc_0317",
+    "title": "Run a Stateless Application Using a Deployment",
+    "source_path": "content\\en\\docs\\tasks\\run-application\\run-stateless-application-deployment.md",
+    "source_url": "https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/",
+    "n_chars": 4760
+  },
+  {
+    "doc_id": "doc_0318",
+    "title": "Horizontal Manual Scaling for a Deployment",
+    "source_path": "content\\en\\docs\\tasks\\run-application\\scale-deployment.md",
+    "source_url": "https://kubernetes.io/docs/tasks/run-application/scale-deployment/",
+    "n_chars": 6332
+  },
+  {
+    "doc_id": "doc_0319",
+    "title": "Scale a StatefulSet",
+    "source_path": "content\\en\\docs\\tasks\\run-application\\scale-stateful-set.md",
+    "source_url": "https://kubernetes.io/docs/tasks/run-application/scale-stateful-set/",
+    "n_chars": 3035
+  },
+  {
+    "doc_id": "doc_0320",
+    "title": "Update a Deployment Without Downtime",
+    "source_path": "content\\en\\docs\\tasks\\run-application\\update-deployment-rolling.md",
+    "source_url": "https://kubernetes.io/docs/tasks/run-application/update-deployment-rolling/",
+    "n_chars": 8546
+  },
+  {
+    "doc_id": "doc_0322",
+    "title": "Issue a Certificate for a Kubernetes API Client Using a CertificateSigningRequest",
+    "source_path": "content\\en\\docs\\tasks\\tls\\certificate-issue-client-csr.md",
+    "source_url": "https://kubernetes.io/docs/tasks/tls/certificate-issue-client-csr/",
+    "n_chars": 7029
+  },
+  {
+    "doc_id": "doc_0323",
+    "title": "Configure Certificate Rotation for the Kubelet",
+    "source_path": "content\\en\\docs\\tasks\\tls\\certificate-rotation.md",
+    "source_url": "https://kubernetes.io/docs/tasks/tls/certificate-rotation/",
+    "n_chars": 2964
+  },
+  {
+    "doc_id": "doc_0324",
+    "title": "Manage TLS Certificates in a Cluster",
+    "source_path": "content\\en\\docs\\tasks\\tls\\managing-tls-in-a-cluster.md",
+    "source_url": "https://kubernetes.io/docs/tasks/tls/managing-tls-in-a-cluster/",
+    "n_chars": 12664
+  },
+  {
+    "doc_id": "doc_0325",
+    "title": "Manual Rotation of CA Certificates",
+    "source_path": "content\\en\\docs\\tasks\\tls\\manual-rotation-of-ca-certificates.md",
+    "source_url": "https://kubernetes.io/docs/tasks/tls/manual-rotation-of-ca-certificates/",
+    "n_chars": 8491
+  },
+  {
+    "doc_id": "doc_0327",
+    "title": "Install and Set Up kubectl on Linux",
+    "source_path": "content\\en\\docs\\tasks\\tools\\install-kubectl-linux.md",
+    "source_url": "https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/",
+    "n_chars": 12890
+  },
+  {
+    "doc_id": "doc_0328",
+    "title": "Install and Set Up kubectl on macOS",
+    "source_path": "content\\en\\docs\\tasks\\tools\\install-kubectl-macos.md",
+    "source_url": "https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/",
+    "n_chars": 8366
+  },
+  {
+    "doc_id": "doc_0329",
+    "title": "Install and Set Up kubectl on Windows",
+    "source_path": "content\\en\\docs\\tasks\\tools\\install-kubectl-windows.md",
+    "source_url": "https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/",
+    "n_chars": 6368
+  },
+  {
+    "doc_id": "doc_0330",
+    "title": "Install Tools",
+    "source_path": "content\\en\\docs\\tasks\\tools\\_index.md",
+    "source_url": "https://kubernetes.io/docs/tasks/tools//",
+    "n_chars": 2827
+  },
+  {
+    "doc_id": "doc_0331",
+    "title": "Adding Linux worker nodes",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\kubeadm\\adding-linux-nodes.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/adding-linux-nodes/",
+    "n_chars": 3960
+  },
+  {
+    "doc_id": "doc_0332",
+    "title": "Adding Windows worker nodes",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\kubeadm\\adding-windows-nodes.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/adding-windows-nodes/",
+    "n_chars": 5676
+  },
+  {
+    "doc_id": "doc_0333",
+    "title": "Changing The Kubernetes Package Repository",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\kubeadm\\change-package-repository.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/change-package-repository/",
+    "n_chars": 7193
+  },
+  {
+    "doc_id": "doc_0334",
+    "title": "Configuring a cgroup driver",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\kubeadm\\configure-cgroup-driver.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/configure-cgroup-driver/",
+    "n_chars": 4931
+  },
+  {
+    "doc_id": "doc_0335",
+    "title": "Certificate Management with kubeadm",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\kubeadm\\kubeadm-certs.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-certs/",
+    "n_chars": 31268
+  },
+  {
+    "doc_id": "doc_0336",
+    "title": "Reconfiguring a kubeadm cluster",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\kubeadm\\kubeadm-reconfigure.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-reconfigure/",
+    "n_chars": 10262
+  },
+  {
+    "doc_id": "doc_0337",
+    "title": "Upgrading kubeadm clusters",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\kubeadm\\kubeadm-upgrade.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/",
+    "n_chars": 16062
+  },
+  {
+    "doc_id": "doc_0338",
+    "title": "Upgrading Linux nodes",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\kubeadm\\upgrading-linux-nodes.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/upgrading-linux-nodes/",
+    "n_chars": 3759
+  },
+  {
+    "doc_id": "doc_0339",
+    "title": "Upgrading Windows nodes",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\kubeadm\\upgrading-windows-nodes.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/upgrading-windows-nodes/",
+    "n_chars": 2629
+  },
+  {
+    "doc_id": "doc_0340",
+    "title": "Administration with kubeadm",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\kubeadm\\_index.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/kubeadm//",
+    "n_chars": 212
+  },
+  {
+    "doc_id": "doc_0341",
+    "title": "Configure Minimum and Maximum CPU Constraints for a Namespace",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\manage-resources\\cpu-constraint-namespace.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/manage-resources/cpu-constraint-namespace/",
+    "n_chars": 9711
+  },
+  {
+    "doc_id": "doc_0342",
+    "title": "Configure Default CPU Requests and Limits for a Namespace",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\manage-resources\\cpu-default-namespace.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/manage-resources/cpu-default-namespace/",
+    "n_chars": 6765
+  },
+  {
+    "doc_id": "doc_0343",
+    "title": "Configure Minimum and Maximum Memory Constraints for a Namespace",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\manage-resources\\memory-constraint-namespace.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/manage-resources/memory-constraint-namespace/",
+    "n_chars": 9463
+  },
+  {
+    "doc_id": "doc_0344",
+    "title": "Configure Default Memory Requests and Limits for a Namespace",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\manage-resources\\memory-default-namespace.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/manage-resources/memory-default-namespace/",
+    "n_chars": 7478
+  },
+  {
+    "doc_id": "doc_0345",
+    "title": "Configure Memory and CPU Quotas for a Namespace",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\manage-resources\\quota-memory-cpu-namespace.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/manage-resources/quota-memory-cpu-namespace/",
+    "n_chars": 6227
+  },
+  {
+    "doc_id": "doc_0346",
+    "title": "Configure a Pod Quota for a Namespace",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\manage-resources\\quota-pod-namespace.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/manage-resources/quota-pod-namespace/",
+    "n_chars": 4002
+  },
+  {
+    "doc_id": "doc_0348",
+    "title": "Changing the Container Runtime on a Node from Docker Engine to containerd",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\migrating-from-dockershim\\change-runtime-containerd.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/migrating-from-dockershim/change-runtime-containerd/",
+    "n_chars": 4982
+  },
+  {
+    "doc_id": "doc_0349",
+    "title": "Check whether dockershim removal affects you",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\migrating-from-dockershim\\check-if-dockershim-removal-affects-you.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/migrating-from-dockershim/check-if-dockershim-removal-affects-you/",
+    "n_chars": 6933
+  },
+  {
+    "doc_id": "doc_0350",
+    "title": "Find Out What Container Runtime is Used on a Node",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\migrating-from-dockershim\\find-out-runtime-you-use.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/migrating-from-dockershim/find-out-runtime-you-use/",
+    "n_chars": 3891
+  },
+  {
+    "doc_id": "doc_0351",
+    "title": "Migrating telemetry and security agents from dockershim",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\migrating-from-dockershim\\migrating-telemetry-and-security-agents.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/migrating-from-dockershim/migrating-telemetry-and-security-agents/",
+    "n_chars": 7657
+  },
+  {
+    "doc_id": "doc_0352",
+    "title": "Troubleshooting CNI plugin-related errors",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\migrating-from-dockershim\\troubleshooting-cni-plugin-related-errors.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/migrating-from-dockershim/troubleshooting-cni-plugin-related-errors/",
+    "n_chars": 5405
+  },
+  {
+    "doc_id": "doc_0353",
+    "title": "Migrating from dockershim",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\migrating-from-dockershim\\_index.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/migrating-from-dockershim//",
+    "n_chars": 2271
+  },
+  {
+    "doc_id": "doc_0354",
+    "title": "Use Antrea for NetworkPolicy",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\network-policy-provider\\antrea-network-policy.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/network-policy-provider/antrea-network-policy/",
+    "n_chars": 744
+  },
+  {
+    "doc_id": "doc_0355",
+    "title": "Use Calico for NetworkPolicy",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\network-policy-provider\\calico-network-policy.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/network-policy-provider/calico-network-policy/",
+    "n_chars": 1435
+  },
+  {
+    "doc_id": "doc_0356",
+    "title": "Use Cilium for NetworkPolicy",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\network-policy-provider\\cilium-network-policy.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/network-policy-provider/cilium-network-policy/",
+    "n_chars": 3377
+  },
+  {
+    "doc_id": "doc_0357",
+    "title": "Use Kube-router for NetworkPolicy",
+    "source_path": "content\\en\\docs\\tasks\\administer-cluster\\network-policy-provider\\kube-router-network-policy.md",
+    "source_url": "https://kubernetes.io/docs/tasks/administer-cluster/network-policy-provider/kube-router-network-policy/",
+    "n_chars": 1022
+  },
+  {
+    "doc_id": "doc_0359",
+    "title": "Access DRA Device Metadata",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\assign-resources\\access-dra-device-metadata.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/assign-resources/access-dra-device-metadata/",
+    "n_chars": 6272
+  },
+  {
+    "doc_id": "doc_0360",
+    "title": "Allocate Devices to Workloads with DRA",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\assign-resources\\allocate-devices-dra.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/assign-resources/allocate-devices-dra/",
+    "n_chars": 7092
+  },
+  {
+    "doc_id": "doc_0361",
+    "title": "Set Up DRA in a Cluster",
+    "source_path": "content\\en\\docs\\tasks\\configure-pod-container\\assign-resources\\set-up-dra-cluster.md",
+    "source_url": "https://kubernetes.io/docs/tasks/configure-pod-container/assign-resources/set-up-dra-cluster/",
+    "n_chars": 6519
+  },
+  {
+    "doc_id": "doc_0363",
+    "title": "Debug Init Containers",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-application\\debug-init-containers.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-application/debug-init-containers/",
+    "n_chars": 3212
+  },
+  {
+    "doc_id": "doc_0364",
+    "title": "Debug Pods",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-application\\debug-pods.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-application/debug-pods/",
+    "n_chars": 8133
+  },
+  {
+    "doc_id": "doc_0365",
+    "title": "Debug Running Pods",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-application\\debug-running-pod.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/",
+    "n_chars": 28248
+  },
+  {
+    "doc_id": "doc_0366",
+    "title": "Debug Services",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-application\\debug-service.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-application/debug-service/",
+    "n_chars": 23250
+  },
+  {
+    "doc_id": "doc_0367",
+    "title": "Debug a StatefulSet",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-application\\debug-statefulset.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-application/debug-statefulset/",
+    "n_chars": 1075
+  },
+  {
+    "doc_id": "doc_0368",
+    "title": "Determine the Reason for Pod Failure",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-application\\determine-reason-pod-failure.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-application/determine-reason-pod-failure/",
+    "n_chars": 4914
+  },
+  {
+    "doc_id": "doc_0369",
+    "title": "Get a Shell to a Running Container",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-application\\get-shell-running-container.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-application/get-shell-running-container/",
+    "n_chars": 3100
+  },
+  {
+    "doc_id": "doc_0370",
+    "title": "Troubleshooting Applications",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-application\\_index.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-application//",
+    "n_chars": 285
+  },
+  {
+    "doc_id": "doc_0371",
+    "title": "Auditing",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-cluster\\audit.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/",
+    "n_chars": 12630
+  },
+  {
+    "doc_id": "doc_0372",
+    "title": "Debugging Kubernetes nodes with crictl",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-cluster\\crictl.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-cluster/crictl/",
+    "n_chars": 7803
+  },
+  {
+    "doc_id": "doc_0373",
+    "title": "Debugging Kubernetes Nodes With Kubectl",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-cluster\\kubectl-node-debug.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-cluster/kubectl-node-debug/",
+    "n_chars": 3793
+  },
+  {
+    "doc_id": "doc_0374",
+    "title": "Developing and debugging services locally using telepresence",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-cluster\\local-debugging.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-cluster/local-debugging/",
+    "n_chars": 3653
+  },
+  {
+    "doc_id": "doc_0375",
+    "title": "Monitor Node Health",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-cluster\\monitor-node-health.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-cluster/monitor-node-health/",
+    "n_chars": 7444
+  },
+  {
+    "doc_id": "doc_0376",
+    "title": "Resource metrics pipeline",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-cluster\\resource-metrics-pipeline.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-metrics-pipeline/",
+    "n_chars": 9865
+  },
+  {
+    "doc_id": "doc_0377",
+    "title": "Tools for Monitoring Resources",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-cluster\\resource-usage-monitoring.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-usage-monitoring/",
+    "n_chars": 5307
+  },
+  {
+    "doc_id": "doc_0378",
+    "title": "Troubleshooting Topology Management",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-cluster\\topology.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-cluster/topology/",
+    "n_chars": 6638
+  },
+  {
+    "doc_id": "doc_0379",
+    "title": "Troubleshooting kubectl",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-cluster\\troubleshoot-kubectl.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-cluster/troubleshoot-kubectl/",
+    "n_chars": 6003
+  },
+  {
+    "doc_id": "doc_0380",
+    "title": "Windows debugging tips",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-cluster\\windows.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-cluster/windows/",
+    "n_chars": 7591
+  },
+  {
+    "doc_id": "doc_0381",
+    "title": "Troubleshooting Clusters",
+    "source_path": "content\\en\\docs\\tasks\\debug\\debug-cluster\\_index.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/debug-cluster//",
+    "n_chars": 13451
+  },
+  {
+    "doc_id": "doc_0382",
+    "title": "Logging in Kubernetes",
+    "source_path": "content\\en\\docs\\tasks\\debug\\logging\\_index.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/logging//",
+    "n_chars": 432
+  },
+  {
+    "doc_id": "doc_0383",
+    "title": "Monitoring in Kubernetes",
+    "source_path": "content\\en\\docs\\tasks\\debug\\monitoring\\_index.md",
+    "source_url": "https://kubernetes.io/docs/tasks/debug/monitoring//",
+    "n_chars": 356
+  },
+  {
+    "doc_id": "doc_0384",
+    "title": "Versions in CustomResourceDefinitions",
+    "source_path": "content\\en\\docs\\tasks\\extend-kubernetes\\custom-resources\\custom-resource-definition-versioning.md",
+    "source_url": "https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definition-versioning/",
+    "n_chars": 41677
+  },
+  {
+    "doc_id": "doc_0385",
+    "title": "Extend the Kubernetes API with CustomResourceDefinitions",
+    "source_path": "content\\en\\docs\\tasks\\extend-kubernetes\\custom-resources\\custom-resource-definitions.md",
+    "source_url": "https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/",
+    "n_chars": 72485
+  },
+  {
+    "doc_id": "doc_0387",
+    "title": "kubectl-convert overview",
+    "source_path": "content\\en\\docs\\tasks\\tools\\included\\kubectl-convert-overview.md",
+    "source_url": "https://kubernetes.io/docs/tasks/tools/included/kubectl-convert-overview/",
+    "n_chars": 371
+  },
+  {
+    "doc_id": "doc_0388",
+    "title": "What's next?",
+    "source_path": "content\\en\\docs\\tasks\\tools\\included\\kubectl-whats-next.md",
+    "source_url": "https://kubernetes.io/docs/tasks/tools/included/kubectl-whats-next/",
+    "n_chars": 618
+  },
+  {
+    "doc_id": "doc_0389",
+    "title": "bash auto-completion on Linux",
+    "source_path": "content\\en\\docs\\tasks\\tools\\included\\optional-kubectl-configs-bash-linux.md",
+    "source_url": "https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-bash-linux/",
+    "n_chars": 2318
+  },
+  {
+    "doc_id": "doc_0390",
+    "title": "bash auto-completion on macOS",
+    "source_path": "content\\en\\docs\\tasks\\tools\\included\\optional-kubectl-configs-bash-mac.md",
+    "source_url": "https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-bash-mac/",
+    "n_chars": 3384
+  },
+  {
+    "doc_id": "doc_0391",
+    "title": "fish auto-completion",
+    "source_path": "content\\en\\docs\\tasks\\tools\\included\\optional-kubectl-configs-fish.md",
+    "source_url": "https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-fish/",
+    "n_chars": 480
+  },
+  {
+    "doc_id": "doc_0392",
+    "title": "PowerShell auto-completion",
+    "source_path": "content\\en\\docs\\tasks\\tools\\included\\optional-kubectl-configs-pwsh.md",
+    "source_url": "https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-pwsh/",
+    "n_chars": 674
+  },
+  {
+    "doc_id": "doc_0393",
+    "title": "zsh auto-completion",
+    "source_path": "content\\en\\docs\\tasks\\tools\\included\\optional-kubectl-configs-zsh.md",
+    "source_url": "https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-zsh/",
+    "n_chars": 629
+  },
+  {
+    "doc_id": "doc_0394",
+    "title": "verify kubectl install",
+    "source_path": "content\\en\\docs\\tasks\\tools\\included\\verify-kubectl.md",
+    "source_url": "https://kubernetes.io/docs/tasks/tools/included/verify-kubectl/",
+    "n_chars": 1976
+  },
+  {
+    "doc_id": "doc_0396",
+    "title": "Hello Minikube",
+    "source_path": "content\\en\\docs\\tutorials\\hello-minikube.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/hello-minikube/",
+    "n_chars": 11675
+  },
+  {
+    "doc_id": "doc_0397",
+    "title": "Tutorials",
+    "source_path": "content\\en\\docs\\tutorials\\_index.md",
+    "source_url": "https://kubernetes.io/docs/tutorials//",
+    "n_chars": 2868
+  },
+  {
+    "doc_id": "doc_0398",
+    "title": "Explore Validating and Mutating Admission Policies",
+    "source_path": "content\\en\\docs\\tutorials\\cluster-management\\admission-policies.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/cluster-management/admission-policies/",
+    "n_chars": 14353
+  },
+  {
+    "doc_id": "doc_0399",
+    "title": "Install Drivers and Allocate Devices with DRA",
+    "source_path": "content\\en\\docs\\tutorials\\cluster-management\\install-use-dra.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/cluster-management/install-use-dra/",
+    "n_chars": 18861
+  },
+  {
+    "doc_id": "doc_0400",
+    "title": "Running Kubelet in Standalone Mode",
+    "source_path": "content\\en\\docs\\tutorials\\cluster-management\\kubelet-standalone.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/cluster-management/kubelet-standalone/",
+    "n_chars": 13390
+  },
+  {
+    "doc_id": "doc_0401",
+    "title": "Namespaces Walkthrough",
+    "source_path": "content\\en\\docs\\tutorials\\cluster-management\\namespaces-walkthrough.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/cluster-management/namespaces-walkthrough/",
+    "n_chars": 8674
+  },
+  {
+    "doc_id": "doc_0402",
+    "title": "Configuring swap memory on Kubernetes nodes",
+    "source_path": "content\\en\\docs\\tutorials\\cluster-management\\provision-swap-memory.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/cluster-management/provision-swap-memory/",
+    "n_chars": 3994
+  },
+  {
+    "doc_id": "doc_0404",
+    "title": "Configure a Pod to Use a PersistentVolume for Storage",
+    "source_path": "content\\en\\docs\\tutorials\\configuration\\configure-persistent-volume-storage.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/configuration/configure-persistent-volume-storage/",
+    "n_chars": 13586
+  },
+  {
+    "doc_id": "doc_0405",
+    "title": "Configuring Redis using a ConfigMap",
+    "source_path": "content\\en\\docs\\tutorials\\configuration\\configure-redis-using-configmap.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/configuration/configure-redis-using-configmap/",
+    "n_chars": 5457
+  },
+  {
+    "doc_id": "doc_0406",
+    "title": "Adopting Sidecar Containers",
+    "source_path": "content\\en\\docs\\tutorials\\configuration\\pod-sidecar-containers.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/configuration/pod-sidecar-containers/",
+    "n_chars": 10012
+  },
+  {
+    "doc_id": "doc_0407",
+    "title": "Updating Configuration via a ConfigMap",
+    "source_path": "content\\en\\docs\\tutorials\\configuration\\updating-configuration-via-a-configmap.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/configuration/updating-configuration-via-a-configmap/",
+    "n_chars": 26253
+  },
+  {
+    "doc_id": "doc_0409",
+    "title": "Learn Kubernetes Basics",
+    "source_path": "content\\en\\docs\\tutorials\\kubernetes-basics\\_index.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/kubernetes-basics//",
+    "n_chars": 3082
+  },
+  {
+    "doc_id": "doc_0410",
+    "title": "Restrict a Container's Access to Resources with AppArmor",
+    "source_path": "content\\en\\docs\\tutorials\\security\\apparmor.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/security/apparmor/",
+    "n_chars": 10664
+  },
+  {
+    "doc_id": "doc_0411",
+    "title": "Apply Pod Security Standards at the Cluster Level",
+    "source_path": "content\\en\\docs\\tutorials\\security\\cluster-level-pss.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/security/cluster-level-pss/",
+    "n_chars": 12779
+  },
+  {
+    "doc_id": "doc_0412",
+    "title": "Apply Pod Security Standards at the Namespace Level",
+    "source_path": "content\\en\\docs\\tutorials\\security\\ns-level-pss.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/security/ns-level-pss/",
+    "n_chars": 5264
+  },
+  {
+    "doc_id": "doc_0413",
+    "title": "Restrict a Container's Syscalls with seccomp",
+    "source_path": "content\\en\\docs\\tutorials\\security\\seccomp.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/security/seccomp/",
+    "n_chars": 20496
+  },
+  {
+    "doc_id": "doc_0414",
+    "title": "Security",
+    "source_path": "content\\en\\docs\\tutorials\\security\\_index.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/security//",
+    "n_chars": 339
+  },
+  {
+    "doc_id": "doc_0415",
+    "title": "Connecting Applications with Services",
+    "source_path": "content\\en\\docs\\tutorials\\services\\connect-applications-service.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/services/connect-applications-service/",
+    "n_chars": 17747
+  },
+  {
+    "doc_id": "doc_0416",
+    "title": "Explore Termination Behavior for Pods And Their Endpoints",
+    "source_path": "content\\en\\docs\\tutorials\\services\\pods-and-endpoint-termination-flow.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/services/pods-and-endpoint-termination-flow/",
+    "n_chars": 5588
+  },
+  {
+    "doc_id": "doc_0417",
+    "title": "Using Source IP",
+    "source_path": "content\\en\\docs\\tutorials\\services\\source-ip.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/services/source-ip/",
+    "n_chars": 13532
+  },
+  {
+    "doc_id": "doc_0419",
+    "title": "StatefulSet Basics",
+    "source_path": "content\\en\\docs\\tutorials\\stateful-application\\basic-stateful-set.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/",
+    "n_chars": 45624
+  },
+  {
+    "doc_id": "doc_0420",
+    "title": "Example: Deploying Cassandra with a StatefulSet",
+    "source_path": "content\\en\\docs\\tutorials\\stateful-application\\cassandra.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/stateful-application/cassandra/",
+    "n_chars": 10156
+  },
+  {
+    "doc_id": "doc_0421",
+    "title": "Example: Deploying WordPress and MySQL with Persistent Volumes",
+    "source_path": "content\\en\\docs\\tutorials\\stateful-application\\mysql-wordpress-persistent-volume.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/stateful-application/mysql-wordpress-persistent-volume/",
+    "n_chars": 9059
+  },
+  {
+    "doc_id": "doc_0422",
+    "title": "Running ZooKeeper, A Distributed System Coordinator",
+    "source_path": "content\\en\\docs\\tutorials\\stateful-application\\zookeeper.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/stateful-application/zookeeper/",
+    "n_chars": 45421
+  },
+  {
+    "doc_id": "doc_0424",
+    "title": "Exposing an External IP Address to Access an Application in a Cluster",
+    "source_path": "content\\en\\docs\\tutorials\\stateless-application\\expose-external-ip-address.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/stateless-application/expose-external-ip-address/",
+    "n_chars": 5550
+  },
+  {
+    "doc_id": "doc_0425",
+    "title": "Example: Deploying PHP Guestbook application with Redis",
+    "source_path": "content\\en\\docs\\tutorials\\stateless-application\\guestbook.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/stateless-application/guestbook/",
+    "n_chars": 13683
+  },
+  {
+    "doc_id": "doc_0427",
+    "title": "Using Minikube to Create a Cluster",
+    "source_path": "content\\en\\docs\\tutorials\\kubernetes-basics\\create-cluster\\cluster-intro.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/kubernetes-basics/create-cluster/cluster-intro/",
+    "n_chars": 4770
+  },
+  {
+    "doc_id": "doc_0429",
+    "title": "Using kubectl to Create a Deployment",
+    "source_path": "content\\en\\docs\\tutorials\\kubernetes-basics\\deploy-app\\deploy-intro.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/kubernetes-basics/deploy-app/deploy-intro/",
+    "n_chars": 8041
+  },
+  {
+    "doc_id": "doc_0431",
+    "title": "Viewing Pods and Nodes",
+    "source_path": "content\\en\\docs\\tutorials\\kubernetes-basics\\explore\\explore-intro.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/kubernetes-basics/explore/explore-intro/",
+    "n_chars": 7923
+  },
+  {
+    "doc_id": "doc_0433",
+    "title": "Using a Service to Expose Your App",
+    "source_path": "content\\en\\docs\\tutorials\\kubernetes-basics\\expose\\expose-intro.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/kubernetes-basics/expose/expose-intro/",
+    "n_chars": 9650
+  },
+  {
+    "doc_id": "doc_0435",
+    "title": "Running Multiple Instances of Your App",
+    "source_path": "content\\en\\docs\\tutorials\\kubernetes-basics\\scale\\scale-intro.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/kubernetes-basics/scale/scale-intro/",
+    "n_chars": 8225
+  },
+  {
+    "doc_id": "doc_0437",
+    "title": "Performing a Rolling Update",
+    "source_path": "content\\en\\docs\\tutorials\\kubernetes-basics\\update\\update-intro.md",
+    "source_url": "https://kubernetes.io/docs/tutorials/kubernetes-basics/update/update-intro/",
+    "n_chars": 6902
+  }
+]
