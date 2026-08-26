@@ -70,12 +70,3 @@ ollama pull qwen2.5:7b-instruct
 ollama run qwen2.5:7b-instruct "Dis bonjour en une phrase"
 ```
 
-## Étape 1 : récupérer le corpus
-
-```bash
-python src/ingestion.py
-```
-
-Ça va cloner (en sparse-checkout, donc rapide et léger) uniquement les dossiers
-Markdown utiles du repo `kubernetes/website`, et les copier nettoyés dans
-`data/raw/`.
