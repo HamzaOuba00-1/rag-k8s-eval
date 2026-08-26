@@ -1,2 +1,0 @@
-chunking,retrieval,mode,n_factual,n_impossible,faithfulness,answer_relevancy,context_precision,context_recall,refusal_rate
-structure,hybrid_rerank,?,10,0,0.875,0.750034455934078,0.938749999944809,1.0,
