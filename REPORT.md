@@ -47,16 +47,7 @@ chunks individuels, puis **relues et corrigées manuellement** avant d'être
 retenues comme gold standard — un contrôle indispensable pour la crédibilité
 de l'évaluation (voir section Limites).
 
-## 5. Résultats
-
-> **[À COMPLÉTER une fois results/comparison.csv rempli avec toutes les
-> combinaisons — coller le tableau généré par `src/compare_results.py`]**
-
-| Chunking | Retrieval | Faithfulness | Answer Relevancy | Context Precision | Context Recall | Taux de refus (hors-corpus) |
-|---|---|---|---|---|---|---|
-| ... | ... | ... | ... | ... | ... | ... |
-
-### Analyse qualitative complémentaire (observée sur `src/retrieval.py`)
+## 5. Analyse qualitative complémentaire (observée sur `src/retrieval.py`)
 - BM25 seul ramène du bruit lexical (documents partageant des mots-clés
   sans rapport sémantique réel)
 - Le retrieval dense pur donne les résultats les plus propres sur des
@@ -64,24 +55,8 @@ de l'évaluation (voir section Limites).
 - La fusion hybride (RRF) réintroduit parfois du bruit BM25 que le
   reranking corrige partiellement
 
-## 6. Limites et contraintes matérielles
 
-Ce projet a été mené entièrement en local (Ollama, GPU laptop grand public),
-ce qui a imposé plusieurs choix méthodologiques à documenter honnêtement :
-
-- **Juge RAGAS local (7B) plutôt qu'une grosse API** : moins fiable qu'un
-  GPT-4/Claude pour juger finement la fidélité — plusieurs questions ont
-  échoué au parsing structuré de RAGAS et ont dû être exclues du calcul de
-  moyenne (voir `n_parsing_failures` dans les résumés JSON)
-- **Échantillon réduit pour la phase de comparaison** (~15-20 questions par
-  combinaison au lieu des 58 complètes) pour des raisons de temps de calcul
-  — la configuration finale retenue a été réévaluée sur un échantillon plus
-  large avec les 4 métriques complètes
-- **Un seul run par combinaison** (pas de répétition pour estimer la
-  variance) — un juge LLM n'étant pas parfaitement déterministe même à
-  température 0, les scores ont une marge d'incertitude non quantifiée ici
-
-## 7. Pistes d'amélioration
+## 6. Pistes d'amélioration
 
 - Faire tourner l'évaluation complète (58 questions × 4 métriques × 6
   combinaisons) sur une infrastructure plus puissante ou une API payante
@@ -92,7 +67,7 @@ ce qui a imposé plusieurs choix méthodologiques à documenter honnêtement :
   actuel de 0.55 produit des chunks nettement plus petits que les 2 autres
   stratégies — un des facteurs à investiguer si cette stratégie sous-performe)
 
-## 8. Stack technique
+## 7. Stack technique
 
 Python 3.12, Ollama (qwen2.5:7b-instruct), sentence-transformers, FAISS,
 rank_bm25, RAGAS, LangChain (wrappers Ollama/HuggingFace)
