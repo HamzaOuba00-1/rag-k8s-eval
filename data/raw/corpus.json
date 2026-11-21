@@ -1,0 +1,12 @@
+{
+  "source_repo": "https://github.com/kubernetes/website.git",
+  "commit": "5184b9b24b288709ed36b4003f53dc1530eda2f3",
+  "sections": [
+    "content/en/docs/concepts",
+    "content/en/docs/tasks",
+    "content/en/docs/tutorials"
+  ],
+  "n_docs": 408,
+  "n_chars": 4200038,
+  "license": "CC BY 4.0 (see NOTICE)"
+}
