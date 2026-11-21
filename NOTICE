@@ -1,0 +1,11 @@
+This repository includes a snapshot of the Kubernetes documentation
+(data/raw/), taken from https://github.com/kubernetes/website
+(content/en/docs/concepts, tasks and tutorials).
+
+The Kubernetes documentation is licensed under the Creative Commons
+Attribution 4.0 International License (CC BY 4.0):
+https://creativecommons.org/licenses/by/4.0/
+
+Copyright The Kubernetes Authors. The files were modified: YAML front
+matter was removed and files were renamed to doc_XXXX.md (see
+data/raw/manifest.json for the original paths and URLs).

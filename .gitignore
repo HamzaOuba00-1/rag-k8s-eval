@@ -1,25 +1,33 @@
-# Environnement
+# Python environments and caches
 venv/
 .venv/
 __pycache__/
 *.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
 # Secrets
 .env
 
-# Données volumineuses (se régénèrent via ingestion.py / chunking.py / indexing.py)
-data/raw/
+# Corpus snapshot: data/raw/ IS tracked on purpose (frozen corpus, ~5 MB,
+# CC BY 4.0, see NOTICE). Gold questions reference its doc_ids.
+# Derived artifacts are rebuilt by the pipeline and are not tracked:
+data/_k8s_website_clone/
 data/processed/
 data/index/
 *.faiss
-*.index
+*.pkl
 
-# Notebooks checkpoints
+# Jupyter
 .ipynb_checkpoints/
 
-# Résultats bruts volumineux (les réponses complètes + contextes) :
-# on garde les résumés/tableaux (summary_*.json, comparison.*), on exclut
-# les runs bruts (run_*.jsonl, scores_*.csv) qui sont gros et régénérables.
+# Evaluation caches and intermediate files (regenerable)
+.cache/
+eval/questions_candidates.jsonl
+
+# Raw run outputs are untracked until the final, reported runs are produced;
+# the tracking policy for final results is defined in a later step.
 results/run_*.jsonl
 results/scores_*.csv
-eval/questions_candidates.jsonl
+results/summary_*.json
