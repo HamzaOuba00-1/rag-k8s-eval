@@ -6,7 +6,9 @@ Pipeline, in order:
   index    build BM25 + FAISS indexes in data/index/<strategy>/
   search   inspect retrieval results for one query (no LLM)
   ask      answer one question with citations (needs Ollama)
-  run      answer every evaluation question for one configuration (needs Ollama)
+  retrieve phase 1: store the top-k contexts of every evaluation question (no LLM)
+  generate phase 2: answer from the stored contexts (Ollama; cached and resumable)
+  run      retrieve, then generate
 """
 
 from __future__ import annotations
@@ -14,6 +16,7 @@ from __future__ import annotations
 import argparse
 import sys
 from collections.abc import Sequence
+from typing import Any
 
 from . import config
 
@@ -100,10 +103,42 @@ def _cmd_ask(args: argparse.Namespace) -> int:
     return 0
 
 
-def _cmd_run(args: argparse.Namespace) -> int:
+def _configs(args: argparse.Namespace) -> list[Any]:
+    from .pipeline import ALL_CONFIGS, RunConfig
+
+    if args.all:
+        return list(ALL_CONFIGS)
+    if not args.configs:
+        raise SystemExit("give --configs <strategy>:<method> ... or --all")
+    return [RunConfig.parse(c) for c in args.configs]
+
+
+def _cmd_retrieve(args: argparse.Namespace) -> int:
     from . import pipeline
 
-    pipeline.run(args.strategy, args.method, top_k=args.top_k, limit_factual=args.limit)
+    pipeline.retrieve(_configs(args), top_k=args.top_k)
+    return 0
+
+
+def _cmd_generate(args: argparse.Namespace) -> int:
+    from . import pipeline
+
+    for cfg in _configs(args):
+        pipeline.generate_run(cfg, limit=args.limit)
+    return 0
+
+
+def _cmd_run(args: argparse.Namespace) -> int:
+    """Both phases; retrieval models are released before the LLM runs."""
+    import gc
+
+    from . import pipeline
+
+    configs = _configs(args)
+    pipeline.retrieve(configs, top_k=args.top_k)
+    gc.collect()
+    for cfg in configs:
+        pipeline.generate_run(cfg, limit=args.limit)
     return 0
 
 
@@ -131,18 +166,24 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--top-k", type=int, default=config.TOP_K)
     p.set_defaults(func=_cmd_search)
 
+    p = sub.add_parser("ask", help="answer one question with citations (needs Ollama)")
+    p.add_argument("question")
+    p.add_argument("--strategy", choices=config.STRATEGIES, default="structure")
+    p.add_argument("--method", choices=config.METHODS, default="hybrid_rerank")
+    p.add_argument("--top-k", type=int, default=config.TOP_K)
+    p.set_defaults(func=_cmd_ask)
+
     for name, func, help_ in (
-        ("ask", _cmd_ask, "answer one question"),
-        ("run", _cmd_run, "answer all evaluation questions"),
+        ("retrieve", _cmd_retrieve, "phase 1: retrieve contexts for all evaluation questions (no LLM)"),
+        ("generate", _cmd_generate, "phase 2: answer from stored contexts (Ollama, cached, resumable)"),
+        ("run", _cmd_run, "retrieve then generate"),
     ):
         p = sub.add_parser(name, help=help_)
-        if name == "ask":
-            p.add_argument("question")
-        p.add_argument("--strategy", choices=config.STRATEGIES, default="structure")
-        p.add_argument("--method", choices=config.METHODS, default="hybrid_rerank")
+        group = p.add_mutually_exclusive_group()
+        group.add_argument("--configs", nargs="+", metavar="STRATEGY:METHOD", help="e.g. structure:hybrid_rerank")
+        group.add_argument("--all", action="store_true", help="all 12 strategy x method combinations")
         p.add_argument("--top-k", type=int, default=config.TOP_K)
-        if name == "run":
-            p.add_argument("--limit", type=int, default=None, help="only the first N factual questions")
+        p.add_argument("--limit", type=int, default=None, help="generate only the first N questions (smoke test)")
         p.set_defaults(func=func)
     return parser
 

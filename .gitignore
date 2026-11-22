@@ -31,6 +31,8 @@ eval/questions_candidates.jsonl
 results/run_*.jsonl
 results/scores_*.csv
 results/summary_*.json
+results/retrieval/
+results/runs/
 
 # Packaging artifacts
 *.egg-info/

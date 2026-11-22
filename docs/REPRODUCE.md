@@ -45,21 +45,37 @@ dense index use `sentence-transformers/all-MiniLM-L6-v2`.
 
 ## 4. Retrieval and generation
 
+Interactive checks:
+
 ```bash
 python -m ragk8s search "How do I create a Deployment?" --strategy structure
 python -m ragk8s ask "How do I create a Deployment?" --strategy structure --method hybrid_rerank
-python -m ragk8s run --strategy structure --method hybrid_rerank
 ```
 
 Decoding is deterministic (temperature 0, seed 42, `num_ctx` 4096). `ask` also prints
 whether the answer is a refusal, which sources it cites, the share of sentences
 with a citation, token counts and the generation time.
 
-## 5. Evaluation
+## 5. Evaluation runs (two phases)
 
-Being reworked (resumable runs, retrieval metrics, RAGAS with caching, judge
-validation, bootstrap confidence intervals). The previous scripts are kept in
-`legacy/` until they are replaced.
+```bash
+# Phase 1, no LLM: top-k contexts of every evaluation question, for all 12 configurations
+python -m ragk8s retrieve --all
+
+# Phase 2, Ollama: answers from the stored contexts
+python -m ragk8s generate --configs structure:hybrid_rerank
+```
+
+- Retrieval results go to `results/retrieval/<strategy>_<method>.jsonl` (+ `.meta.json`).
+- Each answer is cached in `.cache/generations/`, keyed by model digest, prompt,
+  decoding options, question and contexts. `generate` can be interrupted (Ctrl+C,
+  crash, reboot) and rerun: finished answers are reused.
+- Runs are written to `results/runs/run_<strategy>_<method>.jsonl` with a `.meta.json`
+  (model digest, Ollama version, options, timings, git commit, platform).
+- The phases are separate so that the embedding and reranking models are not in
+  memory while the LLM runs (`run` chains both).
+
+The RAGAS evaluation is being reworked; the previous scripts are kept in `legacy/`.
 
 ## Quality checks
 
