@@ -195,6 +195,21 @@ configuration; reported on all factual questions and separately per question ori
 
 The RAGAS evaluation is being reworked; the previous scripts are kept in `legacy/`.
 
+## 10. ONNX models for the web app
+
+The web app runs retrieval without PyTorch: the embedding model and the reranker are
+exported once to ONNX with dynamic int8 quantisation, then checked against PyTorch.
+
+```bash
+pip install -e ".[dev,onnx]"
+python -m ragk8s onnx export   # models/onnx/{embedder,reranker}/ (model.onnx, model.int8.onnx, tokenizer.json)
+python -m ragk8s onnx check    # results/onnx_parity.json
+```
+
+`check` reports, for every strategy and model-based method, the share of evaluation
+questions that get exactly the same context with ONNX int8 as with PyTorch, the mean
+Jaccard overlap, the source-page MRR with both back-ends and the time per query.
+
 ## Quality checks
 
 CI (`.github/workflows/ci.yml`) runs the same checks on every push, with a light

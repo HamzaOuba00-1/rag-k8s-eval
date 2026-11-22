@@ -270,6 +270,28 @@ def _cmd_report(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_onnx(args: argparse.Namespace) -> int:
+    from . import onnx_export
+
+    if args.action == "export":
+        print(json.dumps(onnx_export.export(), indent=2))
+    else:
+        result = onnx_export.check()
+        q = result["query_embedding_cosine"]
+        print(
+            f"{result['n_questions']} questions; query embedding cosine torch vs onnx int8: "
+            f"min {q['min']:.4f}, mean {q['mean']:.4f}"
+        )
+        for name, c in result["configs"].items():
+            print(
+                f"{name:<26} identical context {c['identical_context']:.0%}  jaccard {c['mean_jaccard']:.2f}  "
+                f"same 1st {c['same_first_chunk']:.0%}  MRR {c['mrr_torch']:.3f} -> {c['mrr_onnx_int8']:.3f}  "
+                f"ms/query {c['ms_per_query_torch']} -> {c['ms_per_query_onnx_int8']}"
+            )
+        print(f"-> {onnx_export.PARITY_PATH}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ragk8s", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -358,6 +380,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("compare", help="final tables, figures and results/summary.json")
     p.set_defaults(func=_cmd_compare)
+
+    p = sub.add_parser("onnx", help="export the retrieval models to ONNX int8 / check ranking parity with PyTorch")
+    p.add_argument("action", choices=("export", "check"))
+    p.set_defaults(func=_cmd_onnx)
 
     p = sub.add_parser("report", help="regenerate the result blocks of README.md and REPORT.md")
     p.set_defaults(func=_cmd_report)

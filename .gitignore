@@ -42,3 +42,6 @@ dist/
 # Archives built for Kaggle datasets and outputs downloaded from Kaggle
 kaggle/export/
 kaggle/output/
+
+# Exported ONNX models (rebuilt with `python -m ragk8s onnx export`)
+models/
