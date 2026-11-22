@@ -10,6 +10,7 @@ Pipeline, in order:
   generate phase 2: answer from the stored contexts (Ollama; cached and resumable)
   run      retrieve, then generate
   retrieval-metrics  hit@k and MRR of the source document per configuration (no LLM)
+  questions draft  extra gold questions from whole pages (Groq, neutral w.r.t. chunking)
   review   export the gold questions to Excel for human review, then apply the verdicts
 """
 
@@ -77,7 +78,7 @@ def _cmd_search(args: argparse.Namespace) -> int:
     retriever = Retriever(args.strategy)
     for method in args.methods:
         print(f"\n### {method} ###")
-        for hit in retriever.search(method, args.query, top_k=args.top_k):
+        for hit in retriever.search(method, args.query, budget_chars=args.budget):
             score = hit.rerank_score if hit.rerank_score is not None else hit.score
             preview = hit.chunk["text"][:120].replace("\n", " ")
             print(f"  [{hit.rank}] {score:.4f} | {hit.chunk['title']} ({hit.chunk['doc_id']})\n      {preview}...")
@@ -90,7 +91,7 @@ def _cmd_ask(args: argparse.Namespace) -> int:
     from .refusal import is_refusal
     from .retrieval import Retriever
 
-    hits = Retriever(args.strategy).search(args.method, args.question, top_k=args.top_k)
+    hits = Retriever(args.strategy).search(args.method, args.question, budget_chars=args.budget)
     result = generation.generate(args.question, hits)
     print(result.answer)
     check = check_citations(result.answer, len(hits))
@@ -118,7 +119,7 @@ def _configs(args: argparse.Namespace) -> list[Any]:
 def _cmd_retrieve(args: argparse.Namespace) -> int:
     from . import pipeline
 
-    pipeline.retrieve(_configs(args), top_k=args.top_k)
+    pipeline.retrieve(_configs(args), budget_chars=args.budget)
     return 0
 
 
@@ -137,7 +138,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
     from . import pipeline
 
     configs = _configs(args)
-    pipeline.retrieve(configs, top_k=args.top_k)
+    pipeline.retrieve(configs, budget_chars=args.budget)
     gc.collect()
     for cfg in configs:
         pipeline.generate_run(cfg, limit=args.limit)
@@ -168,6 +169,17 @@ def _cmd_review(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_questions(args: argparse.Namespace) -> int:
+    from . import questions_draft
+
+    stats = questions_draft.draft(n=args.n, model=args.model, replace=args.replace)
+    print(
+        f"{stats['pages']} pages sampled: {stats['accepted']} drafts accepted, {stats['rejected']} rejected "
+        f"(see {questions_draft.REJECTED_PATH}); {stats['new_tokens']:,} new Groq tokens."
+    )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ragk8s", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -189,14 +201,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("query")
     p.add_argument("--strategy", choices=config.STRATEGIES, default="structure")
     p.add_argument("--methods", nargs="+", choices=config.METHODS, default=list(config.METHODS))
-    p.add_argument("--top-k", type=int, default=config.TOP_K)
+    p.add_argument("--budget", type=int, default=config.CONTEXT_BUDGET_CHARS, help="context budget in characters")
     p.set_defaults(func=_cmd_search)
 
     p = sub.add_parser("ask", help="answer one question with citations (needs Ollama)")
     p.add_argument("question")
     p.add_argument("--strategy", choices=config.STRATEGIES, default="structure")
     p.add_argument("--method", choices=config.METHODS, default="hybrid_rerank")
-    p.add_argument("--top-k", type=int, default=config.TOP_K)
+    p.add_argument("--budget", type=int, default=config.CONTEXT_BUDGET_CHARS, help="context budget in characters")
     p.set_defaults(func=_cmd_ask)
 
     for name, func, help_ in (
@@ -208,7 +220,7 @@ def build_parser() -> argparse.ArgumentParser:
         group = p.add_mutually_exclusive_group()
         group.add_argument("--configs", nargs="+", metavar="STRATEGY:METHOD", help="e.g. structure:hybrid_rerank")
         group.add_argument("--all", action="store_true", help="all 12 strategy x method combinations")
-        p.add_argument("--top-k", type=int, default=config.TOP_K)
+        p.add_argument("--budget", type=int, default=config.CONTEXT_BUDGET_CHARS, help="context budget in characters")
         p.add_argument("--limit", type=int, default=None, help="generate only the first N questions (smoke test)")
         p.set_defaults(func=func)
 
@@ -218,6 +230,13 @@ def build_parser() -> argparse.ArgumentParser:
     group.add_argument("--all", action="store_true", help="all configurations with a retrieval file (default)")
     p.add_argument("--reference", metavar="STRATEGY:METHOD", help="paired MRR differences vs this configuration")
     p.set_defaults(func=_cmd_retrieval_metrics)
+
+    p = sub.add_parser("questions", help="draft extra gold questions from whole pages (Groq)")
+    p.add_argument("action", choices=("draft",))
+    p.add_argument("--n", type=int, default=25, help="number of pages to sample")
+    p.add_argument("--model", default="openai/gpt-oss-120b")
+    p.add_argument("--replace", action="store_true", help="also discard already reviewed page questions")
+    p.set_defaults(func=_cmd_questions)
 
     p = sub.add_parser("review", help="human review of the gold questions (Excel round trip)")
     p.add_argument("action", choices=("export", "apply"))

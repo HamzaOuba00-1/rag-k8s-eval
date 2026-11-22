@@ -54,14 +54,22 @@ METHODS: Final[tuple[Method, ...]] = ("bm25", "dense", "hybrid", "hybrid_rerank"
 
 EMBEDDING_MODEL: Final = "sentence-transformers/all-MiniLM-L6-v2"
 RERANKER_MODEL: Final = "cross-encoder/ms-marco-MiniLM-L-6-v2"
-TOP_K: Final = 5
 RRF_K: Final = 60
-HYBRID_CANDIDATE_POOL: Final = 30  # per retriever, before fusion
-RERANK_CANDIDATES: Final = 20  # fused candidates passed to the cross-encoder
+# Every strategy gets the same context budget in characters (not in chunks):
+# chunks are taken in rank order while they fit, so semantic chunking (~290
+# chars per chunk) is not starved compared with fixed/structure (~850-950).
+CONTEXT_BUDGET_CHARS: Final = 5000
+MAX_CONTEXT_CHUNKS: Final = 20  # hard cap on numbered excerpts in the prompt
+CANDIDATE_DEPTH: Final = 60  # ranked candidates per retriever before budgeting / fusion
+# The cross-encoder rescoring pool is also sized in characters (4x the budget),
+# within [RERANK_MIN_CANDIDATES, RERANK_MAX_CANDIDATES] chunks.
+RERANK_POOL_CHARS: Final = 4 * CONTEXT_BUDGET_CHARS
+RERANK_MIN_CANDIDATES: Final = 20
+RERANK_MAX_CANDIDATES: Final = 80
 
 # --- Generation ------------------------------------------------------------------
 
 OLLAMA_MODEL: Final = "qwen2.5:7b-instruct"
-GENERATION_NUM_CTX: Final = 4096  # tokens; 5 chunks of <= 1,500 chars fit with margin
+GENERATION_NUM_CTX: Final = 4096  # tokens; a 5,000-char context (~1,300 tokens) fits with margin
 GENERATION_MAX_TOKENS: Final = 512
 SEED: Final = 42

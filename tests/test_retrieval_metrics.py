@@ -26,7 +26,14 @@ def _item(qid: str, docs: list[str], source: str = "d", category: str = "factual
 
 def test_question_metrics() -> None:
     m = question_metrics(_item("q", ["a", "b", "d", "c", "e"]))
-    assert m == {"hit@1": 0.0, "hit@3": 1.0, "hit@5": 1.0, "mrr": pytest.approx(1 / 3), "context_chars": 50.0}
+    assert m == {
+        "hit@1": 0.0,
+        "hit@3": 1.0,
+        "hit@ctx": 1.0,
+        "mrr": pytest.approx(1 / 3),
+        "context_chunks": 5.0,
+        "context_chars": 50.0,
+    }
     assert question_metrics(_item("q", ["a", "b"]))["mrr"] == 0.0
 
 

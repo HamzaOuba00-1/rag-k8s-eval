@@ -1,7 +1,8 @@
 """Two-phase, resumable evaluation runs.
 
-Phase 1 - retrieve: for one configuration (strategy, method), retrieve the top-k
-chunks for every evaluation question and store them in
+Phase 1 - retrieve: for one configuration (strategy, method), retrieve the
+context (ranked chunks cut to the same character budget for every strategy)
+for every evaluation question and store them in
 results/retrieval/<strategy>_<method>.jsonl. Deterministic and fast; it is the
 input of the retrieval metrics and of phase 2.
 
@@ -109,7 +110,9 @@ def hits_from_records(records: Sequence[dict[str, Any]]) -> list[Hit]:
 
 
 def retrieve(
-    configs: Sequence[RunConfig], top_k: int = config.TOP_K, questions_path: Path = QUESTIONS_PATH
+    configs: Sequence[RunConfig],
+    budget_chars: int = config.CONTEXT_BUDGET_CHARS,
+    questions_path: Path = QUESTIONS_PATH,
 ) -> list[Path]:
     """Phase 1. Strategies are loaded once; models are shared across configurations."""
     from sentence_transformers import CrossEncoder, SentenceTransformer
@@ -129,7 +132,7 @@ def retrieve(
         for cfg in (c for c in configs if c.strategy == strategy):
             records = []
             for q in tqdm(questions, desc=f"retrieve {cfg.name}", leave=False):
-                hits = retriever.search(cfg.method, q["question"], top_k=top_k)
+                hits = retriever.search(cfg.method, q["question"], budget_chars=budget_chars)
                 records.append(
                     {
                         "id": q["id"],
@@ -137,6 +140,7 @@ def retrieve(
                         "category": q["category"],
                         "ground_truth": q.get("ground_truth"),
                         "source_doc_id": q.get("source_doc_id"),
+                        "origin": q.get("origin", "structure_chunk") if q["category"] == "factual" else None,
                         "hits": [_hit_record(h) for h in hits],
                     }
                 )
@@ -146,7 +150,8 @@ def retrieve(
                 out.with_suffix(".meta.json"),
                 {
                     "config": cfg.name,
-                    "top_k": top_k,
+                    "budget_chars": budget_chars,
+                    "max_context_chunks": config.MAX_CONTEXT_CHUNKS,
                     "n_questions": len(records),
                     "questions_sha256": sha256_file(questions_path),
                     "chunks_sha256": index_sha,

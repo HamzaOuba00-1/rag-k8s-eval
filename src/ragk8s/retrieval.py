@@ -44,6 +44,37 @@ def reciprocal_rank_fusion(rankings: Sequence[Sequence[str]], k: int = config.RR
     return sorted(scores.items(), key=lambda kv: (-kv[1], order[kv[0]]))
 
 
+def fill_budget(hits: Sequence[Hit], budget_chars: int, max_chunks: int = config.MAX_CONTEXT_CHUNKS) -> list[Hit]:
+    """Take hits in rank order while they fit in ``budget_chars``.
+
+    A chunk that does not fit is skipped (a later, shorter one may still fit),
+    so the selected chunks keep their relative order. Ranks are renumbered 1..n.
+    """
+    selected: list[Hit] = []
+    used = 0
+    for hit in hits:
+        size = len(hit.chunk["text"])
+        if used + size > budget_chars:
+            continue
+        selected.append(Hit(hit.chunk, hit.score, len(selected) + 1, hit.rerank_score))
+        used += size
+        if len(selected) >= max_chunks:
+            break
+    return selected
+
+
+def pool_by_chars(hits: Sequence[Hit], pool_chars: int, min_hits: int, max_hits: int) -> list[Hit]:
+    """Leading hits until their text totals ``pool_chars``, within [min_hits, max_hits]."""
+    pool: list[Hit] = []
+    total = 0
+    for hit in hits:
+        if len(pool) >= max_hits or (total >= pool_chars and len(pool) >= min_hits):
+            break
+        pool.append(hit)
+        total += len(hit.chunk["text"])
+    return pool
+
+
 def top_indices(scores: np.ndarray, top_k: int) -> list[int]:
     """Indices of the ``top_k`` highest scores; ties keep index order."""
     return [int(i) for i in np.argsort(-scores, kind="stable")[:top_k]]
@@ -88,17 +119,17 @@ class Retriever:
             self._cross_encoder = CrossEncoder(config.RERANKER_MODEL)
         return self._cross_encoder
 
-    def bm25(self, query: str, top_k: int = config.TOP_K) -> list[Hit]:
+    def bm25(self, query: str, top_k: int = config.CANDIDATE_DEPTH) -> list[Hit]:
         scores = np.asarray(self._bm25.get_scores(tokenize(query)))
         return [Hit(self.chunks[i], float(scores[i]), r) for r, i in enumerate(top_indices(scores, top_k), start=1)]
 
-    def dense(self, query: str, top_k: int = config.TOP_K) -> list[Hit]:
+    def dense(self, query: str, top_k: int = config.CANDIDATE_DEPTH) -> list[Hit]:
         vec = np.asarray(self.embed_model.encode([query], normalize_embeddings=True), dtype=np.float32)
         scores, ids = self._faiss.search(vec, top_k)
         pairs = [(int(i), float(s)) for i, s in zip(ids[0], scores[0], strict=True) if i >= 0]
         return [Hit(self.chunks[i], s, r) for r, (i, s) in enumerate(pairs, start=1)]
 
-    def hybrid(self, query: str, top_k: int = config.TOP_K, pool: int = config.HYBRID_CANDIDATE_POOL) -> list[Hit]:
+    def hybrid(self, query: str, top_k: int = config.CANDIDATE_DEPTH, pool: int = config.CANDIDATE_DEPTH) -> list[Hit]:
         bm25_hits = self.bm25(query, pool)
         dense_hits = self.dense(query, pool)
         lookup = {h.chunk_id: h.chunk for h in (*bm25_hits, *dense_hits)}
@@ -106,9 +137,15 @@ class Retriever:
         return [Hit(lookup[cid], score, r) for r, (cid, score) in enumerate(fused[:top_k], start=1)]
 
     def hybrid_rerank(
-        self, query: str, top_k: int = config.TOP_K, candidates: int = config.RERANK_CANDIDATES
+        self,
+        query: str,
+        top_k: int = config.CANDIDATE_DEPTH,
+        pool_chars: int = config.RERANK_POOL_CHARS,
+        min_candidates: int = config.RERANK_MIN_CANDIDATES,
+        max_candidates: int = config.RERANK_MAX_CANDIDATES,
     ) -> list[Hit]:
-        hits = self.hybrid(query, top_k=candidates)
+        """Rescore the leading fused candidates (a pool sized in characters) with the cross-encoder."""
+        hits = pool_by_chars(self.hybrid(query, top_k=max_candidates), pool_chars, min_candidates, max_candidates)
         scores = self.cross_encoder.predict([(query, h.chunk["text"]) for h in hits])
         for hit, s in zip(hits, scores, strict=True):
             hit.rerank_score = float(s)
@@ -118,7 +155,8 @@ class Retriever:
             hit.rank = r
         return ranked
 
-    def search(self, method: Method, query: str, top_k: int = config.TOP_K) -> list[Hit]:
+    def rank(self, method: Method, query: str, top_k: int = config.CANDIDATE_DEPTH) -> list[Hit]:
+        """Full ranking (no budget) of one method."""
         if method == "bm25":
             return self.bm25(query, top_k)
         if method == "dense":
@@ -128,3 +166,7 @@ class Retriever:
         if method == "hybrid_rerank":
             return self.hybrid_rerank(query, top_k)
         raise ValueError(f"unknown retrieval method: {method}")
+
+    def search(self, method: Method, query: str, budget_chars: int = config.CONTEXT_BUDGET_CHARS) -> list[Hit]:
+        """Context handed to the generator: the ranking of ``method`` cut to the character budget."""
+        return fill_budget(self.rank(method, query), budget_chars)

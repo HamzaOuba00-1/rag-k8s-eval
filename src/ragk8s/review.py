@@ -25,6 +25,7 @@ DROPPED_PATH = config.EVAL_DIR / "questions_dropped.jsonl"
 VERDICTS = ("keep", "fix", "drop")
 COLUMNS = (
     "row",
+    "origin",
     "question",
     "ground_truth",
     "source_excerpt",
@@ -37,19 +38,21 @@ COLUMNS = (
 )
 
 INSTRUCTIONS = [
-    "Review of the gold questions — one row per factual question.",
+    "Review of the gold questions - one row per factual question, one single pass.",
     "",
-    "For each row, read the source excerpt, then set 'verdict':",
-    "  keep  the question is clear, answerable from the Kubernetes docs, and the ground truth is correct and complete;",
-    "  fix   the idea is good but the wording or the ground truth must change: fill corrected_question and/or "
-    "corrected_ground_truth (leave a cell empty to keep the original);",
-    "  drop  the question is ambiguous, trivial, unanswerable, or depends on the excerpt itself "
-    "('in this section...').",
+    "Open the source page (source_url) when the excerpt is not enough, then set 'verdict':",
+    "  keep  ALL three criteria hold:",
+    "        1. the ground truth is exactly right according to the page;",
+    "        2. the question is understandable without the excerpt (no 'this page', 'this section', ...);",
+    "        3. there is one single correct answer.",
+    "  drop  any criterion fails, or you hesitate. Prefer dropping to repairing.",
+    "  fix   only for a trivial wording fix (typo, missing word) that changes nothing else:",
+    "        fill corrected_question and/or corrected_ground_truth (an empty cell keeps the original).",
     "",
-    "Checks: one unambiguous answer; the ground truth only states what the excerpt says; "
-    "no reference to 'the excerpt' or 'this page'; English.",
-    "Use 'notes' for anything worth reporting (e.g. why a question was dropped).",
-    "Do not change the 'row' column. Save the file as .xlsx when done.",
+    "origin: 'structure_chunk' = drafted from one chunk; 'page' = drafted from the whole page",
+    "(its excerpt is the evidence sentence quoted by the drafting model).",
+    "Use 'notes' for anything worth reporting, e.g. why a question was dropped.",
+    "Do not edit the 'row' column. Save the file as .xlsx when done.",
 ]
 
 
@@ -70,11 +73,13 @@ def export(path: Path = REVIEW_PATH, questions_path: Path = QUESTIONS_PATH, over
         if q.get("category", "factual") != "factual":
             continue
         excerpt = clean_markup(q.get("source_chunk_text") or "")
-        ws.append(
-            [i, q["question"], q["ground_truth"], excerpt, q.get("source_title"), q.get("source_url"), "", "", "", ""]
-        )
+        origin = q.get("origin", "structure_chunk")
+        url = q.get("source_url")
+        ws.append([i, origin, q["question"], q["ground_truth"], excerpt, q.get("source_title"), url, "", "", "", ""])
+        if url:
+            ws.cell(row=ws.max_row, column=7).hyperlink = url
 
-    widths = {"A": 6, "B": 50, "C": 50, "D": 90, "E": 25, "F": 30, "G": 10, "H": 40, "I": 40, "J": 30}
+    widths = {"A": 6, "B": 14, "C": 50, "D": 50, "E": 90, "F": 25, "G": 30, "H": 10, "I": 40, "J": 40, "K": 30}
     for col, width in widths.items():
         ws.column_dimensions[col].width = width
     for row in ws.iter_rows(min_row=2):
@@ -85,7 +90,7 @@ def export(path: Path = REVIEW_PATH, questions_path: Path = QUESTIONS_PATH, over
     ws.freeze_panes = "B2"
     dv = DataValidation(type="list", formula1='"' + ",".join(VERDICTS) + '"', allow_blank=True)
     ws.add_data_validation(dv)
-    dv.add(f"G2:G{ws.max_row}")
+    dv.add(f"H2:H{ws.max_row}")
 
     info = wb.create_sheet("instructions")
     for line in INSTRUCTIONS:
@@ -145,7 +150,7 @@ def apply(
             kept.append(q)
             continue
         counts[v["verdict"]] += 1
-        q = {**q, "reviewed": True}
+        q = {**q, "reviewed": True, "origin": q.get("origin", "structure_chunk")}
         if v.get("notes"):
             q["review_notes"] = v["notes"]
         if v["verdict"] == "drop":

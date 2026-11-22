@@ -24,7 +24,7 @@ def _fill(path: Path, verdicts: dict[int, tuple[str, str, str]]) -> None:
     ws = wb["review"]
     for row in ws.iter_rows(min_row=2):
         if row[0].value in verdicts:
-            row[6].value, row[7].value, row[8].value = verdicts[row[0].value]
+            row[7].value, row[8].value, row[9].value = verdicts[row[0].value]
     wb.save(path)
 
 
@@ -44,6 +44,7 @@ def test_export_then_apply(tmp_path: Path) -> None:
     out = [json.loads(line) for line in qpath.read_text(encoding="utf-8").splitlines()]
     assert [q["question"] for q in out] == ["Q1?", "Docker Swarm?", "Better Q2?"]
     assert out[2]["original_question"] == "Q2?" and out[2]["ground_truth"] == "A2" and out[2]["reviewed"]
+    assert out[0]["origin"] == "structure_chunk"
     assert json.loads(dropped.read_text(encoding="utf-8"))["question"] == "Q3?"
 
 

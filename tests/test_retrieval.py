@@ -8,7 +8,7 @@ import numpy as np
 import pytest
 
 from ragk8s import indexing, retrieval
-from ragk8s.retrieval import Retriever, reciprocal_rank_fusion, top_indices
+from ragk8s.retrieval import Hit, Retriever, fill_budget, pool_by_chars, reciprocal_rank_fusion, top_indices
 
 
 def test_rrf_scores_and_order() -> None:
@@ -79,7 +79,7 @@ def test_retriever_methods_on_tiny_index(tiny_index: Path) -> None:
     hybrid = r.hybrid("node pods", top_k=4, pool=4)
     assert [h.rank for h in hybrid] == [1, 2, 3, 4]
     assert len({h.chunk_id for h in hybrid}) == 4
-    reranked = r.hybrid_rerank("pods", top_k=2, candidates=4)
+    reranked = r.hybrid_rerank("pods", top_k=2, pool_chars=10_000, min_candidates=4, max_candidates=4)
     assert reranked[0].chunk["doc_id"] == "doc_0002"
     assert [h.rank for h in reranked] == [1, 2]
 
@@ -93,3 +93,35 @@ def test_unknown_method(tiny_index: Path) -> None:
     r = Retriever("fixed", embed_model=FakeEmbedder())  # type: ignore[arg-type]
     with pytest.raises(ValueError):
         r.search("magic", "q")  # type: ignore[arg-type]
+
+
+def _hit(text: str, rank: int) -> Hit:
+    return Hit({"chunk_id": f"c{rank}", "text": text}, 1.0 / rank, rank)
+
+
+def test_fill_budget_skips_chunks_that_do_not_fit_and_renumbers() -> None:
+    hits = [_hit("a" * 40, 1), _hit("b" * 70, 2), _hit("c" * 50, 3), _hit("d" * 10, 4)]
+    selected = fill_budget(hits, budget_chars=100)
+    assert [h.chunk["chunk_id"] for h in selected] == ["c1", "c3", "c4"]
+    assert [h.rank for h in selected] == [1, 2, 3]
+    assert sum(len(h.chunk["text"]) for h in selected) <= 100
+    assert [h.rank for h in hits] == [1, 2, 3, 4]  # input untouched
+
+
+def test_fill_budget_respects_max_chunks() -> None:
+    hits = [_hit("x", i) for i in range(1, 30)]
+    assert len(fill_budget(hits, budget_chars=1000, max_chunks=20)) == 20
+
+
+def test_pool_by_chars() -> None:
+    hits = [_hit("x" * 100, i) for i in range(1, 50)]
+    assert len(pool_by_chars(hits, pool_chars=1000, min_hits=5, max_hits=40)) == 10
+    assert len(pool_by_chars(hits, pool_chars=100, min_hits=5, max_hits=40)) == 5
+    assert len(pool_by_chars(hits, pool_chars=10**6, min_hits=5, max_hits=40)) == 40
+
+
+def test_search_applies_budget(tiny_index: Path) -> None:
+    r = Retriever("fixed", embed_model=FakeEmbedder())  # type: ignore[arg-type]
+    context = r.search("bm25", "pod", budget_chars=50)
+    assert sum(len(h.chunk["text"]) for h in context) <= 50
+    assert len(context) == 2
