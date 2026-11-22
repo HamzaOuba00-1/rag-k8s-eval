@@ -9,6 +9,8 @@ Pipeline, in order:
   retrieve phase 1: store the top-k contexts of every evaluation question (no LLM)
   generate phase 2: answer from the stored contexts (Ollama; cached and resumable)
   run      retrieve, then generate
+  retrieval-metrics  hit@k and MRR of the source document per configuration (no LLM)
+  review   export the gold questions to Excel for human review, then apply the verdicts
 """
 
 from __future__ import annotations
@@ -142,6 +144,30 @@ def _cmd_run(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_retrieval_metrics(args: argparse.Namespace) -> int:
+    from . import retrieval_metrics
+    from .pipeline import RunConfig
+
+    configs = None if (args.all or not args.configs) else _configs(args)
+    reference = RunConfig.parse(args.reference) if args.reference else None
+    retrieval_metrics.run(configs, reference)
+    return 0
+
+
+def _cmd_review(args: argparse.Namespace) -> int:
+    from . import review
+
+    if args.action == "export":
+        print(f"Review file -> {review.export(overwrite=args.overwrite)}")
+    else:
+        counts = review.apply()
+        print(
+            f"Applied: {counts['keep']} kept, {counts['fix']} fixed, {counts['drop']} dropped"
+            f" -> {review.QUESTIONS_PATH}"
+        )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ragk8s", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -185,6 +211,18 @@ def build_parser() -> argparse.ArgumentParser:
         p.add_argument("--top-k", type=int, default=config.TOP_K)
         p.add_argument("--limit", type=int, default=None, help="generate only the first N questions (smoke test)")
         p.set_defaults(func=func)
+
+    p = sub.add_parser("retrieval-metrics", help="hit@k / MRR of the source document, with bootstrap CIs (no LLM)")
+    group = p.add_mutually_exclusive_group()
+    group.add_argument("--configs", nargs="+", metavar="STRATEGY:METHOD")
+    group.add_argument("--all", action="store_true", help="all configurations with a retrieval file (default)")
+    p.add_argument("--reference", metavar="STRATEGY:METHOD", help="paired MRR differences vs this configuration")
+    p.set_defaults(func=_cmd_retrieval_metrics)
+
+    p = sub.add_parser("review", help="human review of the gold questions (Excel round trip)")
+    p.add_argument("action", choices=("export", "apply"))
+    p.add_argument("--overwrite", action="store_true", help="replace an existing review file on export")
+    p.set_defaults(func=_cmd_review)
     return parser
 
 

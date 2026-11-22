@@ -17,6 +17,7 @@ dependencies = [
     "sentence-transformers>=3.0,<7",
     "ollama>=0.4,<1",
     "tqdm>=4.66",
+    "openpyxl>=3.1,<4",
 ]
 
 [project.optional-dependencies]
@@ -50,7 +51,7 @@ strict = true
 warn_unused_ignores = true
 
 [[tool.mypy.overrides]]
-module = ["faiss", "rank_bm25", "frontmatter", "ollama", "sentence_transformers", "sentence_transformers.*", "tqdm"]
+module = ["openpyxl", "openpyxl.*", "faiss", "rank_bm25", "frontmatter", "ollama", "sentence_transformers", "sentence_transformers.*", "tqdm"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
