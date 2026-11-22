@@ -1,0 +1,97 @@
+{
+  "n_questions": 45,
+  "threads": 2,
+  "variants": [
+    "fp32",
+    "int8-matmul"
+  ],
+  "onnx_rerank_max_length": 512,
+  "size_mb": {
+    "fp32": {
+      "embedder": 90.9,
+      "reranker": 90.9
+    },
+    "int8-matmul": {
+      "embedder": 58.7,
+      "reranker": 58.7
+    }
+  },
+  "query_embedding_cosine": {
+    "fp32": {
+      "min": 0.9999998807907104,
+      "mean": 1.0
+    },
+    "int8-matmul": {
+      "min": 0.9920094013214111,
+      "mean": 0.994375467300415
+    }
+  },
+  "configs": {
+    "fixed_dense": {
+      "torch": {
+        "mrr": 0.6344444444444445,
+        "ms_per_query": 26.7
+      },
+      "fp32": {
+        "mrr": 0.6344444444444445,
+        "ms_per_query": 16.4,
+        "n": 45,
+        "identical_context": 1.0,
+        "mean_jaccard": 1.0,
+        "same_first_chunk": 1.0
+      },
+      "int8-matmul": {
+        "mrr": 0.6488888888888888,
+        "ms_per_query": 12.1,
+        "n": 45,
+        "identical_context": 0.28888888888888886,
+        "mean_jaccard": 0.8281938431938431,
+        "same_first_chunk": 0.9111111111111111
+      }
+    },
+    "fixed_hybrid": {
+      "torch": {
+        "mrr": 0.7748148148148148,
+        "ms_per_query": 53.3
+      },
+      "fp32": {
+        "mrr": 0.7748148148148148,
+        "ms_per_query": 44.9,
+        "n": 45,
+        "identical_context": 1.0,
+        "mean_jaccard": 1.0,
+        "same_first_chunk": 1.0
+      },
+      "int8-matmul": {
+        "mrr": 0.775925925925926,
+        "ms_per_query": 41.7,
+        "n": 45,
+        "identical_context": 0.5333333333333333,
+        "mean_jaccard": 0.9180335097001762,
+        "same_first_chunk": 0.9777777777777777
+      }
+    },
+    "fixed_hybrid_rerank": {
+      "torch": {
+        "mrr": 0.8414814814814815,
+        "ms_per_query": 4289.2
+      },
+      "fp32": {
+        "mrr": 0.8414814814814815,
+        "ms_per_query": 5438.6,
+        "n": 45,
+        "identical_context": 1.0,
+        "mean_jaccard": 1.0,
+        "same_first_chunk": 1.0
+      },
+      "int8-matmul": {
+        "mrr": 0.8237037037037038,
+        "ms_per_query": 3771.9,
+        "n": 45,
+        "identical_context": 0.5333333333333333,
+        "mean_jaccard": 0.9322751322751321,
+        "same_first_chunk": 0.9777777777777777
+      }
+    }
+  }
+}

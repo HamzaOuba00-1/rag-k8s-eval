@@ -1,0 +1,97 @@
+{
+  "n_questions": 45,
+  "threads": 2,
+  "variants": [
+    "fp32",
+    "int8-matmul"
+  ],
+  "onnx_rerank_max_length": 256,
+  "size_mb": {
+    "fp32": {
+      "embedder": 90.9,
+      "reranker": 90.9
+    },
+    "int8-matmul": {
+      "embedder": 58.7,
+      "reranker": 58.7
+    }
+  },
+  "query_embedding_cosine": {
+    "fp32": {
+      "min": 0.9999998807907104,
+      "mean": 1.0
+    },
+    "int8-matmul": {
+      "min": 0.9920094013214111,
+      "mean": 0.994375467300415
+    }
+  },
+  "configs": {
+    "fixed_dense": {
+      "torch": {
+        "mrr": 0.6344444444444445,
+        "ms_per_query": 25.5
+      },
+      "fp32": {
+        "mrr": 0.6344444444444445,
+        "ms_per_query": 15.4,
+        "n": 45,
+        "identical_context": 1.0,
+        "mean_jaccard": 1.0,
+        "same_first_chunk": 1.0
+      },
+      "int8-matmul": {
+        "mrr": 0.6488888888888888,
+        "ms_per_query": 11.6,
+        "n": 45,
+        "identical_context": 0.28888888888888886,
+        "mean_jaccard": 0.8281938431938431,
+        "same_first_chunk": 0.9111111111111111
+      }
+    },
+    "fixed_hybrid": {
+      "torch": {
+        "mrr": 0.7748148148148148,
+        "ms_per_query": 54.4
+      },
+      "fp32": {
+        "mrr": 0.7748148148148148,
+        "ms_per_query": 46.4,
+        "n": 45,
+        "identical_context": 1.0,
+        "mean_jaccard": 1.0,
+        "same_first_chunk": 1.0
+      },
+      "int8-matmul": {
+        "mrr": 0.775925925925926,
+        "ms_per_query": 41.1,
+        "n": 45,
+        "identical_context": 0.5333333333333333,
+        "mean_jaccard": 0.9180335097001762,
+        "same_first_chunk": 0.9777777777777777
+      }
+    },
+    "fixed_hybrid_rerank": {
+      "torch": {
+        "mrr": 0.8414814814814815,
+        "ms_per_query": 4241.7
+      },
+      "fp32": {
+        "mrr": 0.8600000000000001,
+        "ms_per_query": 3738.6,
+        "n": 45,
+        "identical_context": 0.4222222222222222,
+        "mean_jaccard": 0.855026455026455,
+        "same_first_chunk": 0.9333333333333333
+      },
+      "int8-matmul": {
+        "mrr": 0.8348148148148147,
+        "ms_per_query": 2467.2,
+        "n": 45,
+        "identical_context": 0.26666666666666666,
+        "mean_jaccard": 0.835978835978836,
+        "same_first_chunk": 0.9111111111111111
+      }
+    }
+  }
+}
