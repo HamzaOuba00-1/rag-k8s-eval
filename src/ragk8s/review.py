@@ -125,8 +125,15 @@ def apply(
     path: Path = REVIEW_PATH,
     questions_path: Path = QUESTIONS_PATH,
     dropped_path: Path = DROPPED_PATH,
+    reviewer: str = "human",
+    assisted_by: str | None = None,
 ) -> dict[str, int]:
-    """Apply verdicts. Refuses to write anything if a verdict is missing or invalid."""
+    """Apply verdicts. Refuses to write anything if a verdict is missing or invalid.
+
+    ``reviewer`` is recorded on every reviewed question (``reviewed_by``) so that the
+    report can state who reviewed the gold set; ``assisted_by`` records a tool that
+    proposed the verdicts (``review_assisted_by``), when there was one.
+    """
     questions = read_jsonl(questions_path)
     verdicts = read_verdicts(path)
     problems = [f"row {v['row']}: verdict {v['verdict']!r}" for v in verdicts if v["verdict"] not in VERDICTS]
@@ -150,7 +157,9 @@ def apply(
             kept.append(q)
             continue
         counts[v["verdict"]] += 1
-        q = {**q, "reviewed": True, "origin": q.get("origin", "structure_chunk")}
+        q = {**q, "reviewed": True, "reviewed_by": reviewer, "origin": q.get("origin", "structure_chunk")}
+        if assisted_by:
+            q["review_assisted_by"] = assisted_by
         if v.get("notes"):
             q["review_notes"] = v["notes"]
         if v["verdict"] == "drop":

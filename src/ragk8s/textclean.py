@@ -74,7 +74,12 @@ def _render(match: re.Match[str]) -> str:
         return f"{label}:" if label else ""
     if name == "feature-state":
         version, state = args.get("for_k8s_version", ""), args.get("state", "")
-        return f"FEATURE STATE: Kubernetes {version} [{state}]".replace("  ", " ")
+        if version and state:
+            return f"FEATURE STATE: Kubernetes {version} [{state}]"
+        # Version and stage are looked up by Hugo from the feature-gate data, which is not in the
+        # corpus: keep the gate name rather than inventing a version.
+        gate = args.get("feature_gate_name")
+        return f"FEATURE STATE: feature gate {gate}" if gate else ""
     if name in ("code_sample", "example", "codenew"):
         return f"(example file: {args['file']})" if "file" in args else ""
     if name == "api-reference":

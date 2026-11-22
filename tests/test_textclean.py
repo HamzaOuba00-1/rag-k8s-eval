@@ -29,3 +29,10 @@ def test_hidden_comment_blocks_are_dropped() -> None:
 def test_go_templates_in_code_are_left_alone() -> None:
     text = "```yaml\nimage: {{ .Values.image }}\n```"
     assert clean_markup(text) == text
+
+
+def test_feature_state_with_only_a_gate_name_does_not_invent_a_version() -> None:
+    assert clean_markup('{{< feature-state feature_gate_name="PodLevelResources" >}}') == (
+        "FEATURE STATE: feature gate PodLevelResources"
+    )
+    assert clean_markup("{{< feature-state >}}") == ""

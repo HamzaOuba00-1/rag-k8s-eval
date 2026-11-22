@@ -39,12 +39,13 @@ def test_export_then_apply(tmp_path: Path) -> None:
         review.export(xlsx, qpath)
 
     _fill(xlsx, {0: ("Keep", "", ""), 2: ("fix", "Better Q2?", ""), 3: ("drop", "", "")})
-    counts = review.apply(xlsx, qpath, dropped)
+    counts = review.apply(xlsx, qpath, dropped, reviewer="Jane Doe", assisted_by="claude-llm")
     assert counts == {"keep": 1, "fix": 1, "drop": 1}
     out = [json.loads(line) for line in qpath.read_text(encoding="utf-8").splitlines()]
     assert [q["question"] for q in out] == ["Q1?", "Docker Swarm?", "Better Q2?"]
     assert out[2]["original_question"] == "Q2?" and out[2]["ground_truth"] == "A2" and out[2]["reviewed"]
-    assert out[0]["origin"] == "structure_chunk"
+    assert out[0]["origin"] == "structure_chunk" and out[0]["reviewed_by"] == "Jane Doe"
+    assert out[0]["review_assisted_by"] == "claude-llm"
     assert json.loads(dropped.read_text(encoding="utf-8"))["question"] == "Q3?"
 
 

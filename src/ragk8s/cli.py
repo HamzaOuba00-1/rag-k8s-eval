@@ -161,7 +161,7 @@ def _cmd_review(args: argparse.Namespace) -> int:
     if args.action == "export":
         print(f"Review file -> {review.export(overwrite=args.overwrite)}")
     else:
-        counts = review.apply()
+        counts = review.apply(reviewer=args.reviewer, assisted_by=args.assisted_by)
         print(
             f"Applied: {counts['keep']} kept, {counts['fix']} fixed, {counts['drop']} dropped"
             f" -> {review.QUESTIONS_PATH}"
@@ -241,6 +241,8 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("review", help="human review of the gold questions (Excel round trip)")
     p.add_argument("action", choices=("export", "apply"))
     p.add_argument("--overwrite", action="store_true", help="replace an existing review file on export")
+    p.add_argument("--reviewer", default="human", help="who reviewed and validated the verdicts (reviewed_by)")
+    p.add_argument("--assisted-by", default=None, help="tool that proposed the verdicts, if any (review_assisted_by)")
     p.set_defaults(func=_cmd_review)
     return parser
 
