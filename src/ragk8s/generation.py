@@ -11,8 +11,9 @@ so that a run can be repeated and compared.
 
 from __future__ import annotations
 
-from collections.abc import Sequence
-from dataclasses import asdict, dataclass
+import re
+from collections.abc import Callable, Sequence
+from dataclasses import asdict, dataclass, field
 from typing import Any
 
 from . import config
@@ -116,3 +117,72 @@ def model_digest(model: str = config.OLLAMA_MODEL) -> str | None:
             digest = _field(entry, "digest")
             return str(digest) if digest else None
     return None
+
+
+# --- Backends ---------------------------------------------------------------------
+
+GROQ_PARAMS: dict[str, Any] = {
+    "temperature": 0.0,
+    "seed": config.SEED,
+    # Qwen 3.8 thinks by default; "none" disables reasoning tokens (cost, determinism,
+    # and the same answer format as the non-reasoning 7B baseline).
+    "reasoning_effort": "none",
+}
+
+_THINK_RE = re.compile(r"<think>.*?</think>", re.S)
+
+
+@dataclass
+class Backend:
+    """Where answers come from. ``params`` and ``digest`` enter the answer cache key."""
+
+    provider: str
+    model: str
+    params: dict[str, Any]
+    generate: Callable[[str, Sequence[Hit]], Generation]
+    digest: str | None = None
+    extra_meta: dict[str, Any] = field(default_factory=dict)
+
+    @property
+    def slug(self) -> str:
+        """Directory name for this model's runs, e.g. ``qwen3.8-27b``."""
+        return self.model.split("/")[-1].replace(":", "-")
+
+
+def ollama_backend(model: str = config.OLLAMA_MODEL) -> Backend:
+    return Backend(
+        provider="ollama",
+        model=model,
+        params=OLLAMA_OPTIONS,
+        generate=lambda q, hits: generate(q, hits, model=model),
+        digest=model_digest(model),
+    )
+
+
+def groq_backend(model: str = config.GROQ_MODEL, client: Any = None) -> Backend:
+    """Groq chat completions; ``client`` defaults to a quota-aware GroqClient."""
+    from .groq_client import GroqClient
+
+    groq = client or GroqClient()
+
+    def run(question: str, hits: Sequence[Hit]) -> Generation:
+        result = groq.chat(
+            model, build_messages(question, hits), max_tokens=config.GENERATION_MAX_TOKENS, **GROQ_PARAMS
+        )
+        return Generation(
+            answer=_THINK_RE.sub("", result.content).strip(),
+            model=result.model,
+            prompt_tokens=result.prompt_tokens,
+            completion_tokens=result.completion_tokens,
+            total_seconds=result.seconds,
+        )
+
+    return Backend(provider="groq", model=model, params=GROQ_PARAMS, generate=run, extra_meta={"client": groq})
+
+
+def make_backend(provider: str, model: str | None = None) -> Backend:
+    if provider == "ollama":
+        return ollama_backend(model or config.OLLAMA_MODEL)
+    if provider == "groq":
+        return groq_backend(model or config.GROQ_MODEL)
+    raise ValueError(f"unknown provider: {provider}")

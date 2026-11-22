@@ -76,6 +76,20 @@ python -m ragk8s generate --configs structure:hybrid_rerank
 - The phases are separate so that the embedding and reranking models are not in
   memory while the LLM runs (`run` chains both).
 
+Generators:
+
+```bash
+# Application generator: qwen/qwen3.8-27b on Groq (reasoning disabled, temperature 0)
+python -m ragk8s generate --provider groq --preset main     # the 6 evaluated configurations
+# Reference generator: qwen2.5:7b-instruct with Ollama, on the best configuration only
+python -m ragk8s generate --provider ollama --preset best
+```
+
+Runs are written per model: `results/runs/<model>/run_<strategy>_<method>.jsonl`.
+With the Groq free tier, `generate` stops cleanly when the daily token budget of the
+model is reached ("Daily quota reached"); rerun the same command the next day and it
+continues from the cache.
+
 ## 6. Extra questions drafted from whole pages (Groq)
 
 The first 55 factual questions were drafted from single `structure` chunks. To get a

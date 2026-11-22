@@ -7,7 +7,8 @@ from pathlib import Path
 import pytest
 
 from ragk8s import pipeline
-from ragk8s.generation import Generation
+from ragk8s.generation import Backend, Generation
+from ragk8s.groq_client import DailyQuotaReached
 from ragk8s.pipeline import RunConfig, generate_run, generation_key, question_id
 from ragk8s.refusal import REFUSAL_SENTENCE
 from ragk8s.retrieval import Hit
@@ -26,11 +27,21 @@ def test_question_id_is_stable_and_whitespace_insensitive() -> None:
     assert question_id("What is a Pod?") != question_id("What is a Node?")
 
 
-def test_generation_key_depends_on_contexts_and_model() -> None:
-    base = generation_key("q", ["a", "b"], "m", "d1")
-    assert base == generation_key("q", ["a", "b"], "m", "d1")
-    assert base != generation_key("q", ["b", "a"], "m", "d1")
-    assert base != generation_key("q", ["a", "b"], "m", "d2")
+def _backend(fn, model: str = "org/m", digest: str | None = "d", provider: str = "fake") -> Backend:  # type: ignore[no-untyped-def]
+    return Backend(provider=provider, model=model, params={"temperature": 0}, generate=fn, digest=digest)
+
+
+def test_generation_key_depends_on_contexts_model_and_provider() -> None:
+    def noop(q: str, h: Sequence[Hit]) -> Generation:
+        raise AssertionError
+
+    base = generation_key("q", ["a", "b"], _backend(noop))
+    assert base == generation_key("q", ["a", "b"], _backend(noop))
+    assert base != generation_key("q", ["b", "a"], _backend(noop))
+    assert base != generation_key("q", ["a", "b"], _backend(noop, digest="d2"))
+    assert base != generation_key("q", ["a", "b"], _backend(noop, provider="groq"))
+    assert _backend(noop, model="qwen/qwen3.8-27b").slug == "qwen3.8-27b"
+    assert _backend(noop, model="qwen2.5:7b-instruct").slug == "qwen2.5-7b-instruct"
 
 
 def _write_retrieval(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> RunConfig:
@@ -82,17 +93,19 @@ def test_generate_run_caches_and_resumes(tmp_path: Path, monkeypatch: pytest.Mon
         return Generation(answer, "m", 10, 5, 1.5)
 
     cache = tmp_path / "cache"
-    out = generate_run(cfg, model="m", generate_fn=fake, digest="d", cache_dir=cache)
+    out = generate_run(cfg, _backend(fake), cache_dir=cache)
     records = [json.loads(line) for line in out.read_text(encoding="utf-8").splitlines()]
     assert [r["is_refusal"] for r in records] == [False, True]
     assert records[0]["cited"] == [1] and records[0]["citation_coverage"] == 1.0
     assert len(calls) == 2
 
     # Second invocation: everything comes from the cache.
-    generate_run(cfg, model="m", generate_fn=fake, digest="d", cache_dir=cache)
+    generate_run(cfg, _backend(fake), cache_dir=cache)
     assert len(calls) == 2
+    assert out.parent.name == "m"
     meta = json.loads(out.with_suffix(".meta.json").read_text(encoding="utf-8"))
     assert meta["n_questions"] == 2 and meta["generation_seconds_total"] == 3.0
+    assert meta["tokens_total"] == 30 and meta["provider"] == "fake"
 
 
 def test_generate_run_interrupted_then_resumed(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -108,10 +121,34 @@ def test_generate_run_interrupted_then_resumed(tmp_path: Path, monkeypatch: pyte
 
     cache = tmp_path / "cache"
     with pytest.raises(RuntimeError, match="cached"):
-        generate_run(cfg, model="m", generate_fn=flaky, digest="d", cache_dir=cache)
+        generate_run(cfg, _backend(flaky), cache_dir=cache)
     assert len(list(cache.glob("*.json"))) == 1  # the first answer survived the failure
 
     calls.clear()
     calls.extend(["x"] * 10)  # Ollama is back
-    generate_run(cfg, model="m", generate_fn=flaky, digest="d", cache_dir=cache)
+    generate_run(cfg, _backend(flaky), cache_dir=cache)
     assert calls[10:] == ["Docker Swarm?"]  # only the missing answer was generated
+
+
+def test_daily_quota_stops_immediately_and_keeps_finished_answers(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    cfg = _write_retrieval(tmp_path, monkeypatch)
+    calls: list[str] = []
+
+    def quota(question: str, hits: Sequence[Hit]) -> Generation:
+        calls.append(question)
+        if len(calls) > 1:
+            raise DailyQuotaReached("tomorrow")
+        return Generation("ok [1]", "m", 1, 1, 1.0)
+
+    cache = tmp_path / "cache"
+    with pytest.raises(DailyQuotaReached):
+        generate_run(cfg, _backend(quota), cache_dir=cache)
+    assert len(calls) == 2  # no retry on a daily quota stop
+    assert len(list(cache.glob("*.json"))) == 1
+
+
+def test_main_configs() -> None:
+    names = [c.name for c in pipeline.MAIN_CONFIGS]
+    assert len(names) == 6 and names[0] == "fixed_hybrid_rerank" == pipeline.BEST_CONFIG.name

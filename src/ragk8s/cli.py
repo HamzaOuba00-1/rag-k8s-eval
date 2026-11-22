@@ -92,7 +92,7 @@ def _cmd_ask(args: argparse.Namespace) -> int:
     from .retrieval import Retriever
 
     hits = Retriever(args.strategy).search(args.method, args.question, budget_chars=args.budget)
-    result = generation.generate(args.question, hits)
+    result = generation.make_backend(args.provider, args.model).generate(args.question, hits)
     print(result.answer)
     check = check_citations(result.answer, len(hits))
     print(
@@ -107,12 +107,16 @@ def _cmd_ask(args: argparse.Namespace) -> int:
 
 
 def _configs(args: argparse.Namespace) -> list[Any]:
-    from .pipeline import ALL_CONFIGS, RunConfig
+    from .pipeline import ALL_CONFIGS, BEST_CONFIG, MAIN_CONFIGS, RunConfig
 
     if args.all:
         return list(ALL_CONFIGS)
+    if getattr(args, "preset", None) == "main":
+        return list(MAIN_CONFIGS)
+    if getattr(args, "preset", None) == "best":
+        return [BEST_CONFIG]
     if not args.configs:
-        raise SystemExit("give --configs <strategy>:<method> ... or --all")
+        raise SystemExit("give --configs <strategy>:<method> ..., --preset main|best or --all")
     return [RunConfig.parse(c) for c in args.configs]
 
 
@@ -123,11 +127,22 @@ def _cmd_retrieve(args: argparse.Namespace) -> int:
     return 0
 
 
-def _cmd_generate(args: argparse.Namespace) -> int:
-    from . import pipeline
+def _generate_all(args: argparse.Namespace) -> None:
+    from . import generation, pipeline
 
-    for cfg in _configs(args):
-        pipeline.generate_run(cfg, limit=args.limit)
+    backend = generation.make_backend(args.provider, args.model)
+    try:
+        for cfg in _configs(args):
+            pipeline.generate_run(cfg, backend, limit=args.limit)
+    finally:
+        client = backend.extra_meta.get("client")
+        if client is not None:
+            tokens, requests = client.ledger.used(backend.model)
+            print(f"Groq usage today (UTC) for {backend.model}: {tokens:,} tokens, {requests} requests")
+
+
+def _cmd_generate(args: argparse.Namespace) -> int:
+    _generate_all(args)
     return 0
 
 
@@ -137,11 +152,9 @@ def _cmd_run(args: argparse.Namespace) -> int:
 
     from . import pipeline
 
-    configs = _configs(args)
-    pipeline.retrieve(configs, budget_chars=args.budget)
+    pipeline.retrieve(_configs(args), budget_chars=args.budget)
     gc.collect()
-    for cfg in configs:
-        pipeline.generate_run(cfg, limit=args.limit)
+    _generate_all(args)
     return 0
 
 
@@ -206,6 +219,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("ask", help="answer one question with citations (needs Ollama)")
     p.add_argument("question")
+    p.add_argument("--provider", choices=("ollama", "groq"), default="ollama")
+    p.add_argument("--model", default=None)
     p.add_argument("--strategy", choices=config.STRATEGIES, default="structure")
     p.add_argument("--method", choices=config.METHODS, default="hybrid_rerank")
     p.add_argument("--budget", type=int, default=config.CONTEXT_BUDGET_CHARS, help="context budget in characters")
@@ -220,6 +235,12 @@ def build_parser() -> argparse.ArgumentParser:
         group = p.add_mutually_exclusive_group()
         group.add_argument("--configs", nargs="+", metavar="STRATEGY:METHOD", help="e.g. structure:hybrid_rerank")
         group.add_argument("--all", action="store_true", help="all 12 strategy x method combinations")
+        group.add_argument("--preset", choices=("main", "best"), help="main = the 6 evaluated configurations")
+        if name != "retrieve":
+            p.add_argument("--provider", choices=("ollama", "groq"), default="ollama")
+            p.add_argument(
+                "--model", default=None, help="default: qwen2.5:7b-instruct (ollama), qwen/qwen3.8-27b (groq)"
+            )
         p.add_argument("--budget", type=int, default=config.CONTEXT_BUDGET_CHARS, help="context budget in characters")
         p.add_argument("--limit", type=int, default=None, help="generate only the first N questions (smoke test)")
         p.set_defaults(func=func)

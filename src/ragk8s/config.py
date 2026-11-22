@@ -69,7 +69,8 @@ RERANK_MAX_CANDIDATES: Final = 80
 
 # --- Generation ------------------------------------------------------------------
 
-OLLAMA_MODEL: Final = "qwen2.5:7b-instruct"
+OLLAMA_MODEL: Final = "qwen2.5:7b-instruct"  # reference generator (local / Kaggle)
+GROQ_MODEL: Final = "qwen/qwen3.8-27b"  # application generator (Groq)
 GENERATION_NUM_CTX: Final = 4096  # tokens; a 5,000-char context (~1,300 tokens) fits with margin
 GENERATION_MAX_TOKENS: Final = 512
 SEED: Final = 42

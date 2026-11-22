@@ -25,7 +25,7 @@ import os
 import platform
 import subprocess
 import time
-from collections.abc import Callable, Sequence
+from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -168,45 +168,68 @@ def retrieve(
 # --- Phase 2: generation ----------------------------------------------------------
 
 
-def generation_key(question: str, contexts: Sequence[str], model: str, digest: str | None) -> str:
+def generation_key(question: str, contexts: Sequence[str], backend: generation.Backend) -> str:
     payload = {
-        "model": model,
-        "digest": digest,
+        "provider": backend.provider,
+        "model": backend.model,
+        "digest": backend.digest,
+        "params": backend.params,
         "prompt": generation.PROMPT_VERSION,
         "system": generation.SYSTEM_PROMPT,
-        "options": generation.OLLAMA_OPTIONS,
         "question": question,
         "contexts": list(contexts),
     }
     return sha256_text(json.dumps(payload, sort_keys=True, ensure_ascii=False))
 
 
-GenerateFn = Callable[[str, Sequence[Hit]], generation.Generation]
+# Selected on 2026-11-22 by the rule fixed before any LLM evaluation (best retrieval MRR,
+# results/retrieval_metrics.md): the 3 chunkings with the best retrieval method, and the
+# 4 retrieval methods with the best chunking.
+MAIN_CONFIGS: tuple[RunConfig, ...] = tuple(
+    RunConfig.parse(c)
+    for c in (
+        "fixed:hybrid_rerank",
+        "structure:hybrid_rerank",
+        "semantic:hybrid_rerank",
+        "fixed:bm25",
+        "fixed:dense",
+        "fixed:hybrid",
+    )
+)
+BEST_CONFIG = MAIN_CONFIGS[0]
 
 
-def _generate_with_retry(fn: GenerateFn, question: str, hits: Sequence[Hit], retries: int = 2) -> generation.Generation:
+def _generate_with_retry(
+    backend: generation.Backend, question: str, hits: Sequence[Hit], retries: int = 2
+) -> generation.Generation:
+    from .groq_client import DailyQuotaReached, GroqError
+
     for attempt in range(retries + 1):
         try:
-            return fn(question, hits)
+            return backend.generate(question, hits)
+        except (DailyQuotaReached, GroqError):
+            raise  # the Groq client already retries what can be retried
         except Exception as exc:  # ollama raises ResponseError / ConnectionError / httpx errors
             if attempt == retries:
                 raise RuntimeError(
                     f"Generation failed after {retries + 1} attempts ({type(exc).__name__}: {exc}). "
-                    "Check that Ollama is running, then rerun the same command: finished answers are cached."
+                    "Check the backend, then rerun the same command: finished answers are cached."
                 ) from exc
             time.sleep(5 * (attempt + 1))
     raise AssertionError("unreachable")
 
 
+def run_path(cfg: RunConfig, backend: generation.Backend) -> Path:
+    return RUNS_DIR / backend.slug / f"run_{cfg.name}.jsonl"
+
+
 def generate_run(
     cfg: RunConfig,
-    model: str = config.OLLAMA_MODEL,
-    generate_fn: GenerateFn | None = None,
-    digest: str | None = None,
+    backend: generation.Backend,
     cache_dir: Path = GENERATION_CACHE,
     limit: int | None = None,
 ) -> Path:
-    """Phase 2 for one configuration. Safe to interrupt and rerun."""
+    """Phase 2 for one configuration. Safe to interrupt and rerun (answers are cached one by one)."""
     from tqdm import tqdm
 
     src = retrieval_path(cfg)
@@ -215,29 +238,20 @@ def generate_run(
             f"{src} not found: run `python -m ragk8s retrieve --configs {cfg.strategy}:{cfg.method}` first"
         )
     items = read_jsonl(src)[:limit] if limit else read_jsonl(src)
-    fn: GenerateFn
-    if generate_fn is None:
-        digest = generation.model_digest(model)
-
-        def fn(question: str, hits: Sequence[Hit]) -> generation.Generation:
-            return generation.generate(question, hits, model=model)
-
-    else:
-        fn = generate_fn
 
     cache_dir.mkdir(parents=True, exist_ok=True)
     records: list[dict[str, Any]] = []
     n_cached, new_seconds = 0, 0.0
-    bar = tqdm(items, desc=f"generate {cfg.name}")
+    bar = tqdm(items, desc=f"{backend.slug} {cfg.name}")
     for item in bar:
         hits = hits_from_records(item["hits"])
         contexts = [h.chunk["text"] for h in hits]
-        cache_file = cache_dir / f"{generation_key(item['question'], contexts, model, digest)}.json"
+        cache_file = cache_dir / f"{generation_key(item['question'], contexts, backend)}.json"
         if cache_file.exists():
             gen = json.loads(cache_file.read_text(encoding="utf-8"))
             n_cached += 1
         else:
-            gen = _generate_with_retry(fn, item["question"], hits).as_dict()
+            gen = _generate_with_retry(backend, item["question"], hits).as_dict()
             write_json(cache_file, gen)
             new_seconds += gen.get("total_seconds") or 0.0
         bar.set_postfix(cached=n_cached, new=len(records) + 1 - n_cached)
@@ -247,6 +261,7 @@ def generate_run(
                 "id": item["id"],
                 "question": item["question"],
                 "category": item["category"],
+                "origin": item.get("origin"),
                 "ground_truth": item["ground_truth"],
                 "source_doc_id": item["source_doc_id"],
                 "answer": gen["answer"],
@@ -259,25 +274,30 @@ def generate_run(
                     {"n": i, **{k: h.chunk[k] for k in ("chunk_id", "doc_id", "title", "source_url")}}
                     for i, h in enumerate(hits, 1)
                 ],
-                "generation": {k: gen.get(k) for k in ("prompt_tokens", "completion_tokens", "total_seconds")},
+                "generation": {k: gen.get(k) for k in ("model", "prompt_tokens", "completion_tokens", "total_seconds")},
             }
         )
 
-    out = RUNS_DIR / f"run_{cfg.name}.jsonl"
+    out = run_path(cfg, backend)
     write_jsonl(out, records)
     seconds = [r["generation"]["total_seconds"] for r in records if r["generation"]["total_seconds"]]
+    tokens = [(r["generation"]["prompt_tokens"] or 0) + (r["generation"]["completion_tokens"] or 0) for r in records]
     write_json(
         out.with_suffix(".meta.json"),
         {
             "config": cfg.name,
             "n_questions": len(records),
             "complete": limit is None,
-            "model": model,
-            "model_digest": digest,
-            "ollama_version": _ollama_version(),
+            "provider": backend.provider,
+            "model": backend.model,
+            "models_returned": sorted({str(r["generation"]["model"]) for r in records if r["generation"]["model"]}),
+            "model_digest": backend.digest,
+            "ollama_version": _ollama_version() if backend.provider == "ollama" else None,
             "prompt_version": generation.PROMPT_VERSION,
-            "options": generation.OLLAMA_OPTIONS,
+            "params": backend.params,
             "retrieval_meta": json.loads(src.with_suffix(".meta.json").read_text(encoding="utf-8")),
+            "tokens_total": sum(tokens),
+            "tokens_mean": round(sum(tokens) / len(tokens), 1) if tokens else None,
             "generation_seconds_total": round(sum(seconds), 1),
             "generation_seconds_mean": round(sum(seconds) / len(seconds), 2) if seconds else None,
             "new_generation_seconds_this_invocation": round(new_seconds, 1),
