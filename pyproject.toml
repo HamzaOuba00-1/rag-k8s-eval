@@ -28,6 +28,14 @@ dev = [
     "mypy>=1.11",
 ]
 
+# Judge dependencies, installed only in the Kaggle judge notebook (pinned: ragas 0.4.3
+# imports a module removed in langchain-community 0.4.2).
+judge = [
+    "ragas==0.4.3",
+    "langchain-community==0.4.1",
+    "openai>=1.40,<3",
+]
+
 [project.scripts]
 ragk8s = "ragk8s.cli:main"
 
@@ -52,7 +60,7 @@ strict = true
 warn_unused_ignores = true
 
 [[tool.mypy.overrides]]
-module = ["openpyxl", "openpyxl.*", "faiss", "rank_bm25", "frontmatter", "ollama", "sentence_transformers", "sentence_transformers.*", "tqdm"]
+module = ["ragas", "ragas.*", "openai", "openai.*", "openpyxl", "openpyxl.*", "faiss", "rank_bm25", "frontmatter", "ollama", "sentence_transformers", "sentence_transformers.*", "tqdm"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

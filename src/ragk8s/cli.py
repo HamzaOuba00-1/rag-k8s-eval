@@ -17,6 +17,7 @@ Pipeline, in order:
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from collections.abc import Sequence
 from typing import Any
@@ -200,7 +201,8 @@ def _cmd_kaggle(args: argparse.Namespace) -> int:
 
     if args.action == "export":
         configs = _configs(args)
-        out = kaggle.export(args.name or kaggle.default_name(configs), configs)
+        name = args.name or kaggle.default_name(configs)
+        out = kaggle.export(name, configs, run_models=args.runs or (), include_judge_cache=args.with_judge_cache)
         print(f"Kaggle dataset archive -> {out}")
     else:
         if not args.path:
@@ -209,6 +211,28 @@ def _cmd_kaggle(args: argparse.Namespace) -> int:
         print(f"Imported {stats['copied']} files ({stats['identical']} already identical): {', '.join(stats['runs'])}")
         for conflict in stats["conflicts"]:
             print(f"  CONFLICT, not overwritten: {conflict}")
+    return 0
+
+
+def _cmd_judge(args: argparse.Namespace) -> int:
+    from . import judge
+    from .pipeline import RUNS_DIR
+
+    wanted = [RUNS_DIR / model / f"run_{cfg.name}.jsonl" for model in args.models for cfg in _configs(args)]
+    files = [f for f in wanted if f.exists()]
+    for f in wanted:
+        if not f.exists():
+            print(f"skipped (no run yet): {f}")
+    if not files:
+        raise SystemExit("no run to judge")
+    stats = judge.run(
+        files,
+        max_minutes=args.max_minutes,
+        concurrency=args.concurrency,
+        limit=args.limit,
+        retry_errors=args.retry_errors,
+    )
+    print(json.dumps({k: v for k, v in stats.items() if k != "outputs"}))
     return 0
 
 
@@ -278,6 +302,20 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--replace", action="store_true", help="also discard already reviewed page questions")
     p.set_defaults(func=_cmd_questions)
 
+    p = sub.add_parser("judge", help="RAGAS scores of generation runs with a local judge (Kaggle GPU)")
+    p.add_argument(
+        "--models", nargs="+", required=True, metavar="MODEL_DIR", help="e.g. qwen3.8-27b qwen2.5-7b-instruct"
+    )
+    group = p.add_mutually_exclusive_group()
+    group.add_argument("--configs", nargs="+", metavar="STRATEGY:METHOD")
+    group.add_argument("--all", action="store_true")
+    group.add_argument("--preset", choices=("main", "best"))
+    p.add_argument("--max-minutes", type=float, default=None, help="stop starting new scores after this time")
+    p.add_argument("--concurrency", type=int, default=4)
+    p.add_argument("--limit", type=int, default=None, help="first N records of each run (pilot)")
+    p.add_argument("--retry-errors", action="store_true", help="score again the cached judge errors")
+    p.set_defaults(func=_cmd_judge)
+
     p = sub.add_parser("kaggle", help="export contexts for a Kaggle notebook / import its outputs")
     p.add_argument("action", choices=("export", "import"))
     p.add_argument("path", nargs="?", help="import: Kaggle output zip or folder")
@@ -286,6 +324,8 @@ def build_parser() -> argparse.ArgumentParser:
     group.add_argument("--all", action="store_true")
     group.add_argument("--preset", choices=("main", "best"))
     p.add_argument("--name", default=None, help="export: archive name (default from the configurations)")
+    p.add_argument("--runs", nargs="+", metavar="MODEL_DIR", help="export: also the complete runs of these models")
+    p.add_argument("--with-judge-cache", action="store_true", help="export: include .cache/judge to resume judging")
     p.set_defaults(func=_cmd_kaggle)
 
     p = sub.add_parser("review", help="human review of the gold questions (Excel round trip)")

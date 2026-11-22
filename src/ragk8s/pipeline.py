@@ -320,6 +320,9 @@ def _now() -> str:
 
 
 def _git_commit() -> str | None:
+    """HEAD of the working copy; on Kaggle (no .git) the commit recorded by the notebook."""
+    if os.environ.get("RAGK8S_GIT_COMMIT"):
+        return os.environ["RAGK8S_GIT_COMMIT"]
     try:
         sha = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
         dirty = subprocess.run(
