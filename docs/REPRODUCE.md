@@ -198,17 +198,29 @@ The RAGAS evaluation is being reworked; the previous scripts are kept in `legacy
 ## 10. ONNX models for the web app
 
 The web app runs retrieval without PyTorch: the embedding model and the reranker are
-exported once to ONNX with dynamic int8 quantisation, then checked against PyTorch.
+exported once to ONNX, in three variants, then checked against PyTorch.
+
+| Variant | File | Quantisation |
+|---|---|---|
+| `fp32` | `model.onnx` | none |
+| `int8` | `model.int8.onnx` | dynamic int8 on every supported op, word embeddings included |
+| `int8-matmul` | `model.int8-matmul.onnx` | dynamic int8, per channel, MatMul weights only |
 
 ```bash
 pip install -e ".[dev,onnx]"
-python -m ragk8s onnx export   # models/onnx/{embedder,reranker}/ (model.onnx, model.int8.onnx, tokenizer.json)
-python -m ragk8s onnx check    # results/onnx_parity.json
+python -m ragk8s onnx export   # models/onnx/{embedder,reranker}/ (three variants, tokenizer.json)
+python -m ragk8s onnx check    # results/onnx_parity.json, 1 CPU thread
+python -m ragk8s onnx check --strategies fixed --variants fp32 int8-matmul --threads 2
+python -m ragk8s onnx check --strategies fixed --variants int8-matmul --rerank-max-length 256
 ```
 
-`check` reports, for every strategy and model-based method, the share of evaluation
-questions that get exactly the same context with ONNX int8 as with PyTorch, the mean
-Jaccard overlap, the source-page MRR with both back-ends and the time per query.
+`check` reports, for every strategy, model-based method and variant, the share of
+evaluation questions that get exactly the same context as with PyTorch, the mean
+Jaccard overlap, the source-page MRR and the time per query. PyTorch and onnxruntime
+run with the same number of threads (`--threads`, default 1 as on a one-vCPU Cloud Run
+instance), so the times can be compared. `--rerank-max-length` shortens only the ONNX
+reranker input; PyTorch keeps the evaluation settings, so the agreement figures show how
+far a faster setting drifts from what was evaluated.
 
 ## Quality checks
 

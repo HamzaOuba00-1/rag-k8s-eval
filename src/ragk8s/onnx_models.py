@@ -26,16 +26,25 @@ import numpy.typing as npt
 
 ONNX_DIR = Path("models") / "onnx"
 META_FILE = "ragk8s_onnx.json"
+# fp32: plain export. int8: dynamic int8 on every supported op (word embeddings included).
+# int8-matmul: dynamic int8, per channel, on MatMul weights only (embeddings stay fp32).
+VARIANT_FILES = {"fp32": "model.onnx", "int8": "model.int8.onnx", "int8-matmul": "model.int8-matmul.onnx"}
+DEFAULT_VARIANT = "int8"
 
 
-def _session(model_dir: Path, quantized: bool) -> Any:
+def _session(model_dir: Path, variant: str, threads: int) -> Any:
     import onnxruntime as ort
 
-    name = "model.int8.onnx" if quantized else "model.onnx"
+    if variant not in VARIANT_FILES:
+        raise ValueError(f"unknown ONNX variant {variant!r}, expected one of {sorted(VARIANT_FILES)}")
     options = ort.SessionOptions()
     options.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
-    options.intra_op_num_threads = 1  # one vCPU on Cloud Run; also keeps results reproducible
-    return ort.InferenceSession(str(model_dir / name), options, providers=["CPUExecutionProvider"])
+    options.intra_op_num_threads = threads  # 1 = one vCPU on Cloud Run
+    options.inter_op_num_threads = 1
+    path = model_dir / VARIANT_FILES[variant]
+    if not path.exists():
+        raise FileNotFoundError(f"{path} not found: run `python -m ragk8s onnx export` first")
+    return ort.InferenceSession(str(path), options, providers=["CPUExecutionProvider"])
 
 
 def _tokenizer(model_dir: Path, max_length: int) -> Any:
@@ -59,11 +68,13 @@ def _feeds(session: Any, encodings: Sequence[Any]) -> dict[str, npt.NDArray[np.i
 class OnnxEmbedder:
     """Mean-pooled, L2-normalised sentence embeddings (all-MiniLM-L6-v2 style)."""
 
-    def __init__(self, model_dir: Path = ONNX_DIR / "embedder", quantized: bool = True) -> None:
+    def __init__(
+        self, model_dir: Path = ONNX_DIR / "embedder", variant: str = DEFAULT_VARIANT, threads: int = 1
+    ) -> None:
         self.meta = json.loads((model_dir / META_FILE).read_text(encoding="utf-8"))
         if self.meta.get("pooling", "mean") != "mean":
             raise ValueError(f"unsupported pooling: {self.meta['pooling']}")
-        self._session = _session(model_dir, quantized)
+        self._session = _session(model_dir, variant, threads)
         self._tok = _tokenizer(model_dir, int(self.meta["max_length"]))
 
     def encode(
@@ -89,10 +100,18 @@ class OnnxEmbedder:
 class OnnxCrossEncoder:
     """Relevance score of (query, passage) pairs (ms-marco cross-encoder style)."""
 
-    def __init__(self, model_dir: Path = ONNX_DIR / "reranker", quantized: bool = True) -> None:
+    def __init__(
+        self,
+        model_dir: Path = ONNX_DIR / "reranker",
+        variant: str = DEFAULT_VARIANT,
+        threads: int = 1,
+        max_length: int | None = None,
+    ) -> None:
+        """``max_length`` truncates (query, passage) pairs below the model's own limit, to cut latency."""
         self.meta = json.loads((model_dir / META_FILE).read_text(encoding="utf-8"))
-        self._session = _session(model_dir, quantized)
-        self._tok = _tokenizer(model_dir, int(self.meta["max_length"]))
+        self._session = _session(model_dir, variant, threads)
+        self.max_length = min(max_length or int(self.meta["max_length"]), int(self.meta["max_length"]))
+        self._tok = _tokenizer(model_dir, self.max_length)
 
     def predict(self, pairs: Sequence[tuple[str, str]], batch_size: int = 16, **_: Any) -> npt.NDArray[np.float32]:
         scores = []

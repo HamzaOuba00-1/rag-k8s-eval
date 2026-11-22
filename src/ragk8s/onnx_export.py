@@ -1,15 +1,21 @@
-"""Export the embedding model and the reranker to ONNX (int8), then check the rankings.
+"""Export the embedding model and the reranker to ONNX, then check the rankings.
 
 Runs where PyTorch and the Hugging Face models are available (the development PC):
 
     python -m ragk8s onnx export   -> models/onnx/{embedder,reranker}/
     python -m ragk8s onnx check    -> results/onnx_parity.json
 
-``check`` answers the question that matters for the app: with the quantised ONNX
-models, does each evaluation question get the same context as with the PyTorch
-models used for the evaluation? It compares, per strategy and method, the chunks
-selected within the context budget (identical contexts, Jaccard overlap, same first
-chunk), the source-page MRR with both back-ends, and the query time.
+Three variants are written per model (see ``onnx_models.VARIANT_FILES``): fp32, int8
+on every supported op, and int8 on MatMul weights only.
+
+``check`` answers the question that matters for the app: with an ONNX variant, does
+each evaluation question get the same context as with the PyTorch models used for the
+evaluation? It compares, per strategy and method, the chunks selected within the
+context budget (identical contexts, Jaccard overlap, same first chunk), the
+source-page MRR with each back-end, and the query time. PyTorch and onnxruntime run
+with the same number of CPU threads, so the times are comparable. PyTorch always keeps
+the evaluation settings; ``rerank_max_length`` only shortens the ONNX reranker input,
+so the agreement figures show how far a faster app setting drifts from the evaluation.
 """
 
 from __future__ import annotations
@@ -23,7 +29,7 @@ from typing import Any
 import numpy as np
 
 from . import config
-from .onnx_models import META_FILE, ONNX_DIR, OnnxCrossEncoder, OnnxEmbedder
+from .onnx_models import META_FILE, ONNX_DIR, VARIANT_FILES, OnnxCrossEncoder, OnnxEmbedder
 from .utils import write_json
 
 PARITY_PATH = config.RESULTS_DIR / "onnx_parity.json"
@@ -31,7 +37,7 @@ PARITY_METHODS = ("dense", "hybrid", "hybrid_rerank")  # BM25 does not use any m
 
 
 def _export_graph(model: Any, sample: dict[str, Any], out_dir: Path, output_name: str, per_token: bool) -> None:
-    """torch.onnx (dynamo exporter) -> single-file model.onnx -> dynamic int8 model.int8.onnx."""
+    """torch.onnx (dynamo exporter) -> single-file model.onnx -> the two dynamic int8 variants."""
     import onnx
     import torch
     from onnxruntime.quantization import QuantType, quantize_dynamic
@@ -52,7 +58,15 @@ def _export_graph(model: Any, sample: dict[str, Any], out_dir: Path, output_name
         )
         graph = onnx.load(str(raw), load_external_data=True)
         onnx.save_model(graph, str(out_dir / "model.onnx"), save_as_external_data=False)
-    quantize_dynamic(str(out_dir / "model.onnx"), str(out_dir / "model.int8.onnx"), weight_type=QuantType.QInt8)
+    fp32 = str(out_dir / VARIANT_FILES["fp32"])
+    quantize_dynamic(fp32, str(out_dir / VARIANT_FILES["int8"]), weight_type=QuantType.QInt8)
+    quantize_dynamic(
+        fp32,
+        str(out_dir / VARIANT_FILES["int8-matmul"]),
+        weight_type=QuantType.QInt8,
+        op_types_to_quantize=["MatMul"],
+        per_channel=True,
+    )
 
 
 def _sample_inputs(tokenizer: Any, texts: Any) -> dict[str, Any]:
@@ -152,48 +166,74 @@ def _mrr(contexts: Sequence[Sequence[dict[str, Any]]], sources: Sequence[str | N
     return float(np.mean(values)) if values else float("nan")
 
 
-def check(strategies: Sequence[str] = config.STRATEGIES, out: Path = PARITY_PATH) -> dict[str, Any]:
+def check(
+    strategies: Sequence[str] = config.STRATEGIES,
+    variants: Sequence[str] = tuple(VARIANT_FILES),
+    threads: int = 1,
+    rerank_max_length: int | None = None,
+    out: Path = PARITY_PATH,
+) -> dict[str, Any]:
+    import torch
     from sentence_transformers import CrossEncoder, SentenceTransformer
 
     from .pipeline import load_questions
     from .retrieval import Retriever
 
+    torch.set_num_threads(threads)
     questions = [q for q in load_questions() if q["category"] == "factual"]
     texts = [q["question"] for q in questions]
     sources = [q.get("source_doc_id") for q in questions]
-    torch_models = (
-        SentenceTransformer(config.EMBEDDING_MODEL, device="cpu"),
-        CrossEncoder(config.RERANKER_MODEL, device="cpu"),
-    )
-    onnx_models = (OnnxEmbedder(), OnnxCrossEncoder())
+    models: dict[str, tuple[Any, Any]] = {
+        "torch": (
+            SentenceTransformer(config.EMBEDDING_MODEL, device="cpu"),
+            CrossEncoder(config.RERANKER_MODEL, device="cpu"),
+        )
+    }
+    for v in variants:
+        models[v] = (
+            OnnxEmbedder(variant=v, threads=threads),
+            OnnxCrossEncoder(variant=v, threads=threads, max_length=rerank_max_length),
+        )
 
-    a = np.asarray(torch_models[0].encode(texts, normalize_embeddings=True))
-    b = onnx_models[0].encode(texts)
-    cosine = (a * b).sum(axis=1)
+    reference = np.asarray(models["torch"][0].encode(texts, normalize_embeddings=True))
     result: dict[str, Any] = {
         "n_questions": len(questions),
-        "query_embedding_cosine": {"min": float(np.min(cosine)), "mean": float(np.mean(cosine))},
+        "threads": threads,
+        "variants": list(variants),
+        # PyTorch keeps the evaluation settings; only the ONNX reranker is truncated.
+        "onnx_rerank_max_length": models[variants[0]][1].max_length if variants else None,
+        "size_mb": {
+            v: {
+                kind: round((ONNX_DIR / kind / VARIANT_FILES[v]).stat().st_size / 1e6, 1)
+                for kind in ("embedder", "reranker")
+            }
+            for v in variants
+        },
+        "query_embedding_cosine": {},
         "configs": {},
     }
+    for v in variants:
+        cosine = (reference * models[v][0].encode(texts)).sum(axis=1)
+        result["query_embedding_cosine"][v] = {"min": float(np.min(cosine)), "mean": float(np.mean(cosine))}
+
     for strategy in strategies:
-        backends = {}
-        for name, (embed, rerank) in (("torch", torch_models), ("onnx_int8", onnx_models)):
-            retriever = Retriever(strategy, embed_model=embed, cross_encoder=rerank)  # type: ignore[arg-type]
-            backends[name] = retriever
+        retrievers = {
+            name: Retriever(strategy, embed_model=embed, cross_encoder=rerank)  # type: ignore[arg-type]
+            for name, (embed, rerank) in models.items()
+        }
         for method in PARITY_METHODS:
             contexts: dict[str, list[list[dict[str, Any]]]] = {}
-            seconds: dict[str, float] = {}
-            for name, retriever in backends.items():
+            row: dict[str, Any] = {}
+            for name, retriever in retrievers.items():
                 started = time.perf_counter()
                 contexts[name] = [[h.chunk for h in retriever.search(method, t)] for t in texts]  # type: ignore[arg-type]
-                seconds[name] = (time.perf_counter() - started) / len(texts)
+                row[name] = {
+                    "mrr": _mrr(contexts[name], sources),
+                    "ms_per_query": round(1000 * (time.perf_counter() - started) / len(texts), 1),
+                }
             ids = {k: [[c["chunk_id"] for c in ctx] for ctx in v] for k, v in contexts.items()}
-            result["configs"][f"{strategy}_{method}"] = {
-                **context_agreement(ids["torch"], ids["onnx_int8"]),
-                "mrr_torch": _mrr(contexts["torch"], sources),
-                "mrr_onnx_int8": _mrr(contexts["onnx_int8"], sources),
-                "ms_per_query_torch": round(1000 * seconds["torch"], 1),
-                "ms_per_query_onnx_int8": round(1000 * seconds["onnx_int8"], 1),
-            }
+            for v in variants:
+                row[v].update(context_agreement(ids["torch"], ids[v]))
+            result["configs"][f"{strategy}_{method}"] = row
     write_json(out, result)
     return result

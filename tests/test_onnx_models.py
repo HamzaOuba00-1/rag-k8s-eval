@@ -102,3 +102,19 @@ def test_context_agreement() -> None:
     assert agr["mean_jaccard"] == pytest.approx((1 + 0 + 1) / 3)
     with pytest.raises(ValueError):
         context_agreement([], [])
+
+
+def test_variant_selects_the_model_file_and_rejects_unknown_names(tmp_path: Path) -> None:
+    _model(tmp_path / "emb", "embedder")
+    with pytest.raises(FileNotFoundError):
+        OnnxEmbedder(tmp_path / "emb", variant="int8-matmul")  # not written by the fixture
+    np.testing.assert_allclose(OnnxEmbedder(tmp_path / "emb", variant="fp32", threads=2).encode(["pod"]), [[1, 0, 0]])
+    with pytest.raises(ValueError, match="unknown ONNX variant"):
+        OnnxEmbedder(tmp_path / "emb", variant="int4")
+
+
+def test_reranker_max_length_can_only_shorten_the_model_limit(tmp_path: Path) -> None:
+    _model(tmp_path / "ce", "reranker")  # fixture limit: 16 tokens
+    assert OnnxCrossEncoder(tmp_path / "ce", max_length=8).max_length == 8
+    assert OnnxCrossEncoder(tmp_path / "ce", max_length=64).max_length == 16
+    assert OnnxCrossEncoder(tmp_path / "ce").max_length == 16

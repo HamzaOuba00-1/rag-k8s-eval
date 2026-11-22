@@ -276,18 +276,32 @@ def _cmd_onnx(args: argparse.Namespace) -> int:
     if args.action == "export":
         print(json.dumps(onnx_export.export(), indent=2))
     else:
-        result = onnx_export.check()
-        q = result["query_embedding_cosine"]
-        print(
-            f"{result['n_questions']} questions; query embedding cosine torch vs onnx int8: "
-            f"min {q['min']:.4f}, mean {q['mean']:.4f}"
+        result = onnx_export.check(
+            strategies=args.strategies or config.STRATEGIES,
+            variants=args.variants,
+            threads=args.threads,
+            rerank_max_length=args.rerank_max_length,
         )
-        for name, c in result["configs"].items():
+        print(
+            f"{result['n_questions']} questions, {result['threads']} CPU thread(s), "
+            f"ONNX reranker max length {result['onnx_rerank_max_length']}"
+        )
+        for v, q in result["query_embedding_cosine"].items():
+            size = result["size_mb"][v]
             print(
-                f"{name:<26} identical context {c['identical_context']:.0%}  jaccard {c['mean_jaccard']:.2f}  "
-                f"same 1st {c['same_first_chunk']:.0%}  MRR {c['mrr_torch']:.3f} -> {c['mrr_onnx_int8']:.3f}  "
-                f"ms/query {c['ms_per_query_torch']} -> {c['ms_per_query_onnx_int8']}"
+                f"  {v:<12} query cosine vs torch: min {q['min']:.4f}, mean {q['mean']:.4f}  "
+                f"size MB embedder {size['embedder']}, reranker {size['reranker']}"
             )
+        for name, row in result["configs"].items():
+            t = row["torch"]
+            print(f"{name:<26} torch        MRR {t['mrr']:.3f}  ms/query {t['ms_per_query']}")
+            for v in result["variants"]:
+                c = row[v]
+                print(
+                    f"{'':<26} {v:<12} MRR {c['mrr']:.3f}  ms/query {c['ms_per_query']}  "
+                    f"identical context {c['identical_context']:.0%}  jaccard {c['mean_jaccard']:.2f}  "
+                    f"same 1st {c['same_first_chunk']:.0%}"
+                )
         print(f"-> {onnx_export.PARITY_PATH}")
     return 0
 
@@ -383,6 +397,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("onnx", help="export the retrieval models to ONNX int8 / check ranking parity with PyTorch")
     p.add_argument("action", choices=("export", "check"))
+    p.add_argument(
+        "--variants", nargs="+", choices=("fp32", "int8", "int8-matmul"), default=["fp32", "int8", "int8-matmul"]
+    )
+    p.add_argument("--strategies", nargs="+", choices=config.STRATEGIES, help="check: default all strategies")
+    p.add_argument("--threads", type=int, default=1, help="check: CPU threads for both PyTorch and onnxruntime")
+    p.add_argument("--rerank-max-length", type=int, help="check: truncate the ONNX reranker input (PyTorch keeps 512)")
     p.set_defaults(func=_cmd_onnx)
 
     p = sub.add_parser("report", help="regenerate the result blocks of README.md and REPORT.md")
