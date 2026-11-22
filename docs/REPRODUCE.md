@@ -85,6 +85,18 @@ python -m ragk8s generate --provider groq --preset main     # the 6 evaluated co
 python -m ragk8s generate --provider ollama --preset best
 ```
 
+The reference 7B run happens on a Kaggle GPU (the local GPU is too slow):
+
+```bash
+python -m ragk8s kaggle export --preset best   # kaggle/export/contexts-fixed_hybrid_rerank.zip
+# upload the zip as a Kaggle dataset, attach it to kaggle/generate_ollama.ipynb, Run All,
+# download ragk8s-output.zip from the Output panel, then:
+python -m ragk8s kaggle import path/to/ragk8s-output.zip
+```
+
+The export records the git commit; the notebook installs `ragk8s` at that commit, so
+the prompt, decoding options and cache keys are the same as for local runs.
+
 Runs are written per model: `results/runs/<model>/run_<strategy>_<method>.jsonl`.
 With the Groq free tier, `generate` stops cleanly when the daily token budget of the
 model is reached ("Daily quota reached"); rerun the same command the next day and it

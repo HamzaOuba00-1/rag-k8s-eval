@@ -193,6 +193,25 @@ def _cmd_questions(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_kaggle(args: argparse.Namespace) -> int:
+    from pathlib import Path
+
+    from . import kaggle
+
+    if args.action == "export":
+        configs = _configs(args)
+        out = kaggle.export(args.name or kaggle.default_name(configs), configs)
+        print(f"Kaggle dataset archive -> {out}")
+    else:
+        if not args.path:
+            raise SystemExit("give the path of the Kaggle output (zip or folder)")
+        stats = kaggle.import_outputs(Path(args.path))
+        print(f"Imported {stats['copied']} files ({stats['identical']} already identical): {', '.join(stats['runs'])}")
+        for conflict in stats["conflicts"]:
+            print(f"  CONFLICT, not overwritten: {conflict}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ragk8s", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -258,6 +277,16 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--model", default="openai/gpt-oss-120b")
     p.add_argument("--replace", action="store_true", help="also discard already reviewed page questions")
     p.set_defaults(func=_cmd_questions)
+
+    p = sub.add_parser("kaggle", help="export contexts for a Kaggle notebook / import its outputs")
+    p.add_argument("action", choices=("export", "import"))
+    p.add_argument("path", nargs="?", help="import: Kaggle output zip or folder")
+    group = p.add_mutually_exclusive_group()
+    group.add_argument("--configs", nargs="+", metavar="STRATEGY:METHOD")
+    group.add_argument("--all", action="store_true")
+    group.add_argument("--preset", choices=("main", "best"))
+    p.add_argument("--name", default=None, help="export: archive name (default from the configurations)")
+    p.set_defaults(func=_cmd_kaggle)
 
     p = sub.add_parser("review", help="human review of the gold questions (Excel round trip)")
     p.add_argument("action", choices=("export", "apply"))

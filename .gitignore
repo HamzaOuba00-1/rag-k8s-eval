@@ -38,3 +38,7 @@ results/runs/
 *.egg-info/
 build/
 dist/
+
+# Archives built for Kaggle datasets and outputs downloaded from Kaggle
+kaggle/export/
+kaggle/output/
