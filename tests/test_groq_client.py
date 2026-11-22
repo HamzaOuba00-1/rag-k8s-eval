@@ -84,6 +84,7 @@ def test_chat_success_records_usage(tmp_path: Path) -> None:
 
 def test_missing_key(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("GROQ_API_KEY", raising=False)
+    monkeypatch.setattr("ragk8s.groq_client._prompt_key", lambda: "")
     with pytest.raises(GroqError, match="GROQ_API_KEY"):
         GroqClient()
 
@@ -131,3 +132,16 @@ def test_server_error_is_retried_and_client_error_raises(tmp_path: Path) -> None
     client, _, _ = _client(tmp_path, [httpx.Response(400, text="bad model")])
     with pytest.raises(GroqError, match="400"):
         client.chat("m", MSG, max_tokens=10)
+
+
+def test_cli_reports_groq_errors_without_traceback(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    from ragk8s import cli, questions_draft
+
+    def fail(**_: Any) -> dict[str, int]:
+        raise GroqError("GROQ_API_KEY is not set")
+
+    monkeypatch.setattr(questions_draft, "draft", fail)
+    assert cli.main(["questions", "draft"]) == 2
+    assert "Groq error: GROQ_API_KEY is not set" in capsys.readouterr().err

@@ -246,8 +246,17 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    from .groq_client import DailyQuotaReached, GroqError
+
     args = build_parser().parse_args(argv)
-    return int(args.func(args))
+    try:
+        return int(args.func(args))
+    except DailyQuotaReached as exc:
+        print(f"Daily quota reached: {exc}", file=sys.stderr)
+        return 3
+    except GroqError as exc:
+        print(f"Groq error: {exc}", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

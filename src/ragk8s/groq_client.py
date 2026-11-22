@@ -133,6 +133,19 @@ class UsageLedger:
         os.replace(tmp, self.path)
 
 
+def _prompt_key() -> str:
+    """Ask for the key on an interactive terminal (input hidden); empty string otherwise."""
+    import getpass
+    import sys
+
+    if not sys.stdin or not sys.stdin.isatty():
+        return ""
+    key = getpass.getpass("Groq API key (input hidden, right-click to paste, then Enter): ").strip()
+    if key:
+        os.environ["GROQ_API_KEY"] = key  # this process only
+    return key
+
+
 class GroqClient:
     def __init__(
         self,
@@ -144,9 +157,9 @@ class GroqClient:
         clock: Callable[[], float] = time.monotonic,
         max_retries: int = 5,
     ) -> None:
-        key = api_key or os.environ.get("GROQ_API_KEY")
+        key = api_key or os.environ.get("GROQ_API_KEY") or _prompt_key()
         if not key:
-            raise GroqError("GROQ_API_KEY is not set (see docs/REPRODUCE.md)")
+            raise GroqError("GROQ_API_KEY is not set and no key was entered (see docs/REPRODUCE.md)")
         self.limits = limits
         self.ledger = ledger or UsageLedger()
         self._http = http or httpx.Client(base_url=BASE_URL, timeout=120.0)

@@ -83,12 +83,13 @@ subset that no chunking strategy has seen, extra questions are drafted from whol
 unused pages (seeded sample, proportional to concepts / tasks / tutorials) by
 `openai/gpt-oss-120b` on Groq, a different model family from the evaluated generator.
 
-```powershell
-# PowerShell: read the key without echoing it or saving it in the shell history
-$k = Read-Host "Groq API key" -AsSecureString
-$env:GROQ_API_KEY = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($k))
+```bash
 python -m ragk8s questions draft --n 25
 ```
+
+The Groq API key is read from the `GROQ_API_KEY` environment variable. When it is not
+set, the command asks for it with hidden input (it is kept in memory for this process
+only). Never put the key in a file of the repository.
 
 Drafts whose evidence sentence is not found verbatim in the page, or whose question
 refers to "this page", are rejected automatically (`eval/review/drafts_rejected.jsonl`);
