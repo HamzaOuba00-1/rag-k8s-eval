@@ -262,6 +262,14 @@ def _cmd_compare(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_report(args: argparse.Namespace) -> int:
+    from . import report
+
+    for path, blocks in report.run().items():
+        print(f"{path}: {', '.join(blocks) or 'no result block'}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ragk8s", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -350,6 +358,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("compare", help="final tables, figures and results/summary.json")
     p.set_defaults(func=_cmd_compare)
+
+    p = sub.add_parser("report", help="regenerate the result blocks of README.md and REPORT.md")
+    p.set_defaults(func=_cmd_report)
 
     p = sub.add_parser("kaggle", help="export contexts for a Kaggle notebook / import its outputs")
     p.add_argument("action", choices=("export", "import"))

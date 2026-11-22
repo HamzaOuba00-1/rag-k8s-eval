@@ -92,6 +92,14 @@ def config_summary(model: str, cfg: RunConfig) -> dict[str, Any] | None:
     for metric in METRICS:
         values = _metric_values(scores, metric)
         out[metric] = _est(list(values.values())) if values else None
+    # Complete = every factual question has its context scores and every answered one its answer scores.
+    expected = {
+        "faithfulness": len(answered),
+        "answer_relevancy": len(answered),
+        "context_precision": len(factual),
+        "context_recall": len(factual),
+    }
+    out["judge_complete"] = bool(scores) and all((out[m] or {}).get("n", 0) == n for m, n in expected.items())
     return out
 
 

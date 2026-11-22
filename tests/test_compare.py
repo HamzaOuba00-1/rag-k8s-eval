@@ -65,6 +65,7 @@ def test_build_tables_summary_and_figures(tmp_path: Path, monkeypatch: pytest.Mo
     assert [r["config"] for r in summary["configs"]] == ["fixed_hybrid_rerank", "fixed_bm25"]  # missing run skipped
     best = summary["configs"][0]
     assert best["faithfulness"]["n"] == 9 and best["context_recall"]["n"] == 10
+    assert best["judge_complete"]
     assert best["refusal_rate"]["mean"] == 1.0 and best["false_refusal_rate"]["mean"] == pytest.approx(0.1)
     assert summary["paired_vs_best"]["fixed_bm25"]["faithfulness"]["diff"] == pytest.approx(-0.3)
     assert summary["app_vs_reference"]["faithfulness"]["diff"] == pytest.approx(0.2)

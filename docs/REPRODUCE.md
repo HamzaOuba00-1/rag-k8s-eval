@@ -142,6 +142,14 @@ python -m ragk8s compare   # results/comparison.{md,csv}, results/summary.json, 
 Every number is read from the run, judge and agreement files; configurations whose
 runs are incomplete appear as missing rather than estimated.
 
+```bash
+python -m ragk8s report    # regenerates the result blocks of README.md and REPORT.md
+```
+
+The documentation never contains hand-typed results: each block between
+`<!-- BEGIN:name -->` and `<!-- END:name -->` is rebuilt from the result files, and stays
+"pending" until its source is complete (e.g. every configuration fully judged).
+
 ## 7. Extra questions drafted from whole pages (Groq)
 
 The first 55 factual questions were drafted from single `structure` chunks. To get a
