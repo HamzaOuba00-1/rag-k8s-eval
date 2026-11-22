@@ -36,6 +36,9 @@ python -m ragk8s chunk    # data/processed/chunks_{fixed,structure,semantic}.jso
 python -m ragk8s index    # data/index/<strategy>/ (BM25 tokens, FAISS, metadata)
 ```
 
+Before chunking, Hugo shortcodes and layout comments are rendered to plain text
+(`src/ragk8s/textclean.py`); `data/raw/` itself is never modified.
+
 Both are deterministic for a given environment (seed in `src/ragk8s/config.py`).
 `fixed` and `structure` chunking do not use any model; `semantic` chunking and the
 dense index use `sentence-transformers/all-MiniLM-L6-v2`.
@@ -47,6 +50,10 @@ python -m ragk8s search "How do I create a Deployment?" --strategy structure
 python -m ragk8s ask "How do I create a Deployment?" --strategy structure --method hybrid_rerank
 python -m ragk8s run --strategy structure --method hybrid_rerank
 ```
+
+Decoding is deterministic (temperature 0, seed 42, `num_ctx` 4096). `ask` also prints
+whether the answer is a refusal, which sources it cites, the share of sentences
+with a citation, token counts and the generation time.
 
 ## 5. Evaluation
 

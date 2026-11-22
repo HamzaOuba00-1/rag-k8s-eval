@@ -45,6 +45,7 @@ STRUCTURE_OVERLAP: Final = 100
 SEMANTIC_THRESHOLD: Final = 0.55
 SEMANTIC_MAX_CHUNK_SIZE: Final = 1500
 MIN_CHUNK_CHARS: Final = 50
+CLEAN_MARKUP: Final = True  # render Hugo shortcodes to text before chunking (textclean.py)
 
 # --- Retrieval -------------------------------------------------------------------
 
@@ -61,4 +62,6 @@ RERANK_CANDIDATES: Final = 20  # fused candidates passed to the cross-encoder
 # --- Generation ------------------------------------------------------------------
 
 OLLAMA_MODEL: Final = "qwen2.5:7b-instruct"
+GENERATION_NUM_CTX: Final = 4096  # tokens; 5 chunks of <= 1,500 chars fit with margin
+GENERATION_MAX_TOKENS: Final = 512
 SEED: Final = 42

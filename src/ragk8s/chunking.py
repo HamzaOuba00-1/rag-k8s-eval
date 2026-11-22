@@ -21,6 +21,7 @@ import numpy.typing as npt
 
 from . import config
 from .config import Strategy
+from .textclean import clean_markup
 from .utils import write_jsonl
 
 EmbedFn = Callable[[list[str]], npt.NDArray[np.float32]]
@@ -118,10 +119,11 @@ def chunk_semantic(
 def build_chunks(
     strategy: Strategy, docs: Sequence[dict[str, Any]], chunk_fn: Callable[[str], list[str]]
 ) -> list[dict[str, Any]]:
-    """Apply ``chunk_fn`` to every document and attach metadata."""
+    """Apply ``chunk_fn`` to every document (after markup cleaning) and attach metadata."""
     records: list[dict[str, Any]] = []
     for doc in docs:
-        for piece in chunk_fn(doc["text"]):
+        text = clean_markup(doc["text"]) if config.CLEAN_MARKUP else doc["text"]
+        for piece in chunk_fn(text):
             piece = piece.strip()
             if len(piece) < config.MIN_CHUNK_CHARS:
                 continue

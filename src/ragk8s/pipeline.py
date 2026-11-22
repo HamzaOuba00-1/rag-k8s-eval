@@ -44,7 +44,7 @@ def run(strategy: Strategy, method: Method, top_k: int = config.TOP_K, limit_fac
                 "question": q["question"],
                 "ground_truth": q["ground_truth"],
                 "category": q.get("category", "factual"),
-                "answer": generation.generate(q["question"], hits),
+                "answer": generation.generate(q["question"], hits).answer,
                 "contexts": [h.chunk["text"] for h in hits],
                 "sources": generation.sources(hits),
             }

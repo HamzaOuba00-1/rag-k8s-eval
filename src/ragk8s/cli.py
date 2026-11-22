@@ -81,10 +81,19 @@ def _cmd_search(args: argparse.Namespace) -> int:
 
 def _cmd_ask(args: argparse.Namespace) -> int:
     from . import generation
+    from .citations import check_citations
+    from .refusal import is_refusal
     from .retrieval import Retriever
 
     hits = Retriever(args.strategy).search(args.method, args.question, top_k=args.top_k)
-    print(generation.generate(args.question, hits))
+    result = generation.generate(args.question, hits)
+    print(result.answer)
+    check = check_citations(result.answer, len(hits))
+    print(
+        f"\n[refusal={is_refusal(result.answer)} cited={list(check.cited)} invalid={list(check.invalid)} "
+        f"coverage={check.coverage:.0%} tokens={result.prompt_tokens}+{result.completion_tokens} "
+        f"time={result.total_seconds or 0:.1f}s]"
+    )
     print("\nSources:")
     for s in generation.sources(hits):
         print(f"  [{s['n']}] {s['title']} - {s['url']}")
