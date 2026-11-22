@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
 import pytest
@@ -73,7 +73,7 @@ def tiny_index(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
 
 
 def test_retriever_methods_on_tiny_index(tiny_index: Path) -> None:
-    r = Retriever("fixed", embed_model=FakeEmbedder(), cross_encoder=FakeCrossEncoder())  # type: ignore[arg-type]
+    r = Retriever("fixed", embed_model=cast(Any, FakeEmbedder()), cross_encoder=cast(Any, FakeCrossEncoder()))
     assert r.bm25("service", top_k=1)[0].chunk["doc_id"] == "doc_0001"
     assert r.dense("volume", top_k=1)[0].chunk["doc_id"] == "doc_0002"
     hybrid = r.hybrid("node pods", top_k=4, pool=4)
@@ -85,12 +85,12 @@ def test_retriever_methods_on_tiny_index(tiny_index: Path) -> None:
 
 
 def test_dense_ignores_missing_ids_when_top_k_exceeds_corpus(tiny_index: Path) -> None:
-    r = Retriever("fixed", embed_model=FakeEmbedder())  # type: ignore[arg-type]
+    r = Retriever("fixed", embed_model=cast(Any, FakeEmbedder()))
     assert len(r.dense("pod", top_k=10)) == 4
 
 
 def test_unknown_method(tiny_index: Path) -> None:
-    r = Retriever("fixed", embed_model=FakeEmbedder())  # type: ignore[arg-type]
+    r = Retriever("fixed", embed_model=cast(Any, FakeEmbedder()))
     with pytest.raises(ValueError):
         r.search("magic", "q")  # type: ignore[arg-type]
 
@@ -121,7 +121,7 @@ def test_pool_by_chars() -> None:
 
 
 def test_search_applies_budget(tiny_index: Path) -> None:
-    r = Retriever("fixed", embed_model=FakeEmbedder())  # type: ignore[arg-type]
+    r = Retriever("fixed", embed_model=cast(Any, FakeEmbedder()))
     context = r.search("bm25", "pod", budget_chars=50)
     assert sum(len(h.chunk["text"]) for h in context) <= 50
     assert len(context) == 2

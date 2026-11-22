@@ -236,6 +236,32 @@ def _cmd_judge(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_validation(args: argparse.Namespace) -> int:
+    from . import validation
+
+    if args.action == "export":
+        print(f"Judge validation sheet -> {validation.export(n=args.n, overwrite=args.overwrite)}")
+    else:
+        result = validation.agree()
+        for metric, a in result["metrics"].items():
+            print(
+                f"{metric:<18} n={a['n']} spearman={a['spearman']:.2f}"
+                f" [{a['spearman_ci'][0]:.2f}, {a['spearman_ci'][1]:.2f}]"
+                f" mae={a['mae']:.2f} bias={a['bias_judge_minus_human']:+.2f} kappa={a['kappa_binary_0.5']:.2f}"
+            )
+        print(f"-> {validation.OUT_PATH}")
+    return 0
+
+
+def _cmd_compare(args: argparse.Namespace) -> int:
+    from . import compare
+
+    compare.build()
+    print(compare.OUT_MD.read_text(encoding="utf-8"))
+    print(f"-> {compare.OUT_MD}, {compare.OUT_CSV}, {compare.SUMMARY}, {compare.FIGURES}/")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ragk8s", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -315,6 +341,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--limit", type=int, default=None, help="first N records of each run (pilot)")
     p.add_argument("--retry-errors", action="store_true", help="score again the cached judge errors")
     p.set_defaults(func=_cmd_judge)
+
+    p = sub.add_parser("validation", help="human validation of the judge (Excel sheet, then agreement)")
+    p.add_argument("action", choices=("export", "agree"))
+    p.add_argument("--n", type=int, default=40, help="export: number of answers to label")
+    p.add_argument("--overwrite", action="store_true")
+    p.set_defaults(func=_cmd_validation)
+
+    p = sub.add_parser("compare", help="final tables, figures and results/summary.json")
+    p.set_defaults(func=_cmd_compare)
 
     p = sub.add_parser("kaggle", help="export contexts for a Kaggle notebook / import its outputs")
     p.add_argument("action", choices=("export", "import"))

@@ -120,6 +120,28 @@ Only complete runs are exported. Each score is cached by metric, inputs and judg
 (model digest, RAGAS version, embeddings); context metrics are shared between the two
 generators. Re-export with `--with-judge-cache` to resume in a new session.
 
+### Judge validation (human labels)
+
+```bash
+python -m ragk8s validation export --n 40   # eval/review/judge_validation.xlsx (judge scores hidden)
+python -m ragk8s validation agree           # results/judge_agreement.json
+```
+
+A seeded sample stratified by generator and by judge faithfulness (< 1 vs = 1) is
+labelled blind on three levels (0 / 0.5 / 1): claims supported by the contexts,
+answer relevant to the question, contexts covering the reference answer. Agreement:
+Spearman correlation (bootstrap CI), mean absolute error, judge-minus-human bias and
+Cohen's kappa after binarising at 0.5.
+
+### Final comparison
+
+```bash
+python -m ragk8s compare   # results/comparison.{md,csv}, results/summary.json, results/figures/*.png
+```
+
+Every number is read from the run, judge and agreement files; configurations whose
+runs are incomplete appear as missing rather than estimated.
+
 ## 7. Extra questions drafted from whole pages (Groq)
 
 The first 55 factual questions were drafted from single `structure` chunks. To get a
@@ -166,6 +188,9 @@ configuration; reported on all factual questions and separately per question ori
 The RAGAS evaluation is being reworked; the previous scripts are kept in `legacy/`.
 
 ## Quality checks
+
+CI (`.github/workflows/ci.yml`) runs the same checks on every push, with a light
+install: no PyTorch, no model download, no LLM.
 
 ```bash
 ruff check src tests
