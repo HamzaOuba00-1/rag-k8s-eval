@@ -128,4 +128,4 @@ reported above. Details in [REPORT.md](REPORT.md#limitations).
 - Documentation corpus: © The Kubernetes Authors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/),
   modified (front matter removed, files renamed); see [NOTICE](NOTICE).
 - Unofficial project, not affiliated with the Linux Foundation or the Kubernetes project.
-- Code license: not chosen yet.
+- Code: [MIT License](LICENSE), © 2026 Hamza Ouba.
