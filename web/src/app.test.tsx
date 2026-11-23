@@ -116,3 +116,13 @@ test("scores list only the main subset and flag the live config", async () => {
   expect(screen.getByText(/not significant/)).toBeInTheDocument();
   expect(screen.getAllByText(/pending/).length).toBeGreaterThan(0);
 });
+
+test("the theme toggle switches between dark and light", async () => {
+  const user = userEvent.setup();
+  renderAt("/scores");
+  const [toggle] = await screen.findAllByRole("button", { name: /Switch to (light|dark) mode/ });
+  const before = document.documentElement.dataset.theme;
+  await user.click(toggle!);
+  expect(document.documentElement.dataset.theme).not.toBe(before);
+  expect(["light", "dark"]).toContain(document.documentElement.dataset.theme);
+});

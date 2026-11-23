@@ -26,16 +26,47 @@
   --font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 
+/* Light theme: warm ivory and paper, a darker bronze so text and buttons keep their contrast. */
+:root[data-theme="light"] {
+  --color-ink: #f5efe6;
+  --color-surface: #fffcf7;
+  --color-raised: #efe6da;
+  --color-line: #e3d8c9;
+  --color-line-strong: #cdbda8;
+  --color-fg: #1f1914;
+  --color-muted: #66594b;
+  --color-faint: #93846f;
+  --color-accent: #8a6238;
+  --color-accent-strong: #6f4c27;
+  --color-accent-deep: #c9a77c;
+  --color-ok: #2d7a52;
+  --color-warn: #8f6210;
+  --color-danger: #a3412f;
+  --glow-a: rgb(193 154 107 / 0.18);
+  --glow-b: rgb(138 98 56 / 0.08);
+  --panel-shadow: 0 0 0 1px rgb(60 40 20 / 0.01), 0 12px 32px -20px rgb(60 40 20 / 0.22);
+  --float-shadow: 0 18px 40px -18px rgb(60 40 20 / 0.28);
+  --logo-filter: drop-shadow(0 1px 1.5px rgb(60 40 20 / 0.35));
+  color-scheme: light;
+}
+
+:root {
+  --glow-a: rgb(193 154 107 / 0.08);
+  --glow-b: rgb(107 79 51 / 0.12);
+  --panel-shadow: inset 0 1px 0 rgb(255 255 255 / 0.03), 0 1px 2px rgb(0 0 0 / 0.4);
+  --float-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.6);
+  --logo-filter: none;
+  color-scheme: dark;
+}
+
 @layer base {
-  html {
-    color-scheme: dark;
-  }
   body {
     @apply bg-ink font-sans text-fg antialiased;
     background-image:
-      radial-gradient(1200px 600px at 85% -10%, rgb(193 154 107 / 0.08), transparent 60%),
-      radial-gradient(900px 500px at -10% 110%, rgb(107 79 51 / 0.12), transparent 60%);
+      radial-gradient(1200px 600px at 85% -10%, var(--glow-a), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, var(--glow-b), transparent 60%);
     background-attachment: fixed;
+    transition: background-color 0.2s ease;
   }
   /* Headings: same family, heavier and tighter. */
   .font-display {
@@ -61,11 +92,17 @@
 
 @utility panel {
   @apply rounded-2xl border border-line bg-surface/80;
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.03),
-    0 1px 2px rgb(0 0 0 / 0.4);
+  box-shadow: var(--panel-shadow);
 }
 
 @utility btn-primary {
   @apply inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-accent-strong disabled:opacity-50;
+}
+
+@utility float-shadow {
+  box-shadow: var(--float-shadow);
+}
+
+@utility logo-mark {
+  filter: var(--logo-filter);
 }

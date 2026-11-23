@@ -137,7 +137,7 @@ export function AskPage() {
           </>
         )}
 
-        <form onSubmit={submit} className="sticky bottom-24 mt-auto flex items-center gap-2 rounded-full border border-line-strong bg-surface/90 p-1.5 pl-5 shadow-2xl shadow-black/50 backdrop-blur-xl focus-within:border-accent/60 md:bottom-6">
+        <form onSubmit={submit} className="sticky bottom-24 mt-auto flex items-center gap-2 rounded-full border border-line-strong bg-surface/90 p-1.5 pl-5 float-shadow backdrop-blur-xl focus-within:border-accent/60 md:bottom-6">
           <label htmlFor="question" className="sr-only">Question</label>
           <input id="question" value={draft} maxLength={500} onChange={(e) => { setDraft(e.target.value); setError(undefined); }}
             placeholder="How do I drain a node?" className="flex-1 bg-transparent text-[15px] text-fg outline-none placeholder:text-faint" />

@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from "react-router";
 import { Brand } from "./Brand";
 import { Icon, type IconName } from "./Icon";
+import { ThemeToggle } from "./ThemeToggle";
 
 const NAV: { to: string; label: string; icon: IconName }[] = [
   { to: "/", label: "Home", icon: "home" },
@@ -47,14 +48,18 @@ export function Layout() {
             </NavLink>
           ))}
         </nav>
-        <p className="mt-auto px-3 text-[11px] leading-relaxed text-faint">
-          Retrieval-augmented answers over the Kubernetes documentation, with every score measured.
-        </p>
+        <div className="mt-auto space-y-4 px-3">
+          <p className="text-[11px] leading-relaxed text-faint">
+            Retrieval-augmented answers over the Kubernetes documentation, with every score measured.
+          </p>
+          <ThemeToggle />
+        </div>
       </aside>
 
       <div className="flex min-h-screen flex-col">
-        <header className="flex items-center px-4 pt-5 md:hidden">
+        <header className="flex items-center justify-between px-4 pt-5 md:hidden">
           <Brand />
+          <ThemeToggle />
         </header>
         <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-6 pb-10 md:px-10 md:pt-10 md:pb-14">
           <Outlet />
@@ -62,7 +67,7 @@ export function Layout() {
         <Footer />
       </div>
 
-      <nav aria-label="Main" className="fixed inset-x-5 bottom-5 z-10 flex justify-around rounded-full border border-line bg-surface/85 p-1.5 shadow-2xl shadow-black/60 backdrop-blur-xl md:hidden">
+      <nav aria-label="Main" className="fixed inset-x-5 bottom-5 z-10 flex justify-around rounded-full border border-line bg-surface/85 p-1.5 float-shadow backdrop-blur-xl md:hidden">
         {NAV.map((n) => (
           <NavLink key={n.to} to={n.to} end={n.to === "/"} aria-label={n.label}
             className={({ isActive }) => `rounded-full p-3 transition-colors ${isActive ? "bg-accent text-ink" : "text-muted"}`}>
