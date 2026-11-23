@@ -22,8 +22,8 @@ export function HomePage() {
       <section className="grid items-end gap-6 md:grid-cols-[1.5fr_1fr]">
         <div>
           <p className="eyebrow">Kubernetes documentation · grounded answers</p>
-          <h1 className="mt-4 font-display text-4xl leading-[1.05] md:text-[56px]">
-            Answers you can <span className="text-accent">check</span>.
+          <h1 className="mt-4 font-display text-[40px] leading-[1.05] whitespace-nowrap md:text-[56px]">
+            Cited. <span className="text-accent">Measured.</span>
           </h1>
           <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-muted">
             Every answer cites the pages it comes from and says so when the docs don't cover it. Every score on this

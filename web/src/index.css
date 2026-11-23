@@ -73,10 +73,7 @@
     font-weight: 600;
     letter-spacing: -0.035em;
   }
-  .tabular-nums {
-    font-family: var(--font-mono);
-    letter-spacing: -0.02em;
-  }
+
   ::selection {
     background: rgb(193 154 107 / 0.35);
   }

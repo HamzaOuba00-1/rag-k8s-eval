@@ -4,7 +4,7 @@ export function Logo({ size = 24, className = "" }: { size?: number; className?:
   return (
     <img src={src} width={size} height={size} alt="" aria-hidden="true" draggable={false}
       style={{ width: size, height: size }}
-      className={`logo-mark shrink-0 self-start object-contain select-none ${className}`} />
+      className={`logo-mark shrink-0 object-contain select-none ${className}`} />
   );
 }
 

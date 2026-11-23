@@ -118,7 +118,7 @@ export function AskPage() {
             </div>
             {answer && (
               <div className="flex gap-3">
-                <Logo size={30} className="mt-1" />
+                <Logo size={30} className="mt-1 self-start" />
                 <Card className="flex-1 rounded-tl-md">
                   <AnswerText text={answer.text} sources={result.sources} />
                   <div className="mt-4 flex items-center gap-4 border-t border-line pt-3 text-xs text-muted">
