@@ -1,0 +1,12 @@
+# Runtime dependencies of the web app image (no PyTorch, no sentence-transformers):
+# retrieval with FAISS + BM25 and the ONNX embedder, the FastAPI server, the Groq client.
+# Pinned to the versions the app was tested with; the package itself is installed with --no-deps.
+numpy==2.5.5
+faiss-cpu==1.16.0
+rank-bm25==0.2.2
+onnxruntime==1.32.0
+tokenizers==0.23.3
+httpx==0.28.1
+pydantic==2.14.4
+fastapi==0.165.0
+uvicorn==0.54.0

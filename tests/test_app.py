@@ -283,3 +283,18 @@ def test_front_end_openapi_file_is_up_to_date() -> None:
     from app.openapi import main
 
     assert main([str(Path(__file__).parents[1] / "web" / "src" / "api" / "openapi.json"), "--check"]) == 0
+
+
+def test_visitor_is_the_last_forwarded_address_so_it_cannot_be_forged() -> None:
+    client = _client(_engine(_llm(), daily=10, hourly=1))
+    client.post("/api/ask", json={"question": "What is a Pod?"}, headers={"x-forwarded-for": "203.0.113.5"})
+    forged = client.post(
+        "/api/ask", json={"question": "What is a Job?"}, headers={"x-forwarded-for": "198.51.100.1, 203.0.113.5"}
+    ).json()
+    assert "this hour" in forged["message"]
+
+
+def test_startup_loads_the_engine_once() -> None:
+    engine = _engine()
+    with TestClient(create_app(Settings(), engine=engine)) as client:
+        assert client.get("/api/health").json()["status"] == "ok"

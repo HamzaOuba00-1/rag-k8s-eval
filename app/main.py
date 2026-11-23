@@ -6,6 +6,9 @@ uvicorn app.main:app --port 8080
 from __future__ import annotations
 
 import json
+import threading
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from typing import Any, cast
 
 from fastapi import FastAPI, HTTPException, Request
@@ -20,10 +23,16 @@ from .settings import Settings
 
 
 def client_ip(request: Request) -> str:
-    """Cloud Run puts the visitor address first in X-Forwarded-For."""
+    """Visitor address as seen by Cloud Run's front end.
+
+    Google's front end appends the address it received the request from to
+    X-Forwarded-For, so the last entry is the one a visitor can't forge; earlier
+    entries are whatever the client sent.
+    """
     forwarded = request.headers.get("x-forwarded-for", "")
-    if forwarded:
-        return forwarded.split(",")[0].strip()
+    entries = [e.strip() for e in forwarded.split(",") if e.strip()]
+    if entries:
+        return entries[-1]
     return request.client.host if request.client else "unknown"
 
 
@@ -46,19 +55,29 @@ def build_engine(settings: Settings) -> Engine:
 
 def create_app(settings: Settings | None = None, engine: Engine | None = None) -> FastAPI:
     settings = settings or Settings()
+    state: dict[str, Engine] = {}
+    lock = threading.Lock()
+
+    def get_engine() -> Engine:
+        if "engine" not in state:
+            with lock:  # first requests may arrive together: load the indexes once
+                if "engine" not in state:
+                    state["engine"] = engine or build_engine(settings)
+        return state["engine"]
+
+    @asynccontextmanager
+    async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+        get_engine()  # load before serving: Cloud Run sends traffic only once startup is done
+        yield
+
     app = FastAPI(
+        lifespan=lifespan,
         title="DocTruth API",
         version=__version__,
         openapi_url="/api/openapi.json",
         docs_url="/api/docs",
         redoc_url=None,
     )
-    state: dict[str, Engine] = {}
-
-    def get_engine() -> Engine:
-        if "engine" not in state:
-            state["engine"] = engine or build_engine(settings)
-        return state["engine"]
 
     @app.get("/api/health", response_model=schemas.Health)
     def health() -> dict[str, Any]:

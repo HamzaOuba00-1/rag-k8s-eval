@@ -1,0 +1,36 @@
+# Files uploaded by `gcloud builds submit` (without this file gcloud would use
+# .gitignore, which leaves out the indexes, the ONNX model and the app bundle).
+# Same rules as .dockerignore.
+/*
+!/Dockerfile
+!/requirements-app.txt
+!/pyproject.toml
+!/README.md
+!/LICENSE
+!/NOTICE
+!/src/
+!/app/
+!/web/
+/web/node_modules/
+/web/dist/
+/web/*.tsbuildinfo
+!/data/
+/data/*
+!/data/index/
+/data/index/*/*
+!/data/index/*/chunks.jsonl
+!/data/index/*/bm25_tokens.json
+!/data/index/*/dense.faiss
+!/models/
+/models/*
+!/models/onnx/
+/models/onnx/*
+!/models/onnx/embedder/
+/models/onnx/embedder/*
+!/models/onnx/embedder/model.onnx
+!/models/onnx/embedder/tokenizer.json
+!/models/onnx/embedder/ragk8s_onnx.json
+!/app_data/
+/app_data/*
+!/app_data/bundle.json
+__pycache__/
