@@ -30,6 +30,10 @@ $IMAGE   = "${REGION}-docker.pkg.dev/${PROJECT}/${REPO}/app"
 gcloud config set project $PROJECT
 ```
 
+To avoid retyping them, put these lines (plus `$BILLING`, see section 1) in
+`deploy/env.ps1`, which Git ignores, and load them in each new session with
+`. .\deploy\env.ps1`.
+
 ## 1. One-time setup
 
 ```powershell

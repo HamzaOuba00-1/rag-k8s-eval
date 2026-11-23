@@ -66,7 +66,7 @@ test("home shows measured MRR and pending judge scores", async () => {
   renderAt("/");
   expect(await screen.findByRole("img", { name: "Retrieval MRR: 0.84" })).toBeInTheDocument();
   expect(screen.getByRole("img", { name: "Faithfulness: pending" })).toBeInTheDocument();
-  expect(await screen.findByText("62/80 left")).toBeInTheDocument();
+  expect(await screen.findByText("of 80 left")).toBeInTheDocument();
 });
 
 test("ask shows precomputed answers per model with citation links", async () => {

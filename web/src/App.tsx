@@ -9,7 +9,7 @@ function NotFound() {
   return (
     <div className="py-16 text-center">
       <h1 className="text-xl font-semibold">Page not found</h1>
-      <Link to="/" className="mt-2 inline-block text-sm text-brand-800 underline">Back to home</Link>
+      <Link to="/" className="mt-2 inline-block text-sm text-accent underline">Back to home</Link>
     </div>
   );
 }

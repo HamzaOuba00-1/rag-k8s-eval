@@ -53,3 +53,6 @@ kaggle/output/
 
 # Exported ONNX models (rebuilt with `python -m ragk8s onnx export`)
 models/
+
+# Local deployment variables (project and billing account IDs)
+deploy/env.ps1

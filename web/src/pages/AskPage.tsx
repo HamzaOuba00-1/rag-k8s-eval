@@ -64,43 +64,43 @@ export function AskPage() {
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
       <div className="flex min-h-[60vh] flex-col gap-4">
-        <div className="flex items-center justify-between text-xs text-slate-500">
+        <div className="flex items-center justify-between text-xs text-muted">
           <span>{result ? configLabel(result.config) : "Live: fixed · hybrid"}</span>
           {remaining !== undefined && <span>{remaining} live answers left today</span>}
         </div>
 
         {!asked && (
           <div className="flex flex-1 flex-col items-center justify-center gap-3 py-10 text-center">
-            <Orb size={72} />
-            <h1 className="text-xl font-semibold">Ask the Kubernetes docs</h1>
-            <p className="text-sm text-slate-500">Answers cite the pages they come from.</p>
+            <Orb size={84} />
+            <h1 className="font-display text-4xl tracking-tight">Ask the Kubernetes docs</h1>
+            <p className="text-sm text-muted">Answers cite the pages they come from.</p>
             <div className="mt-4 grid w-full max-w-lg gap-3 sm:grid-cols-2">
               {examples.data?.[0] && (
                 <Link to={`/ask?q=${encodeURIComponent(examples.data[0].question)}`}
-                  className="rounded-2xl bg-white p-4 text-left text-sm shadow-sm ring-1 ring-slate-200/70">
-                  <span className="text-xs text-slate-500">Example question</span>
-                  <span className="mt-1 block">{examples.data[0].question}</span>
+                  className="panel p-4 text-left text-sm transition-colors hover:border-line-strong hover:bg-raised">
+                  <span className="eyebrow">Example question</span>
+                  <span className="mt-2 block leading-relaxed">{examples.data[0].question}</span>
                 </Link>
               )}
-              <Link to="/compare" className="rounded-2xl bg-white p-4 text-left text-sm shadow-sm ring-1 ring-slate-200/70">
-                <span className="text-xs text-slate-500">Compare retrieval</span>
-                <span className="mt-1 block">See what each chunking strategy finds</span>
+              <Link to="/compare" className="panel p-4 text-left text-sm transition-colors hover:border-line-strong hover:bg-raised">
+                <span className="eyebrow">Compare retrieval</span>
+                <span className="mt-2 block leading-relaxed">See what each chunking strategy finds</span>
               </Link>
             </div>
           </div>
         )}
 
         {asked && (
-          <div className="ml-auto max-w-[85%] rounded-2xl rounded-br-sm bg-brand-600 px-4 py-2 text-white">{asked}</div>
+          <div className="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-raised px-4 py-2.5 text-[15px] text-fg ring-1 ring-line-strong">{asked}</div>
         )}
 
-        {loading && <p className="text-sm text-slate-500" role="status">Retrieving and answering…</p>}
+        {loading && <p className="text-sm text-muted" role="status">Retrieving and answering…</p>}
         {error && <ErrorNote message={error} />}
 
         {result && !loading && (
           <>
             {result.message && (
-              <p className={`rounded-xl p-3 text-sm ${result.demo_mode ? "bg-amber-50 text-amber-900" : "bg-brand-50 text-brand-900"}`}>
+              <p className={`rounded-xl p-3 text-sm ${result.demo_mode ? "bg-warn/10 text-warn ring-1 ring-warn/25" : "bg-accent/10 text-muted ring-1 ring-accent/20"}`}>
                 {result.message}
               </p>
             )}
@@ -108,7 +108,7 @@ export function AskPage() {
               <div role="tablist" className="flex gap-2">
                 {result.answers.map((a, i) => (
                   <button key={a.model} role="tab" aria-selected={tab === i} onClick={() => setTab(i)}
-                    className={`rounded-full px-3 py-1 text-xs ${tab === i ? "bg-brand-600 text-white" : "ring-1 ring-slate-300"}`}>
+                    className={`rounded-full px-3 py-1.5 text-xs transition-colors ${tab === i ? "bg-accent text-ink" : "text-muted ring-1 ring-line-strong hover:text-fg"}`}>
                     {a.model} · {a.origin}
                   </button>
                 ))}
@@ -117,14 +117,14 @@ export function AskPage() {
             {answer && (
               <div className="flex gap-3">
                 <Orb size={28} />
-                <Card className="flex-1 rounded-tl-sm">
+                <Card className="flex-1 rounded-tl-md">
                   <AnswerText text={answer.text} sources={result.sources} />
-                  <div className="mt-3 flex items-center gap-4 text-xs text-slate-500">
-                    <button className="flex items-center gap-1 hover:text-slate-800"
+                  <div className="mt-4 flex items-center gap-4 border-t border-line pt-3 text-xs text-muted">
+                    <button className="flex items-center gap-1 hover:text-fg"
                       onClick={() => void navigator.clipboard.writeText(answer.text).then(() => setCopied(true))}>
                       <Icon name="copy" className="h-4 w-4" /> {copied ? "Copied" : "Copy"}
                     </button>
-                    <Link className="flex items-center gap-1 hover:text-slate-800" to={`/compare?q=${encodeURIComponent(result.question)}`}>
+                    <Link className="flex items-center gap-1 hover:text-fg" to={`/compare?q=${encodeURIComponent(result.question)}`}>
                       <Icon name="compare" className="h-4 w-4" /> Compare retrieval
                     </Link>
                     <span className="ml-auto">{answer.model}</span>
@@ -135,29 +135,29 @@ export function AskPage() {
           </>
         )}
 
-        <form onSubmit={submit} className="sticky bottom-24 mt-auto flex items-center gap-2 rounded-full bg-white p-1.5 pl-4 shadow-sm ring-1 ring-slate-300 md:bottom-4">
+        <form onSubmit={submit} className="sticky bottom-24 mt-auto flex items-center gap-2 rounded-full border border-line-strong bg-surface/90 p-1.5 pl-5 shadow-2xl shadow-black/50 backdrop-blur-xl focus-within:border-accent/60 md:bottom-6">
           <label htmlFor="question" className="sr-only">Question</label>
           <input id="question" value={draft} maxLength={500} onChange={(e) => { setDraft(e.target.value); setError(undefined); }}
-            placeholder="How do I drain a node?" className="flex-1 bg-transparent text-sm outline-none" />
+            placeholder="How do I drain a node?" className="flex-1 bg-transparent text-[15px] text-fg outline-none placeholder:text-faint" />
           <button type="submit" aria-label="Ask" disabled={loading}
-            className="rounded-full bg-brand-600 p-2 text-white disabled:opacity-60">
+            className="rounded-full bg-accent p-2.5 text-ink transition-colors hover:bg-accent-strong disabled:opacity-60">
             <Icon name="send" className="h-4 w-4" />
           </button>
         </form>
       </div>
 
       <aside className="space-y-3">
-        <h2 className="text-sm font-semibold">Sources</h2>
+        <h2 className="eyebrow">Sources</h2>
         {result ? (
           <>
             <SourceList sources={result.sources} cited={answer?.cited ?? []} />
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-muted">
               {plural(result.sources.reduce((n, s) => n + s.text.length, 0), "character")} of context ·{" "}
               {plural(result.sources.length, "excerpt")}
             </p>
           </>
         ) : (
-          <p className="text-sm text-slate-500">The excerpts given to the model appear here.</p>
+          <p className="text-sm text-muted">The excerpts given to the model appear here.</p>
         )}
       </aside>
     </div>
