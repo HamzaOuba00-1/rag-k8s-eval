@@ -270,6 +270,13 @@ def _cmd_report(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_app_bundle(args: argparse.Namespace) -> int:
+    from . import app_bundle
+
+    print(json.dumps(app_bundle.build(), indent=2))
+    return 0
+
+
 def _cmd_onnx(args: argparse.Namespace) -> int:
     from . import onnx_export
 
@@ -394,6 +401,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("compare", help="final tables, figures and results/summary.json")
     p.set_defaults(func=_cmd_compare)
+
+    p = sub.add_parser("app-bundle", help="data of the web app (app_data/bundle.json) from the evaluation results")
+    p.set_defaults(func=_cmd_app_bundle)
 
     p = sub.add_parser("onnx", help="export the retrieval models to ONNX int8 / check ranking parity with PyTorch")
     p.add_argument("action", choices=("export", "check"))

@@ -34,6 +34,9 @@ results/summary_*.json
 results/retrieval/
 results/runs/
 
+# Web app data bundle, rebuilt from the results by `python -m ragk8s app-bundle`
+app_data/
+
 # Packaging artifacts
 *.egg-info/
 build/

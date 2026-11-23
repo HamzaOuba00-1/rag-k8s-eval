@@ -222,14 +222,35 @@ instance), so the times can be compared. `--rerank-max-length` shortens only the
 reranker input; PyTorch keeps the evaluation settings, so the agreement figures show how
 far a faster setting drifts from what was evaluated.
 
+## 11. Web app API (DocTruth)
+
+The API serves live retrieval with the ONNX fp32 embedder (identical contexts to
+PyTorch on every evaluation question) and no reranker: the cross-encoder takes seconds
+per query on one vCPU (`results/onnx_parity_*.json`). Live answers therefore use
+`fixed_hybrid`; for the evaluation questions the app shows the answers and the
+hybrid + rerank contexts of the evaluation runs, copied into one bundle file.
+
+```bash
+pip install -e ".[dev,onnx,app]"
+python -m ragk8s app-bundle                 # app_data/bundle.json from results/
+uvicorn app.main:app --port 8080            # http://127.0.0.1:8080/api/docs
+```
+
+Live answers need `GROQ_API_KEY` in the environment; without it the app runs in demo
+mode (live retrieval, precomputed answers). Quota settings: `DOCTRUTH_DAILY_LIMIT`
+(default 80 live answers per UTC day for the whole app), `DOCTRUTH_VISITOR_HOURLY`
+(default 5), `DOCTRUTH_QUOTA_BUCKET` (Cloud Storage bucket of the daily counter; in
+memory when unset). Visitors are told apart by a keyed hash of their IP address, kept
+in memory only.
+
 ## Quality checks
 
 CI (`.github/workflows/ci.yml`) runs the same checks on every push, with a light
 install: no PyTorch, no model download, no LLM.
 
 ```bash
-ruff check src tests
-ruff format --check src tests
+ruff check src app tests
+ruff format --check src app tests
 mypy
 pytest
 ```
