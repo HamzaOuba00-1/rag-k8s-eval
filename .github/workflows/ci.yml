@@ -36,7 +36,29 @@ jobs:
         run: |
           ruff check src app tests
           ruff format --check src app tests
+      - name: OpenAPI schema of the front-end is up to date
+        run: python -m app.openapi web/src/api/openapi.json --check
       - name: Mypy
         run: mypy
       - name: Pytest
         run: pytest
+
+  web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - name: Types generated from the OpenAPI schema
+        run: npm run gen:api && git diff --exit-code src/api/schema.d.ts
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build

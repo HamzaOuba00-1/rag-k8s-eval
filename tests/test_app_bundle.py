@@ -64,13 +64,71 @@ def test_bundle_keeps_only_complete_runs_and_measured_scores(tree: Path) -> None
     }
     assert "q2" not in bundle["precomputed"]
     assert bundle["scores"] == {"retrieval": [], "generation": None, "onnx_parity": None}
+    assert report["judge_complete"] is False
     assert bundle["live_config"] == "fixed_hybrid" and bundle["best_config"] == "fixed_hybrid_rerank"
 
 
-def test_generation_scores_are_left_out_until_the_judge_run_is_complete(tree: Path) -> None:
+HEADER = (
+    "subset,config,chunking,retrieval,n,hit@1,hit@1_low,hit@1_high,hit@3,hit@3_low,hit@3_high,hit@ctx,hit@ctx_low,"
+    "hit@ctx_high,mrr,mrr_low,mrr_high,context_chunks,context_chunks_low,context_chunks_high,context_chars,"
+    "context_chars_low,context_chars_high,mrr_diff_vs_ref,mrr_diff_low,mrr_diff_high,mrr_diff_p"
+)
+
+
+def test_retrieval_rows_follow_the_metrics_csv(tree: Path) -> None:
     results = tree / "results"
-    write_json(results / "summary.json", {"configs": [{"judge_complete": True}, {"judge_complete": False}]})
+    (results / "retrieval_metrics.csv").write_text(
+        HEADER
+        + "\nall,fixed_hybrid_rerank,fixed,hybrid_rerank,45,0.76,0.62,0.87,0.9,0.8,0.96,0.93,0.84,1.0,0.84,0.75,0.92,"
+        "4,3,5,4879,4700,5000,,,,"
+        "\npage,fixed_dense,fixed,dense,18,0.5,0.3,0.7,0.6,0.4,0.8,0.7,0.5,0.9,0.6,0.4,0.8,4,3,5,4800,4600,5000,"
+        "-0.2,-0.3,-0.1,0.001\n",
+        encoding="utf-8",
+    )
     out = tree / "bundle.json"
-    assert app_bundle.build(out, results, results / "retrieval", results / "runs")["generation_scores"] is False
-    write_json(results / "summary.json", {"configs": [{"judge_complete": True}]})
-    assert app_bundle.build(out, results, results / "retrieval", results / "runs")["generation_scores"] is True
+    app_bundle.build(out, results, results / "retrieval", results / "runs")
+    rows = json.loads(out.read_text(encoding="utf-8"))["scores"]["retrieval"]
+    assert [r["subset"] for r in rows] == ["all", "page"]
+    assert rows[0]["mrr"] == {"mean": 0.84, "low": 0.75, "high": 0.92, "n": 45}
+    assert rows[0]["hit_at_ctx"]["mean"] == 0.93 and rows[0]["mrr_diff_vs_best"] is None
+    assert rows[1]["mrr_diff_vs_best"] == {"mean": -0.2, "low": -0.3, "high": -0.1, "n": 18}
+
+
+def _row(config: str, complete: bool) -> dict[str, Any]:
+    est = {"mean": 0.8, "low": 0.7, "high": 0.9, "n": 40}
+    return {
+        "config": config,
+        "judge_complete": complete,
+        "citation_coverage": est,
+        "faithfulness": est,
+        "answer_relevancy": est,
+        "context_precision": est,
+        "context_recall": est,
+    }
+
+
+def test_judge_metrics_stay_null_until_the_judge_run_is_complete(tree: Path) -> None:
+    results = tree / "results"
+    out = tree / "bundle.json"
+    write_json(
+        results / "summary.json",
+        {
+            "configs": [_row("a", True), _row("b", False)],
+            "reference": _row("a", True),
+            "judge_agreement": {"spearman": 0.7},
+        },
+    )
+    report = app_bundle.build(out, results, results / "retrieval", results / "runs")
+    gen = json.loads(out.read_text(encoding="utf-8"))["scores"]["generation"]
+    assert report["generation_summary"] is True and report["judge_complete"] is False
+    assert gen["configs"][0]["faithfulness"] is not None
+    assert gen["configs"][1]["faithfulness"] is None and gen["configs"][1]["citation_coverage"] is not None
+    assert gen["judge_agreement"] is None
+
+    write_json(
+        results / "summary.json",
+        {"configs": [_row("a", True)], "reference": _row("a", True), "judge_agreement": {"spearman": 0.7}},
+    )
+    assert app_bundle.build(out, results, results / "retrieval", results / "runs")["judge_complete"] is True
+    gen = json.loads(out.read_text(encoding="utf-8"))["scores"]["generation"]
+    assert gen["judge_agreement"] == {"spearman": 0.7}

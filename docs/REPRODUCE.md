@@ -243,6 +243,20 @@ mode (live retrieval, precomputed answers). Quota settings: `DOCTRUTH_DAILY_LIMI
 memory when unset). Visitors are told apart by a keyed hash of their IP address, kept
 in memory only.
 
+### Front-end (React, web/)
+
+```bash
+cd web
+npm ci
+npm run dev          # http://localhost:5173, /api proxied to uvicorn on port 8080
+npm test             # Vitest, mocked API
+npm run build        # web/dist, served by the API when present
+```
+
+The TypeScript types of the API come from its OpenAPI schema. After a change to
+`app/schemas.py`: `python -m app.openapi web/src/api/openapi.json`, then
+`npm run gen:api` in `web/`. CI fails when either file is out of date.
+
 ## Quality checks
 
 CI (`.github/workflows/ci.yml`) runs the same checks on every push, with a light

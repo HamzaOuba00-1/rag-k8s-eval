@@ -88,6 +88,7 @@ def _estimate(row: dict[str, str], name: str) -> dict[str, Any] | None:
 
 
 def _retrieval_rows(path: Path) -> list[dict[str, Any]]:
+    """results/retrieval_metrics.csv: one row per (subset, config); subset "all" is the main table."""
     if not path.exists():
         return []
     rows = []
@@ -103,18 +104,46 @@ def _retrieval_rows(path: Path) -> list[dict[str, Any]]:
                 }
             rows.append(
                 {
+                    "subset": row.get("subset") or "all",
                     "config": row["config"],
                     "chunking": row["chunking"],
                     "retrieval": row["retrieval"],
                     "n": int(row["n"]),
                     "mrr": _estimate(row, "mrr"),
                     "hit_at_1": _estimate(row, "hit@1"),
-                    "hit_at_5": _estimate(row, "hit@5"),
+                    "hit_at_3": _estimate(row, "hit@3"),
+                    "hit_at_ctx": _estimate(row, "hit@ctx"),
                     "context_chars": float(row["context_chars"]),
                     "mrr_diff_vs_best": diff,
                 }
             )
     return rows
+
+
+JUDGE_METRICS = ("faithfulness", "answer_relevancy", "context_precision", "context_recall")
+
+
+def _generation(summary: dict[str, Any] | None) -> dict[str, Any] | None:
+    """results/summary.json, with the judge metrics of a config left null until its judge run is complete."""
+    if not summary:
+        return None
+    rows = [r for r in [*summary.get("configs", []), summary.get("reference")] if r]
+    for row in rows:
+        if not row.get("judge_complete"):
+            for metric in JUDGE_METRICS:
+                row[metric] = None
+    complete = bool(rows) and all(r.get("judge_complete") for r in rows)
+    return {
+        "app_model": summary.get("app_model"),
+        "reference_model": summary.get("reference_model"),
+        "best_config": summary.get("best_config"),
+        "judge": summary.get("judge"),
+        "judge_complete": complete,
+        "configs": summary.get("configs", []),
+        "reference": summary.get("reference"),
+        "judge_agreement": summary.get("judge_agreement") if complete else None,
+        "generated_at": summary.get("generated_at"),
+    }
 
 
 def _json_or_none(path: Path) -> Any:
@@ -138,8 +167,7 @@ def build(
         if q["id"] in best_sources and answers:
             precomputed[q["id"]] = {"config": BEST_CONFIG.name, "sources": best_sources[q["id"]], "answers": answers}
 
-    summary = _json_or_none(results / "summary.json")
-    generation_scores = summary if summary and all(c.get("judge_complete") for c in summary["configs"]) else None
+    generation = _generation(_json_or_none(results / "summary.json"))
     bundle: dict[str, Any] = {
         "created_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "git_commit": _git_commit(),
@@ -160,8 +188,8 @@ def build(
         "rerank": rerank,
         "scores": {
             "retrieval": _retrieval_rows(results / "retrieval_metrics.csv"),
-            # Shown only once complete: no partial judge scores in the app.
-            "generation": generation_scores,
+            # Judge metrics stay null until the judge run is complete: no partial scores in the app.
+            "generation": generation,
             "onnx_parity": _json_or_none(results / "onnx_parity.json"),
         },
     }
@@ -172,5 +200,7 @@ def build(
         "precomputed_answers": len(precomputed),
         "rerank_contexts": {s: len(v) for s, v in rerank.items()},
         "models_with_answers": [m for m in MODELS if per_model[m][0]],
-        "generation_scores": generation_scores is not None,
+        "retrieval_rows": len(bundle["scores"]["retrieval"]),
+        "generation_summary": generation is not None,
+        "judge_complete": bool(generation and generation["judge_complete"]),
     }

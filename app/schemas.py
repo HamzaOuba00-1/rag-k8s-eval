@@ -7,7 +7,7 @@ generates its TypeScript types from that schema, so both sides cannot drift apar
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -111,15 +111,53 @@ class Estimate(BaseModel):
 
 
 class RetrievalRow(BaseModel):
+    subset: str = Field(description="all, or a subset of questions (page, structure_chunk)")
     config: str
     chunking: Strategy
     retrieval: Method
     n: int
-    mrr: Estimate
-    hit_at_1: Estimate
-    hit_at_5: Estimate
+    mrr: Estimate | None
+    hit_at_1: Estimate | None
+    hit_at_3: Estimate | None
+    hit_at_ctx: Estimate | None = Field(description="Source page within the context budget")
     context_chars: float
     mrr_diff_vs_best: Estimate | None = Field(description="Paired bootstrap difference with the best config")
+
+
+class GenerationRow(BaseModel):
+    """One model and configuration of results/summary.json."""
+
+    model: str
+    config: str
+    chunking: Strategy
+    retrieval: Method
+    n_factual: int
+    n_impossible: int
+    refusal_rate: Estimate | None = Field(description="Refusals on impossible questions (higher is better)")
+    false_refusal_rate: Estimate | None = Field(description="Refusals on answerable questions")
+    citation_coverage: Estimate | None
+    answers_with_invalid_citation: int
+    tokens_mean: float | None
+    seconds_mean: float | None
+    provider: str | None
+    generated_at: str | None
+    judge_complete: bool
+    faithfulness: Estimate | None
+    answer_relevancy: Estimate | None
+    context_precision: Estimate | None
+    context_recall: Estimate | None
+
+
+class GenerationScores(BaseModel):
+    app_model: str | None
+    reference_model: str | None
+    best_config: str | None
+    judge: dict[str, Any] | str | None = Field(description="Judge model and settings")
+    judge_complete: bool
+    configs: list[GenerationRow]
+    reference: GenerationRow | None = Field(description="Reference model with the best config")
+    judge_agreement: dict[str, Any] | None = Field(description="Judge vs human ratings, once complete")
+    generated_at: str | None
 
 
 class ScoresResponse(BaseModel):
@@ -128,8 +166,8 @@ class ScoresResponse(BaseModel):
     live_config: str = Field(description="Configuration used for live answers")
     best_config: str = Field(description="Best configuration of the evaluation")
     retrieval: list[RetrievalRow]
-    generation: dict[str, object] | None = Field(description="results/summary.json, once the judge run is complete")
-    onnx_parity: dict[str, object] | None
+    generation: GenerationScores | None = Field(description="results/summary.json, judge metrics null until complete")
+    onnx_parity: dict[str, Any] | None
     measured_on: str | None = Field(description="Date the bundle was built from the result files (UTC)")
 
 

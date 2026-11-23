@@ -229,3 +229,57 @@ def test_visitor_ids_are_keyed_hashes_not_ips() -> None:
 
 def test_normalise_ignores_case_spaces_and_question_mark() -> None:
     assert normalise(" How  do I drain a NODE? ") == normalise("how do i drain a node")
+
+
+def test_scores_accept_a_real_summary_shape() -> None:
+    from ragk8s.app_bundle import _generation
+
+    est = {"mean": 0.9, "low": 0.8, "high": 0.95, "n": 44}
+    row = {
+        "model": "qwen3.8-27b",
+        "config": "fixed_hybrid_rerank",
+        "chunking": "fixed",
+        "retrieval": "hybrid_rerank",
+        "n_factual": 45,
+        "n_impossible": 8,
+        "refusal_rate": est,
+        "false_refusal_rate": est,
+        "citation_coverage": est,
+        "answers_with_invalid_citation": 0,
+        "tokens_mean": 1397.0,
+        "seconds_mean": 0.47,
+        "generated_at": "x",
+        "provider": "groq",
+        "model_id": "qwen/qwen3.8-27b",
+        "judged": False,
+        "faithfulness": None,
+        "answer_relevancy": None,
+        "context_precision": None,
+        "context_recall": None,
+        "judge_complete": False,
+    }
+    summary = {
+        "app_model": "qwen3.8-27b",
+        "reference_model": "qwen2.5-7b-instruct",
+        "best_config": "fixed_hybrid_rerank",
+        "configs": [row],
+        "reference": dict(row, model="qwen2.5-7b-instruct"),
+        "judge": None,
+        "judge_agreement": None,
+        "generated_at": "2026-11-25T10:00:00+00:00",
+    }
+    bundle = dict(BUNDLE, scores={"retrieval": [], "generation": _generation(summary), "onnx_parity": {"threads": 1}})
+    gate = QuotaGate(MemoryCounterStore(), 1, VisitorLimiter(1), live_llm=False, now=lambda: NOW)
+    engine = Engine(bundle, {"fixed": FakeRetriever()}, gate)
+    resp = _client(engine).get("/api/scores")
+    assert resp.status_code == 200
+    body = resp.json()["generation"]
+    assert body["judge_complete"] is False and body["configs"][0]["citation_coverage"]["mean"] == 0.9
+
+
+def test_front_end_openapi_file_is_up_to_date() -> None:
+    from pathlib import Path
+
+    from app.openapi import main
+
+    assert main([str(Path(__file__).parents[1] / "web" / "src" / "api" / "openapi.json"), "--check"]) == 0

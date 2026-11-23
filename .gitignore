@@ -37,6 +37,11 @@ results/runs/
 # Web app data bundle, rebuilt from the results by `python -m ragk8s app-bundle`
 app_data/
 
+# Front-end dependencies and build output (rebuilt by npm ci && npm run build)
+web/node_modules/
+web/dist/
+web/*.tsbuildinfo
+
 # Packaging artifacts
 *.egg-info/
 build/

@@ -1,0 +1,1193 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "DocTruth API",
+    "version": "0.2.0"
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/quota": {
+      "get": {
+        "summary": "Quota",
+        "operationId": "quota_api_quota_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Quota"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/examples": {
+      "get": {
+        "summary": "Examples",
+        "operationId": "examples_api_examples_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ExampleQuestion"
+                  },
+                  "type": "array",
+                  "title": "Response Examples Api Examples Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ask": {
+      "post": {
+        "summary": "Ask",
+        "operationId": "ask_api_ask_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AskRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AskResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/search": {
+      "post": {
+        "summary": "Search",
+        "operationId": "search_api_search_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/scores": {
+      "get": {
+        "summary": "Scores",
+        "operationId": "scores_api_scores_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScoresResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Answer": {
+        "properties": {
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text",
+            "description": "Answer with [n] citations, or the refusal sentence"
+          },
+          "is_refusal": {
+            "type": "boolean",
+            "title": "Is Refusal"
+          },
+          "cited": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Cited",
+            "description": "Valid citation numbers used in the answer"
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "live",
+              "precomputed"
+            ],
+            "title": "Origin"
+          },
+          "generated_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Generated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "model",
+          "text",
+          "is_refusal",
+          "cited",
+          "origin"
+        ],
+        "title": "Answer"
+      },
+      "AskRequest": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 3,
+            "title": "Question"
+          }
+        },
+        "type": "object",
+        "required": [
+          "question"
+        ],
+        "title": "AskRequest"
+      },
+      "AskResponse": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "title": "Question"
+          },
+          "config": {
+            "type": "string",
+            "title": "Config",
+            "description": "Chunking and retrieval used, e.g. fixed_hybrid"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/Source"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "answers": {
+            "items": {
+              "$ref": "#/components/schemas/Answer"
+            },
+            "type": "array",
+            "title": "Answers",
+            "description": "Live answer, or precomputed answers of the evaluated models"
+          },
+          "quota": {
+            "$ref": "#/components/schemas/Quota"
+          },
+          "demo_mode": {
+            "type": "boolean",
+            "title": "Demo Mode"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message",
+            "description": "Shown to the user, e.g. quota reached"
+          }
+        },
+        "type": "object",
+        "required": [
+          "question",
+          "config",
+          "sources",
+          "answers",
+          "quota",
+          "demo_mode"
+        ],
+        "title": "AskResponse"
+      },
+      "Estimate": {
+        "properties": {
+          "mean": {
+            "type": "number",
+            "title": "Mean"
+          },
+          "low": {
+            "type": "number",
+            "title": "Low"
+          },
+          "high": {
+            "type": "number",
+            "title": "High"
+          },
+          "n": {
+            "type": "integer",
+            "title": "N"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mean",
+          "low",
+          "high",
+          "n"
+        ],
+        "title": "Estimate"
+      },
+      "ExampleQuestion": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "question": {
+            "type": "string",
+            "title": "Question"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "factual",
+              "impossible"
+            ],
+            "title": "Category"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "question",
+          "category"
+        ],
+        "title": "ExampleQuestion"
+      },
+      "GenerationRow": {
+        "properties": {
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "config": {
+            "type": "string",
+            "title": "Config"
+          },
+          "chunking": {
+            "type": "string",
+            "enum": [
+              "fixed",
+              "structure",
+              "semantic"
+            ],
+            "title": "Chunking"
+          },
+          "retrieval": {
+            "type": "string",
+            "enum": [
+              "bm25",
+              "dense",
+              "hybrid",
+              "hybrid_rerank"
+            ],
+            "title": "Retrieval"
+          },
+          "n_factual": {
+            "type": "integer",
+            "title": "N Factual"
+          },
+          "n_impossible": {
+            "type": "integer",
+            "title": "N Impossible"
+          },
+          "refusal_rate": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Estimate"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Refusals on impossible questions (higher is better)"
+          },
+          "false_refusal_rate": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Estimate"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Refusals on answerable questions"
+          },
+          "citation_coverage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Estimate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "answers_with_invalid_citation": {
+            "type": "integer",
+            "title": "Answers With Invalid Citation"
+          },
+          "tokens_mean": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tokens Mean"
+          },
+          "seconds_mean": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seconds Mean"
+          },
+          "provider": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider"
+          },
+          "generated_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Generated At"
+          },
+          "judge_complete": {
+            "type": "boolean",
+            "title": "Judge Complete"
+          },
+          "faithfulness": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Estimate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "answer_relevancy": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Estimate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "context_precision": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Estimate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "context_recall": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Estimate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "model",
+          "config",
+          "chunking",
+          "retrieval",
+          "n_factual",
+          "n_impossible",
+          "refusal_rate",
+          "false_refusal_rate",
+          "citation_coverage",
+          "answers_with_invalid_citation",
+          "tokens_mean",
+          "seconds_mean",
+          "provider",
+          "generated_at",
+          "judge_complete",
+          "faithfulness",
+          "answer_relevancy",
+          "context_precision",
+          "context_recall"
+        ],
+        "title": "GenerationRow",
+        "description": "One model and configuration of results/summary.json."
+      },
+      "GenerationScores": {
+        "properties": {
+          "app_model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "App Model"
+          },
+          "reference_model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reference Model"
+          },
+          "best_config": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Best Config"
+          },
+          "judge": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Judge",
+            "description": "Judge model and settings"
+          },
+          "judge_complete": {
+            "type": "boolean",
+            "title": "Judge Complete"
+          },
+          "configs": {
+            "items": {
+              "$ref": "#/components/schemas/GenerationRow"
+            },
+            "type": "array",
+            "title": "Configs"
+          },
+          "reference": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GenerationRow"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Reference model with the best config"
+          },
+          "judge_agreement": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Judge Agreement",
+            "description": "Judge vs human ratings, once complete"
+          },
+          "generated_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Generated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "app_model",
+          "reference_model",
+          "best_config",
+          "judge",
+          "judge_complete",
+          "configs",
+          "reference",
+          "judge_agreement",
+          "generated_at"
+        ],
+        "title": "GenerationScores"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Health": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok",
+            "title": "Status"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "strategies": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "fixed",
+                "structure",
+                "semantic"
+              ]
+            },
+            "type": "array",
+            "title": "Strategies"
+          },
+          "live_llm": {
+            "type": "boolean",
+            "title": "Live Llm",
+            "description": "A Groq key is configured"
+          },
+          "bundle_created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bundle Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "version",
+          "strategies",
+          "live_llm",
+          "bundle_created_at"
+        ],
+        "title": "Health"
+      },
+      "Quota": {
+        "properties": {
+          "live_enabled": {
+            "type": "boolean",
+            "title": "Live Enabled",
+            "description": "False in demo mode: no live LLM answer until the reset"
+          },
+          "remaining_today": {
+            "type": "integer",
+            "title": "Remaining Today",
+            "description": "Live answers still available today (app-wide)"
+          },
+          "daily_limit": {
+            "type": "integer",
+            "title": "Daily Limit"
+          },
+          "visitor_remaining_this_hour": {
+            "type": "integer",
+            "title": "Visitor Remaining This Hour"
+          },
+          "resets_at": {
+            "type": "string",
+            "title": "Resets At",
+            "description": "ISO 8601 time (UTC) when the daily counter resets"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason",
+            "description": "Why live answers are paused, if they are"
+          }
+        },
+        "type": "object",
+        "required": [
+          "live_enabled",
+          "remaining_today",
+          "daily_limit",
+          "visitor_remaining_this_hour",
+          "resets_at"
+        ],
+        "title": "Quota"
+      },
+      "RetrievalRow": {
+        "properties": {
+          "subset": {
+            "type": "string",
+            "title": "Subset",
+            "description": "all, or a subset of questions (page, structure_chunk)"
+          },
+          "config": {
+            "type": "string",
+            "title": "Config"
+          },
+          "chunking": {
+            "type": "string",
+            "enum": [
+              "fixed",
+              "structure",
+              "semantic"
+            ],
+            "title": "Chunking"
+          },
+          "retrieval": {
+            "type": "string",
+            "enum": [
+              "bm25",
+              "dense",
+              "hybrid",
+              "hybrid_rerank"
+            ],
+            "title": "Retrieval"
+          },
+          "n": {
+            "type": "integer",
+            "title": "N"
+          },
+          "mrr": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Estimate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "hit_at_1": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Estimate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "hit_at_3": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Estimate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "hit_at_ctx": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Estimate"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Source page within the context budget"
+          },
+          "context_chars": {
+            "type": "number",
+            "title": "Context Chars"
+          },
+          "mrr_diff_vs_best": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Estimate"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Paired bootstrap difference with the best config"
+          }
+        },
+        "type": "object",
+        "required": [
+          "subset",
+          "config",
+          "chunking",
+          "retrieval",
+          "n",
+          "mrr",
+          "hit_at_1",
+          "hit_at_3",
+          "hit_at_ctx",
+          "context_chars",
+          "mrr_diff_vs_best"
+        ],
+        "title": "RetrievalRow"
+      },
+      "ScoresResponse": {
+        "properties": {
+          "live_config": {
+            "type": "string",
+            "title": "Live Config",
+            "description": "Configuration used for live answers"
+          },
+          "best_config": {
+            "type": "string",
+            "title": "Best Config",
+            "description": "Best configuration of the evaluation"
+          },
+          "retrieval": {
+            "items": {
+              "$ref": "#/components/schemas/RetrievalRow"
+            },
+            "type": "array",
+            "title": "Retrieval"
+          },
+          "generation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GenerationScores"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "results/summary.json, judge metrics null until complete"
+          },
+          "onnx_parity": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Onnx Parity"
+          },
+          "measured_on": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Measured On",
+            "description": "Date the bundle was built from the result files (UTC)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "live_config",
+          "best_config",
+          "retrieval",
+          "generation",
+          "onnx_parity",
+          "measured_on"
+        ],
+        "title": "ScoresResponse",
+        "description": "Measured results only; a part not measured yet is null."
+      },
+      "SearchCell": {
+        "properties": {
+          "strategy": {
+            "type": "string",
+            "enum": [
+              "fixed",
+              "structure",
+              "semantic"
+            ],
+            "title": "Strategy"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "bm25",
+              "dense",
+              "hybrid",
+              "hybrid_rerank"
+            ],
+            "title": "Method"
+          },
+          "available": {
+            "type": "boolean",
+            "title": "Available",
+            "description": "False when this cell can't be computed live for this query"
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "live",
+              "precomputed"
+            ],
+            "title": "Origin"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/Source"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "context_chars": {
+            "type": "integer",
+            "title": "Context Chars"
+          },
+          "milliseconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Milliseconds",
+            "description": "Measured server time; null for precomputed cells"
+          },
+          "source_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Rank",
+            "description": "Rank of the question's source page, for evaluation questions only"
+          }
+        },
+        "type": "object",
+        "required": [
+          "strategy",
+          "method",
+          "available",
+          "origin",
+          "sources",
+          "context_chars",
+          "milliseconds"
+        ],
+        "title": "SearchCell"
+      },
+      "SearchRequest": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 3,
+            "title": "Query"
+          },
+          "strategies": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "fixed",
+                "structure",
+                "semantic"
+              ]
+            },
+            "type": "array",
+            "title": "Strategies"
+          },
+          "methods": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "bm25",
+                "dense",
+                "hybrid",
+                "hybrid_rerank"
+              ]
+            },
+            "type": "array",
+            "title": "Methods"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query"
+        ],
+        "title": "SearchRequest"
+      },
+      "SearchResponse": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query"
+          },
+          "budget_chars": {
+            "type": "integer",
+            "title": "Budget Chars"
+          },
+          "evaluation_question": {
+            "type": "boolean",
+            "title": "Evaluation Question",
+            "description": "The query is one of the evaluation questions"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url",
+            "description": "Page the evaluation question was written from"
+          },
+          "cells": {
+            "items": {
+              "$ref": "#/components/schemas/SearchCell"
+            },
+            "type": "array",
+            "title": "Cells"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query",
+          "budget_chars",
+          "evaluation_question",
+          "cells"
+        ],
+        "title": "SearchResponse"
+      },
+      "Source": {
+        "properties": {
+          "n": {
+            "type": "integer",
+            "title": "N",
+            "description": "Citation number, [n] in the answer"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "description": "Public page on kubernetes.io"
+          },
+          "doc_id": {
+            "type": "string",
+            "title": "Doc Id"
+          },
+          "chunk_id": {
+            "type": "string",
+            "title": "Chunk Id"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "score": {
+            "type": "number",
+            "title": "Score",
+            "description": "Retriever score (rerank score for hybrid_rerank)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "n",
+          "title",
+          "url",
+          "doc_id",
+          "chunk_id",
+          "text",
+          "score"
+        ],
+        "title": "Source",
+        "description": "An excerpt given to the generator; ``n`` is the number used in citations."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
