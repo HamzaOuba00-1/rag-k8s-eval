@@ -2,7 +2,7 @@ import { type FormEvent, useCallback, useEffect, useRef, useState } from "react"
 import { Link, useSearchParams } from "react-router";
 import { api, type AskResponse } from "../api/client";
 import { AnswerText, SourceList } from "../components/Answer";
-import { Orb } from "../components/Brand";
+import { Logo } from "../components/Brand";
 import { Card, ErrorNote } from "../components/Cards";
 import { Icon } from "../components/Icon";
 import { configLabel } from "../lib/format";
@@ -71,8 +71,8 @@ export function AskPage() {
 
         {!asked && (
           <div className="flex flex-1 flex-col items-center justify-center gap-3 py-10 text-center">
-            <Orb size={84} />
-            <h1 className="font-display text-4xl tracking-tight">Ask the Kubernetes docs</h1>
+            <Logo size={88} className="drop-shadow-[0_0_28px_rgb(193_154_107/0.25)]" />
+            <h1 className="font-display text-3xl md:text-4xl">Ask the Kubernetes docs</h1>
             <p className="text-sm text-muted">Answers cite the pages they come from.</p>
             <div className="mt-4 grid w-full max-w-lg gap-3 sm:grid-cols-2">
               {examples.data?.[0] && (
@@ -116,7 +116,7 @@ export function AskPage() {
             )}
             {answer && (
               <div className="flex gap-3">
-                <Orb size={28} />
+                <Logo size={30} />
                 <Card className="flex-1 rounded-tl-md">
                   <AnswerText text={answer.text} sources={result.sources} />
                   <div className="mt-4 flex items-center gap-4 border-t border-line pt-3 text-xs text-muted">

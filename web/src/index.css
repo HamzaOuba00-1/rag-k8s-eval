@@ -1,9 +1,8 @@
 @import "tailwindcss";
 
 /* Fonts are bundled (no request to a font CDN: visitors' addresses are not shared). */
-@import "@fontsource-variable/inter/wght.css";
-@import "@fontsource/instrument-serif/latin-400.css";
-@import "@fontsource/instrument-serif/latin-400-italic.css";
+@import "@fontsource-variable/geist/wght.css";
+@import "@fontsource-variable/geist-mono/wght.css";
 
 /* Matte black and brown, one bronze accent. */
 @theme {
@@ -22,8 +21,9 @@
   --color-warn: #e0b872;
   --color-danger: #e39a8c;
 
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 
 @layer base {
@@ -36,7 +36,15 @@
       radial-gradient(1200px 600px at 85% -10%, rgb(193 154 107 / 0.08), transparent 60%),
       radial-gradient(900px 500px at -10% 110%, rgb(107 79 51 / 0.12), transparent 60%);
     background-attachment: fixed;
-    font-feature-settings: "cv11", "ss01";
+  }
+  /* Headings: same family, heavier and tighter. */
+  .font-display {
+    font-weight: 600;
+    letter-spacing: -0.035em;
+  }
+  .tabular-nums {
+    font-family: var(--font-mono);
+    letter-spacing: -0.02em;
   }
   ::selection {
     background: rgb(193 154 107 / 0.35);

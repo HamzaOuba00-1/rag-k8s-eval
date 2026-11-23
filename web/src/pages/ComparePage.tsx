@@ -69,7 +69,7 @@ export function ComparePage() {
     <div className="space-y-4">
       <div>
         <p className="eyebrow">Retrieval lab</p>
-        <h1 className="mt-3 font-display text-4xl tracking-tight md:text-5xl">Compare retrieval</h1>
+        <h1 className="mt-3 font-display text-3xl md:text-[44px]">Compare retrieval</h1>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
           Three chunking strategies, four retrieval methods: see which excerpts each one puts in the 5,000-character
           context, and where the source page lands.

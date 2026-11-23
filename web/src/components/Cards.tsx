@@ -13,7 +13,7 @@ export function QuotaCard({ quota }: { quota?: Quota }) {
     <Card>
       <p className="eyebrow">Live answers today</p>
       <div className="mt-3 flex items-baseline gap-1.5">
-        <span className="font-display text-4xl leading-none tabular-nums">{quota.remaining_today}</span>
+        <span className="text-4xl leading-none tabular-nums">{quota.remaining_today}</span>
         <span className="text-sm text-muted">of {quota.daily_limit} left</span>
       </div>
       <div className="mt-4 h-1 rounded-full bg-line" role="progressbar" aria-valuenow={used} aria-valuemin={0}

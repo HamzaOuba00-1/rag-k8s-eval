@@ -48,7 +48,7 @@ export function ScoresPage() {
     <div className="space-y-6">
       <div>
         <p className="eyebrow">Evaluation</p>
-        <h1 className="mt-3 font-display text-4xl tracking-tight md:text-5xl">Scores</h1>
+        <h1 className="mt-3 font-display text-3xl md:text-[44px]">Scores</h1>
         <p className="text-sm text-muted">
           Measured results only, with 95% bootstrap intervals. Bundle built {data.measured_on?.slice(0, 10) ?? "–"}.
         </p>
@@ -56,7 +56,7 @@ export function ScoresPage() {
 
       <div className="grid gap-4 lg:grid-cols-[1.2fr_1fr]">
         <Card>
-          <h2 className="font-display text-2xl">Retrieval</h2>
+          <h2 className="font-display text-xl">Retrieval</h2>
           <p className="text-sm text-muted">MRR of the source page</p>
           <p className="mb-5 text-xs text-faint">{rows[0]?.n ?? 0} answerable questions, 5,000-character context budget</p>
           <ul className="space-y-2.5">
@@ -93,7 +93,7 @@ export function ScoresPage() {
 
         <div className="space-y-4">
           <Card>
-            <h2 className="font-display text-2xl">Generation</h2>
+            <h2 className="font-display text-xl">Generation</h2>
             <p className="mb-3 text-sm text-muted">{configLabel(data.best_config)}</p>
             {gen && bestApp ? <GenRows rows={[bestApp, gen.reference]} /> : <p className="text-sm text-faint">pending</p>}
             <p className="mt-2 text-xs text-muted">
@@ -101,7 +101,7 @@ export function ScoresPage() {
             </p>
           </Card>
           <Card>
-            <h2 className="mb-2 font-display text-2xl">LLM judge</h2>
+            <h2 className="mb-2 font-display text-xl">LLM judge</h2>
             <p className="text-sm text-muted">
               {gen?.judge_complete
                 ? `Judge vs human ratings: ${JSON.stringify(gen.judge_agreement)}`
@@ -109,7 +109,7 @@ export function ScoresPage() {
             </p>
           </Card>
           <Card>
-            <h2 className="mb-2 font-display text-2xl">This deployment</h2>
+            <h2 className="mb-2 font-display text-xl">This deployment</h2>
             <p className="text-sm text-muted">
               Live answers use {configLabel(data.live_config)}: the reranker takes seconds per query on one vCPU. The
               ONNX embedder gives the same context as the evaluation on{" "}

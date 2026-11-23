@@ -22,8 +22,8 @@ export function HomePage() {
       <section className="grid items-end gap-6 md:grid-cols-[1.5fr_1fr]">
         <div>
           <p className="eyebrow">Kubernetes documentation · grounded answers</p>
-          <h1 className="mt-4 font-display text-5xl leading-[1.02] tracking-tight md:text-6xl">
-            Answers you can <em className="text-accent">check</em>.
+          <h1 className="mt-4 font-display text-4xl leading-[1.05] md:text-[56px]">
+            Answers you can <span className="text-accent">check</span>.
           </h1>
           <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-muted">
             Every answer cites the pages it comes from and says so when the docs don't cover it. Every score on this
@@ -43,7 +43,7 @@ export function HomePage() {
 
       <section>
         <div className="mb-4 flex items-baseline justify-between">
-          <h2 className="font-display text-2xl">Measured scores</h2>
+          <h2 className="font-display text-xl">Measured scores</h2>
           <span className="eyebrow">best configuration</span>
         </div>
         {scores.error && <ErrorNote message={scores.error} />}
@@ -61,7 +61,7 @@ export function HomePage() {
 
       <section>
         <div className="mb-4 flex items-baseline justify-between">
-          <h2 className="font-display text-2xl">Try an example question</h2>
+          <h2 className="font-display text-xl">Try an example question</h2>
           <Link to="/scores" className="text-xs text-muted underline decoration-line-strong underline-offset-4 hover:text-fg">
             How these are scored
           </Link>
