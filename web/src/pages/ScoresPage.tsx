@@ -45,11 +45,11 @@ export function ScoresPage() {
     ?.configs?.fixed_hybrid?.fp32?.identical_context;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
         <p className="eyebrow">Evaluation</p>
         <h1 className="mt-3 font-display text-3xl md:text-[44px]">Scores</h1>
-        <p className="text-sm text-muted">
+        <p className="mt-3 text-sm text-muted">
           Measured results only, with 95% bootstrap intervals. Bundle built {data.measured_on?.slice(0, 10) ?? "–"}.
         </p>
       </div>

@@ -66,7 +66,7 @@ export function ComparePage() {
 
   const data = result.data;
   return (
-    <div className="space-y-4">
+    <div className="space-y-8">
       <div>
         <p className="eyebrow">Retrieval lab</p>
         <h1 className="mt-3 font-display text-3xl md:text-[44px]">Compare retrieval</h1>
@@ -75,6 +75,7 @@ export function ComparePage() {
           context, and where the source page lands.
         </p>
       </div>
+      <div className="space-y-3">
       <form onSubmit={submit} className="flex gap-2">
         <label htmlFor="query" className="sr-only">Question</label>
         <input id="query" value={draft} onChange={(e) => { setDraft(e.target.value); setInputError(undefined); }}
@@ -91,6 +92,8 @@ export function ComparePage() {
             {LABELS[m]}
           </button>
         ))}
+      </div>
+
       </div>
 
       {result.error && <ErrorNote message={result.error} />}

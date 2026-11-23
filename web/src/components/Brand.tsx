@@ -3,7 +3,8 @@ export function Logo({ size = 24, className = "" }: { size?: number; className?:
   const src = size > 96 ? "/logo-512.png" : size > 32 ? "/logo-192.png" : "/logo-64.png";
   return (
     <img src={src} width={size} height={size} alt="" aria-hidden="true" draggable={false}
-      className={`shrink-0 select-none ${className}`} />
+      style={{ width: size, height: size }}
+      className={`shrink-0 self-start object-contain select-none ${className}`} />
   );
 }
 

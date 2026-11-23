@@ -99,8 +99,9 @@ export function AskPage() {
 
         {result && !loading && (
           <>
+            <div className="ml-[42px] space-y-3 empty:hidden">
             {result.message && (
-              <p className={`rounded-xl p-3 text-sm ${result.demo_mode ? "bg-warn/10 text-warn ring-1 ring-warn/25" : "bg-accent/10 text-muted ring-1 ring-accent/20"}`}>
+              <p className={`rounded-xl px-5 py-3 text-sm ${result.demo_mode ? "bg-warn/10 text-warn ring-1 ring-warn/25" : "bg-accent/10 text-muted ring-1 ring-accent/20"}`}>
                 {result.message}
               </p>
             )}
@@ -114,9 +115,10 @@ export function AskPage() {
                 ))}
               </div>
             )}
+            </div>
             {answer && (
               <div className="flex gap-3">
-                <Logo size={30} />
+                <Logo size={30} className="mt-1" />
                 <Card className="flex-1 rounded-tl-md">
                   <AnswerText text={answer.text} sources={result.sources} />
                   <div className="mt-4 flex items-center gap-4 border-t border-line pt-3 text-xs text-muted">

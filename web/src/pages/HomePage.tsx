@@ -47,7 +47,7 @@ export function HomePage() {
           <span className="eyebrow">best configuration</span>
         </div>
         {scores.error && <ErrorNote message={scores.error} />}
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           <ScoreRing label="Retrieval MRR" value={best?.mrr?.mean ?? null} display={best?.mrr?.mean.toFixed(2)}
             sub={`${best?.n ?? 0} answerable questions`} />
           <ScoreRing label="Correct refusals" value={gen?.refusal_rate?.mean ?? null}
@@ -67,7 +67,7 @@ export function HomePage() {
           </Link>
         </div>
         {examples.error && <ErrorNote message={examples.error} />}
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-2">
           {[...factual, ...(impossible ? [impossible] : [])].map((e) => (
             <Link key={e.id} to={`/ask?q=${encodeURIComponent(e.question)}`}
               className="panel group flex items-center gap-4 p-4 text-sm transition-colors hover:border-line-strong hover:bg-raised">

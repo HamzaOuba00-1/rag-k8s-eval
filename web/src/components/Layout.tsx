@@ -17,7 +17,8 @@ function navClass({ isActive }: { isActive: boolean }) {
 
 export function Footer() {
   return (
-    <footer className="mx-auto w-full max-w-5xl border-t border-line px-4 pb-28 pt-6 text-[11px] leading-relaxed text-faint md:px-10 md:pb-8">
+    <footer className="mx-auto w-full max-w-5xl px-4 pb-28 text-[11px] leading-relaxed text-faint md:px-10 md:pb-8">
+      <div className="border-t border-line pt-6">
       <p>AI-generated answers: check the cited pages. Questions are sent to Groq to generate answers and are not stored.</p>
       <p className="mt-1">
         Docs: The Kubernetes Authors,{" "}
@@ -25,6 +26,7 @@ export function Footer() {
         Unofficial project, not affiliated with the Linux Foundation or the Kubernetes project.{" "}
         <a className="underline decoration-line-strong underline-offset-2 hover:text-muted" href="https://github.com/HamzaOuba00-1/rag-k8s-eval">Source code and evaluation</a>
       </p>
+      </div>
     </footer>
   );
 }
@@ -32,8 +34,8 @@ export function Footer() {
 export function Layout() {
   return (
     <div className="min-h-screen md:grid md:grid-cols-[232px_minmax(0,1fr)]">
-      <aside className="sticky top-0 hidden h-screen border-r border-line bg-surface/40 px-4 py-6 backdrop-blur md:flex md:flex-col">
-        <div className="mb-10 px-2">
+      <aside className="sticky top-0 hidden h-screen border-r border-line bg-surface/40 px-4 pt-8 pb-6 backdrop-blur md:flex md:flex-col">
+        <div className="mb-10 px-3">
           <Brand />
         </div>
         <p className="eyebrow mb-2 px-3">Explore</p>
@@ -51,10 +53,10 @@ export function Layout() {
       </aside>
 
       <div className="flex min-h-screen flex-col">
-        <header className="flex items-center px-5 pt-5 md:hidden">
+        <header className="flex items-center px-4 pt-5 md:hidden">
           <Brand />
         </header>
-        <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 md:px-10 md:py-12">
+        <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-6 pb-10 md:px-10 md:pt-10 md:pb-14">
           <Outlet />
         </main>
         <Footer />
