@@ -298,3 +298,22 @@ def test_startup_loads_the_engine_once() -> None:
     engine = _engine()
     with TestClient(create_app(Settings(), engine=engine)) as client:
         assert client.get("/api/health").json()["status"] == "ok"
+
+
+def test_lazy_retrievers_build_each_strategy_once_on_first_use() -> None:
+    from app.engine import LazyRetrievers
+
+    built: list[str] = []
+
+    def build(strategy: str) -> FakeRetriever:
+        built.append(strategy)
+        return FakeRetriever()
+
+    lazy = LazyRetrievers(["fixed", "structure", "semantic"], build)
+    assert list(lazy) == ["fixed", "structure", "semantic"] and built == []
+    first = lazy["fixed"]
+    assert lazy["fixed"] is first and built == ["fixed"] and lazy.loaded == ["fixed"]
+    lazy["semantic"]
+    assert built == ["fixed", "semantic"]
+    with pytest.raises(KeyError):
+        lazy["other"]

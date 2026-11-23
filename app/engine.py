@@ -10,8 +10,9 @@ from __future__ import annotations
 
 import re
 import tempfile
+import threading
 import time
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Callable, Iterator, Mapping, Sequence
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Protocol
@@ -43,6 +44,39 @@ class NoReranker:
 
     def predict(self, *_: Any, **__: Any) -> Any:
         raise RuntimeError("the reranker is not loaded in the web app; hybrid_rerank is served precomputed")
+
+
+class LazyRetrievers(Mapping[str, RetrieverLike]):
+    """Retrievers by strategy, each built on first use (once, under a lock).
+
+    Live answers need only LIVE_STRATEGY; the other strategies serve the Compare page,
+    so loading them at startup would only lengthen Cloud Run cold starts.
+    """
+
+    def __init__(self, strategies: Sequence[str], build: Callable[[str], RetrieverLike]) -> None:
+        self._strategies = tuple(strategies)
+        self._build = build
+        self._built: dict[str, RetrieverLike] = {}
+        self._lock = threading.Lock()
+
+    def __getitem__(self, strategy: str) -> RetrieverLike:
+        if strategy not in self._strategies:
+            raise KeyError(strategy)
+        if strategy not in self._built:
+            with self._lock:
+                if strategy not in self._built:
+                    self._built[strategy] = self._build(strategy)
+        return self._built[strategy]
+
+    def __iter__(self) -> Iterator[str]:
+        return iter(self._strategies)
+
+    def __len__(self) -> int:
+        return len(self._strategies)
+
+    @property
+    def loaded(self) -> list[str]:
+        return list(self._built)
 
 
 def normalise(text: str) -> str:

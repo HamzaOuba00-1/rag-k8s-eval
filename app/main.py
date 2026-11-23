@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import threading
+import time
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import Any, cast
@@ -17,7 +18,7 @@ from fastapi.responses import FileResponse
 from ragk8s import __version__, config
 
 from . import schemas
-from .engine import Engine, NoReranker, RetrieverLike, groq_llm
+from .engine import LIVE_STRATEGY, Engine, LazyRetrievers, NoReranker, RetrieverLike, groq_llm
 from .quota import GcsCounterStore, MemoryCounterStore, QuotaGate, VisitorLimiter
 from .settings import Settings
 
@@ -36,17 +37,38 @@ def client_ip(request: Request) -> str:
     return request.client.host if request.client else "unknown"
 
 
+def _timed(label: str, started: float) -> float:
+    """Log how long a startup step took (stdout goes to Cloud Logging)."""
+    now = time.perf_counter()
+    print(f"doctruth startup: {label} {now - started:.2f}s", flush=True)
+    return now
+
+
 def build_engine(settings: Settings) -> Engine:
-    """Production wiring: indexes from data/index, ONNX fp32 embedder, Groq if a key is set."""
+    """Production wiring: indexes from data/index, ONNX fp32 embedder, Groq if a key is set.
+
+    Only the live strategy is loaded here; Compare loads the others on first use.
+    """
+    t = time.perf_counter()
     from ragk8s.onnx_models import OnnxEmbedder
     from ragk8s.retrieval import Retriever
 
+    t = _timed("imports", t)
     bundle = json.loads((settings.data_dir / "bundle.json").read_text(encoding="utf-8"))
+    t = _timed("bundle", t)
     embedder = OnnxEmbedder(variant="fp32", threads=settings.threads)
-    retrievers: dict[str, RetrieverLike] = {
-        s: Retriever(s, embed_model=cast(Any, embedder), cross_encoder=cast(Any, NoReranker()))
-        for s in config.STRATEGIES
-    }
+    t = _timed("onnx embedder", t)
+
+    def build(strategy: str) -> RetrieverLike:
+        started = time.perf_counter()
+        retriever = Retriever(
+            cast(Any, strategy), embed_model=cast(Any, embedder), cross_encoder=cast(Any, NoReranker())
+        )
+        _timed(f"index {strategy}", started)
+        return retriever
+
+    retrievers = LazyRetrievers(config.STRATEGIES, build)
+    retrievers[LIVE_STRATEGY]
     store = GcsCounterStore(settings.quota_bucket) if settings.quota_bucket else MemoryCounterStore()
     gate = QuotaGate(store, settings.daily_limit, VisitorLimiter(settings.visitor_hourly_limit), settings.live_llm)
     llm, model = groq_llm(settings.groq_api_key) if settings.live_llm else (None, "")
