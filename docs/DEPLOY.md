@@ -7,7 +7,7 @@ does not cap spending.
 
 | Resource | Setting | Why |
 |---|---|---|
-| Cloud Run | 1 vCPU, 1 GiB, min 0 / max 1 instance, concurrency 8 | The app process uses about 600 MB once the indexes and the ONNX model are loaded; one instance keeps the per-visitor quota in one place |
+| Cloud Run | 1 vCPU, 1 GiB, min 0 / max 1 instance, concurrency 8, second-generation execution environment, startup CPU boost | The app process uses about 600 MB once the indexes and the ONNX model are loaded; one instance keeps the per-visitor quota in one place |
 | Artifact Registry | one Docker repository, cleanup policy keeps the latest image | Image storage is free up to 0.5 GB |
 | Cloud Build | default pool (e2-standard-2) | Free build-minutes cover a build of a few minutes |
 | Cloud Storage | one bucket, one small object per day (quota counter), deleted after 30 days | |
@@ -87,6 +87,7 @@ evaluation runs). No Groq call can be made.
 gcloud run deploy $SERVICE --image "${IMAGE}:${TAG}" --region=$REGION `
   --service-account=$SA --allow-unauthenticated `
   --cpu=1 --memory=1Gi --min-instances=0 --max-instances=1 --concurrency=8 --timeout=60 `
+  --execution-environment=gen2 --cpu-boost `
   --set-env-vars="DOCTRUTH_QUOTA_BUCKET=${BUCKET}"
 ```
 
@@ -97,6 +98,22 @@ $URL = gcloud run services describe $SERVICE --region=$REGION --format="value(st
 Measure-Command { Invoke-RestMethod "${URL}/api/health" } | Select-Object TotalSeconds   # first call: cold start
 Invoke-RestMethod "${URL}/api/health"
 ```
+
+### Cold start
+
+With no instance running, the first request waits for a new one. Measured on this
+service on 23 and 24 November 2026 (server-side latency of the first `/api/health`, from the Cloud Run request log;
+the app logs each loading step as `doctruth startup: ...`):
+
+| Setting | Container start | ONNX model | Live index | Total |
+|---|---|---|---|---|
+| First generation, all indexes at startup | 6.0 s | 8.4 s (all loading) | | 14.6 s |
+| First generation, startup CPU boost, live index only | 6.1 s | 4.1 s | 1.9 s | 12.5 s |
+| Second generation, startup CPU boost, live index only | 3.6 s | 0.9 s | 1.0 s | 6.1 s |
+
+The first generation reads the image's files much more slowly (the 91 MB model took
+4.1 s against 0.9 s). Once an instance is up, requests take tens of milliseconds.
+Keeping an instance always on would remove the wait but is not free.
 
 ## 4. Turn on live answers (after the evaluation is complete)
 
