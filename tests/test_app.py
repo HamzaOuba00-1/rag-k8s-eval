@@ -356,8 +356,9 @@ def test_security_headers_and_a_hash_based_csp_on_the_front_end(tmp_path: Any) -
 
 def test_request_bodies_are_size_limited_and_swagger_ui_is_off() -> None:
     client = _client(_engine())
-    big = client.post("/api/ask", content=b'{"question": "' + b"a" * 20000 + b'"}',
-                      headers={"content-type": "application/json"})
+    big = client.post(
+        "/api/ask", content=b'{"question": "' + b"a" * 20000 + b'"}', headers={"content-type": "application/json"}
+    )
     assert big.status_code == 413
     assert client.get("/api/docs").status_code == 404
     assert client.get("/api/openapi.json").status_code == 200

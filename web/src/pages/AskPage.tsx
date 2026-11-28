@@ -242,7 +242,7 @@ export function AskPage() {
       )}
       <div ref={end} />
 
-      <div className="sticky bottom-24 mt-8 md:bottom-6">
+      <div className="sticky bottom-20 z-[5] -mx-3 mt-6 bg-gradient-to-t from-ink from-75% to-transparent px-3 pt-6 pb-3 md:bottom-0 md:pb-6">
         {error && <div className="mb-2"><ErrorNote message={error} /></div>}
         <form onSubmit={submit}
           className="flex items-end gap-2 rounded-3xl border border-line-strong bg-surface/90 p-2 pl-5 float-shadow backdrop-blur-xl focus-within:border-accent/60">

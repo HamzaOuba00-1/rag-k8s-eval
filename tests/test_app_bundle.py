@@ -130,9 +130,15 @@ def test_judge_metrics_stay_null_until_the_judge_run_is_complete(tree: Path) -> 
         "annotator": "claude-opus-5-5",
         "metrics": {
             "faithfulness": {
-                "n": 40, "spearman": -0.04, "spearman_ci": [-0.09, -0.03], "mae": 0.04,
-                "bias_judge_minus_human": -0.01, "bias_ci": [-0.05, 0.03], "kappa_binary_0.5": float("nan"),
-                "human_mean": 0.99, "judge_mean": 0.97,
+                "n": 40,
+                "spearman": -0.04,
+                "spearman_ci": [-0.09, -0.03],
+                "mae": 0.04,
+                "bias_judge_minus_human": -0.01,
+                "bias_ci": [-0.05, 0.03],
+                "kappa_binary_0.5": float("nan"),
+                "human_mean": 0.99,
+                "judge_mean": 0.97,
             }
         },
     }
