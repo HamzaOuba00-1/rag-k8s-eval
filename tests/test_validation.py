@@ -94,3 +94,26 @@ def test_export_hides_scores_then_agree(tmp_path: Path) -> None:
     faith = result["metrics"]["faithfulness"]
     assert faith["n"] == 6 and faith["mae"] == 0.0 and faith["kappa_binary_0.5"] == 1.0
     assert json.loads((tmp_path / "a.json").read_text())["n_items"] == 6
+
+
+def test_export_can_exclude_items_of_an_earlier_sheet(tmp_path: Path) -> None:
+    runs, scores = _fixture(tmp_path)
+    first = tmp_path / "first.xlsx"
+    validation.export(n=2, path=first, scores_dir=scores, runs_dir=runs)
+    seen = {r[3] for r in list(load_workbook(first)["key"].iter_rows(values_only=True))[1:]}
+    second = tmp_path / "second.xlsx"
+    validation.export(n=4, path=second, scores_dir=scores, runs_dir=runs, exclude=[first])
+    fresh = {r[3] for r in list(load_workbook(second)["key"].iter_rows(values_only=True))[1:]}
+    assert len(fresh) == 4 and not fresh & seen
+
+
+def test_agree_records_the_annotator(tmp_path: Path) -> None:
+    runs, scores = _fixture(tmp_path)
+    sheet = tmp_path / "v.xlsx"
+    validation.export(n=6, path=sheet, scores_dir=scores, runs_dir=runs)
+    wb = load_workbook(sheet)
+    for row in wb["labels"].iter_rows(min_row=2):
+        row[7].value = row[8].value = row[9].value = 1
+    wb.save(sheet)
+    result = validation.agree(sheet, scores_dir=scores, out=tmp_path / "a.json", annotator="claude-opus-5-5")
+    assert result["annotator"] == "claude-opus-5-5"

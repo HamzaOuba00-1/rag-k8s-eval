@@ -96,14 +96,24 @@ def export(
     scores_dir: Path = config.RESULTS_DIR / "judge",
     runs_dir: Path = config.RESULTS_DIR / "runs",
     overwrite: bool = False,
+    exclude: Sequence[Path] = (),
 ) -> Path:
-    from openpyxl import Workbook
+    """Write the labelling sheet. ``exclude``: earlier sheets whose items must not be drawn again
+    (for instance items an annotator has already seen with their judge scores)."""
+    from openpyxl import Workbook, load_workbook
     from openpyxl.styles import Alignment, Font
     from openpyxl.worksheet.datavalidation import DataValidation
 
     if path.exists() and not overwrite:
         raise FileExistsError(f"{path} exists (it may contain your labels). Use --overwrite to replace it.")
-    chosen = sample(_judged_items(scores_dir, runs_dir), n)
+    seen = {
+        (str(r[1]), str(r[2]), str(r[3]))
+        for sheet in exclude
+        for r in list(load_workbook(sheet, read_only=True)["key"].iter_rows(values_only=True))[1:]
+        if r and r[0] is not None
+    }
+    pool = [i for i in _judged_items(scores_dir, runs_dir) if (i["model"], i["config"], i["id"]) not in seen]
+    chosen = sample(pool, n)
     wb = Workbook()
     ws = wb.active
     assert ws is not None
@@ -233,8 +243,12 @@ def agreement(human: npt.ArrayLike, judge: npt.ArrayLike) -> dict[str, Any]:
 
 
 def agree(
-    path: Path = SHEET_PATH, scores_dir: Path = config.RESULTS_DIR / "judge", out: Path = OUT_PATH
+    path: Path = SHEET_PATH,
+    scores_dir: Path = config.RESULTS_DIR / "judge",
+    out: Path = OUT_PATH,
+    annotator: str = "human",
 ) -> dict[str, Any]:
+    """``annotator`` is recorded with the result: "human", or the model that labelled the sheet."""
     from openpyxl import load_workbook
 
     wb = load_workbook(path, read_only=True)
@@ -252,7 +266,7 @@ def agree(
     missing = [str(lab["item"]) for lab in labels if any(lab.get(c) in (None, "") for c in PAIRS)]
     if missing:
         raise ValueError(f"unlabelled items: {', '.join(missing)}")
-    result: dict[str, Any] = {"n_items": len(labels), "sheet": str(path), "metrics": {}}
+    result: dict[str, Any] = {"n_items": len(labels), "sheet": str(path), "annotator": annotator, "metrics": {}}
     for human_col, metric in PAIRS.items():
         h, j = [], []
         for lab in labels:

@@ -237,19 +237,30 @@ def _cmd_judge(args: argparse.Namespace) -> int:
 
 
 def _cmd_validation(args: argparse.Namespace) -> int:
+    from pathlib import Path
+
     from . import validation
 
     if args.action == "export":
-        print(f"Judge validation sheet -> {validation.export(n=args.n, overwrite=args.overwrite)}")
+        path = Path(args.path) if args.path else validation.SHEET_PATH
+        sheet = validation.export(
+            n=args.n, path=path, overwrite=args.overwrite, exclude=[Path(e) for e in args.exclude]
+        )
+        print(f"Judge validation sheet -> {sheet}")
     else:
-        result = validation.agree()
+        result = validation.agree(
+            path=Path(args.path) if args.path else validation.SHEET_PATH,
+            out=Path(args.out) if args.out else validation.OUT_PATH,
+            annotator=args.annotator,
+        )
+        print(f"annotator: {result['annotator']}")
         for metric, a in result["metrics"].items():
             print(
                 f"{metric:<18} n={a['n']} spearman={a['spearman']:.2f}"
                 f" [{a['spearman_ci'][0]:.2f}, {a['spearman_ci'][1]:.2f}]"
                 f" mae={a['mae']:.2f} bias={a['bias_judge_minus_human']:+.2f} kappa={a['kappa_binary_0.5']:.2f}"
             )
-        print(f"-> {validation.OUT_PATH}")
+        print(f"-> {args.out or validation.OUT_PATH}")
     return 0
 
 
@@ -397,6 +408,10 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("action", choices=("export", "agree"))
     p.add_argument("--n", type=int, default=40, help="export: number of answers to label")
     p.add_argument("--overwrite", action="store_true")
+    p.add_argument("--path", help="labelling sheet (default eval/review/judge_validation.xlsx)")
+    p.add_argument("--exclude", nargs="*", default=[], help="export: sheets whose items are not drawn again")
+    p.add_argument("--out", help="agree: output JSON (default results/judge_agreement.json)")
+    p.add_argument("--annotator", default="human", help='agree: who labelled the sheet ("human" or a model name)')
     p.set_defaults(func=_cmd_validation)
 
     p = sub.add_parser("compare", help="final tables, figures and results/summary.json")

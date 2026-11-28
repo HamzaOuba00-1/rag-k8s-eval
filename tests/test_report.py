@@ -107,3 +107,27 @@ def test_partial_judging_is_not_reported(tmp_path: Path, monkeypatch: pytest.Mon
     row["judge_complete"] = True
     (tmp_path / "summary.json").write_text(json.dumps(summary), encoding="utf-8")
     assert "0.90 [0.80, 1.00]" in report.generation_block()
+
+
+def test_agreement_block_names_an_llm_annotator_and_handles_constant_sides(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from ragk8s import report
+
+    monkeypatch.setattr(report, "RESULTS", tmp_path)
+    metric = {
+        "n": 40,
+        "spearman": float("nan"),
+        "spearman_ci": [float("nan"), float("nan")],
+        "mae": 0.04,
+        "bias_judge_minus_human": -0.01,
+        "bias_ci": [-0.03, 0.01],
+        "kappa_binary_0.5": float("nan"),
+        "human_mean": 0.99,
+        "judge_mean": 0.97,
+    }
+    data = {"n_items": 40, "annotator": "claude-opus-5-5", "metrics": {"faithfulness": metric}}
+    (tmp_path / "judge_agreement.json").write_text(json.dumps(data), encoding="utf-8")
+    block = report.agreement_block()
+    assert "claude-opus-5-5" in block and "not a human validation" in block
+    assert "| faithfulness | n/a [n/a, n/a] |" in block and "0.99 / 0.97" in block

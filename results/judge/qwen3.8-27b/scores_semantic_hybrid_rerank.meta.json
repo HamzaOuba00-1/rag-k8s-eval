@@ -1,0 +1,58 @@
+{
+  "judge": {
+    "model": "gemma4:12b-it-q8_0",
+    "digest": "41c402fdddc2a87e40a4391caa400961e93786383fbb92a88fc764c333c25322",
+    "ragas": "0.4.3",
+    "embeddings": "sentence-transformers/all-MiniLM-L6-v2"
+  },
+  "llm_kwargs": {
+    "temperature": 0.0,
+    "max_tokens": 2048,
+    "reasoning_effort": "none"
+  },
+  "metrics": [
+    "faithfulness",
+    "answer_relevancy",
+    "context_precision",
+    "context_recall"
+  ],
+  "concurrency": 4,
+  "ragk8s_version": "0.2.0",
+  "git_commit": "6a96644ed24412a9a29d20aa5f34476638bc600c",
+  "last_session": {
+    "cached": 38,
+    "scored": 978,
+    "errors": 0,
+    "skipped_deadline": 0,
+    "seconds": 10310.1
+  },
+  "seconds_per_new_score": 10.54,
+  "run": "results/runs/qwen3.8-27b/run_semantic_hybrid_rerank.jsonl",
+  "n_factual": 45,
+  "status": {
+    "faithfulness": {
+      "ok": 43,
+      "error": 0,
+      "missing": 0,
+      "n/a": 2
+    },
+    "answer_relevancy": {
+      "ok": 43,
+      "error": 0,
+      "missing": 0,
+      "n/a": 2
+    },
+    "context_precision": {
+      "ok": 45,
+      "error": 0,
+      "missing": 0,
+      "n/a": 0
+    },
+    "context_recall": {
+      "ok": 45,
+      "error": 0,
+      "missing": 0,
+      "n/a": 0
+    }
+  }
+}

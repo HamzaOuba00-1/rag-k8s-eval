@@ -18,7 +18,8 @@ intervals, not by eye.
   answer relevancy, context precision and recall; refusal rate on out-of-corpus
   questions; false refusals; share of sentences carrying a citation.
 - **The judge itself** — RAGAS scores come from an LLM judge, so its agreement with
-  a human is measured on a blind sample before its numbers are trusted.
+  an independent annotator is checked on a blind sample (here another LLM: not a
+  human validation, see below).
 - **Uncertainty** — about 50 questions is small: every mean has a bootstrap
   interval and every comparison is a *paired* bootstrap difference on the same
   questions.
@@ -45,19 +46,43 @@ Top 5 of 12 configurations; full tables in [`results/retrieval_metrics.md`](resu
 ### Generation and RAGAS
 
 <!-- BEGIN:generation -->
-_Pending: all runs judged by RAGAS, then `python -m ragk8s compare`._
+Generator `qwen3.8-27b`; judge `gemma4:12b-it-q8_0`. Mean with 95% bootstrap CI over questions.
+
+| Chunking | Retrieval | Faithfulness | Answer relevancy | Context precision | Context recall | Refused out-of-corpus | False refusals |
+|---|---|---|---|---|---|---|---|
+| fixed | hybrid_rerank | 0.98 [0.95, 1.00] | 0.88 [0.83, 0.91] | 0.89 [0.82, 0.95] | 0.96 [0.89, 1.00] | 1.00 [1.00, 1.00] | 0.02 [0.00, 0.07] |
+| structure | hybrid_rerank | 0.99 [0.98, 1.00] | 0.87 [0.83, 0.91] | 0.92 [0.87, 0.96] | 0.97 [0.91, 1.00] | 1.00 [1.00, 1.00] | 0.00 [0.00, 0.00] |
+| semantic | hybrid_rerank | 0.98 [0.96, 1.00] | 0.90 [0.86, 0.93] | 0.72 [0.63, 0.81] | 0.90 [0.81, 0.98] | 1.00 [1.00, 1.00] | 0.04 [0.00, 0.11] |
+| fixed | bm25 | 0.99 [0.98, 1.00] | 0.89 [0.85, 0.92] | 0.80 [0.70, 0.88] | 0.94 [0.88, 1.00] | 1.00 [1.00, 1.00] | 0.04 [0.00, 0.11] |
+| fixed | dense | 0.99 [0.96, 1.00] | 0.88 [0.84, 0.92] | 0.65 [0.56, 0.74] | 0.93 [0.84, 1.00] | 1.00 [1.00, 1.00] | 0.07 [0.00, 0.16] |
+| fixed | hybrid | 0.98 [0.95, 1.00] | 0.87 [0.83, 0.91] | 0.84 [0.76, 0.91] | 0.96 [0.89, 1.00] | 1.00 [1.00, 1.00] | 0.04 [0.00, 0.11] |
+
+Full tables and paired differences: [`results/comparison.md`](results/comparison.md).
 <!-- END:generation -->
 
 ### Application generator vs reference generator
 
 <!-- BEGIN:models -->
-_Pending: reference generator run fully judged, then `python -m ragk8s compare`._
+Same contexts (`fixed_hybrid_rerank`), same prompt, same judge. Δ = paired bootstrap difference (* = CI excludes 0).
+
+| Metric | qwen3.8-27b | qwen2.5-7b-instruct | Δ |
+|---|---|---|---|
+| faithfulness | 0.98 [0.95, 1.00] | 0.94 [0.89, 0.99] | +0.039 [-0.008, +0.093] |
+| answer relevancy | 0.88 [0.83, 0.91] | 0.86 [0.80, 0.91] | -0.012 [-0.063, +0.036] |
+| citation coverage | 0.91 [0.84, 0.97] | 0.68 [0.56, 0.78] | +0.229 [+0.129, +0.338] * |
+| seconds per answer (mean) | 0.47 | 4.61 | — |
 <!-- END:models -->
 
 ### How far can the judge be trusted?
 
 <!-- BEGIN:agreement -->
-_Pending: human labels (`python -m ragk8s validation export`, then `agree`)._
+40 answers labelled by an LLM (claude-opus-5-5, 0 / 0.5 / 1) without seeing the judge's scores: this is agreement between two models, not a human validation. Bias > 0 = judge more lenient than the annotator. n/a = one side gives the same value to every answer.
+
+| Metric | Spearman [95% CI] | MAE | Bias (judge - annotator) | Cohen's κ (≥ 0.5) | Mean, annotator / judge |
+|---|---|---|---|---|---|
+| faithfulness | -0.04 [-0.09, -0.03] | 0.04 | -0.01 [-0.05, +0.03] | n/a | 0.99 / 0.97 |
+| answer_relevancy | 0.27 [0.15, 0.46] | 0.13 | -0.11 [-0.15, -0.07] | n/a | 0.97 / 0.87 |
+| context_recall | 0.72 [0.52, 1.00] | 0.01 | +0.01 [+0.00, +0.04] | 1.00 | 0.96 / 0.97 |
 <!-- END:agreement -->
 
 Methodology, run conditions and limitations: [REPORT.md](REPORT.md).
@@ -120,8 +145,8 @@ data/raw/          frozen corpus snapshot (CC BY 4.0, see NOTICE)
 
 The gold set is small (45 factual questions) and its review was LLM-assisted, then
 validated by the author; the application generator is a preview model on a free
-API tier; RAGAS scores come from a single 12B judge whose agreement with a human is
-reported above. Details in [REPORT.md](REPORT.md#limitations).
+API tier; RAGAS scores come from a single 12B judge with no human validation (its
+agreement with another LLM is reported above, under a strong ceiling effect). Details in [REPORT.md](REPORT.md#limitations).
 
 ## License and attribution
 

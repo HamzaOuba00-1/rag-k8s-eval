@@ -26,8 +26,10 @@ data/index/
 .cache/
 eval/questions_candidates.jsonl
 
-# Raw run outputs are untracked until the final, reported runs are produced;
-# the tracking policy for final results is defined in a later step.
+# Raw run outputs (answers, contexts, ~3 MB) stay untracked: they are rebuilt from
+# the run cache. Final aggregates ARE tracked: results/summary.json,
+# results/comparison.*, results/figures/, results/judge/ (per-answer judge scores)
+# and results/judge_agreement.json.
 results/run_*.jsonl
 results/scores_*.csv
 results/summary_*.json
@@ -56,3 +58,7 @@ models/
 
 # Local deployment variables (project and billing account IDs)
 deploy/env.ps1
+
+# Discarded first pass of the judge agreement check (not reported)
+eval/review/judge_validation_first_pass.*
+results/judge_agreement_first_pass.json

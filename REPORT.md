@@ -65,9 +65,13 @@ retrieval choices make a measurable difference once uncertainty is accounted for
   generators, as they depend only on retrieval). Refusals are counted outside RAGAS
   with an exact sentence match: refusal rate on out-of-corpus questions, false
   refusal rate on factual ones.
-- **Judge validation.** A seeded sample stratified by generator and by judge
-  faithfulness, labelled blind by a human on three levels; Spearman correlation,
-  MAE, judge-minus-human bias and Cohen's kappa.
+- **Judge agreement check.** A seeded sample of 40 answers, stratified by generator
+  and by judge faithfulness, labelled on three levels (0 / 0.5 / 1) without access
+  to the judge's scores; Spearman correlation, MAE, judge-minus-annotator bias and
+  Cohen's kappa. A first human pass was discarded by its author as unreliable. The
+  reported sample is a second, non-overlapping draw (the first 40 items excluded)
+  labelled by an LLM (`claude-opus-5-5`), so it measures agreement between two
+  models, not a human validation.
 - **Statistics.** 95% percentile bootstrap (10,000 resamples) over questions;
   comparisons use paired bootstrap differences on the questions scored in both.
 
@@ -101,20 +105,51 @@ Per-origin tables (neutral page subset vs chunk-based subset):
 ### 6.2 Generation and RAGAS
 
 <!-- BEGIN:generation -->
-_Pending: all runs judged by RAGAS, then `python -m ragk8s compare`._
+Generator `qwen3.8-27b`; judge `gemma4:12b-it-q8_0`. Mean with 95% bootstrap CI over questions.
+
+| Chunking | Retrieval | Faithfulness | Answer relevancy | Context precision | Context recall | Refused out-of-corpus | False refusals |
+|---|---|---|---|---|---|---|---|
+| fixed | hybrid_rerank | 0.98 [0.95, 1.00] | 0.88 [0.83, 0.91] | 0.89 [0.82, 0.95] | 0.96 [0.89, 1.00] | 1.00 [1.00, 1.00] | 0.02 [0.00, 0.07] |
+| structure | hybrid_rerank | 0.99 [0.98, 1.00] | 0.87 [0.83, 0.91] | 0.92 [0.87, 0.96] | 0.97 [0.91, 1.00] | 1.00 [1.00, 1.00] | 0.00 [0.00, 0.00] |
+| semantic | hybrid_rerank | 0.98 [0.96, 1.00] | 0.90 [0.86, 0.93] | 0.72 [0.63, 0.81] | 0.90 [0.81, 0.98] | 1.00 [1.00, 1.00] | 0.04 [0.00, 0.11] |
+| fixed | bm25 | 0.99 [0.98, 1.00] | 0.89 [0.85, 0.92] | 0.80 [0.70, 0.88] | 0.94 [0.88, 1.00] | 1.00 [1.00, 1.00] | 0.04 [0.00, 0.11] |
+| fixed | dense | 0.99 [0.96, 1.00] | 0.88 [0.84, 0.92] | 0.65 [0.56, 0.74] | 0.93 [0.84, 1.00] | 1.00 [1.00, 1.00] | 0.07 [0.00, 0.16] |
+| fixed | hybrid | 0.98 [0.95, 1.00] | 0.87 [0.83, 0.91] | 0.84 [0.76, 0.91] | 0.96 [0.89, 1.00] | 1.00 [1.00, 1.00] | 0.04 [0.00, 0.11] |
+
+Full tables and paired differences: [`results/comparison.md`](results/comparison.md).
 <!-- END:generation -->
 
 ### 6.3 Application vs reference generator
 
 <!-- BEGIN:models -->
-_Pending: reference generator run fully judged, then `python -m ragk8s compare`._
+Same contexts (`fixed_hybrid_rerank`), same prompt, same judge. Δ = paired bootstrap difference (* = CI excludes 0).
+
+| Metric | qwen3.8-27b | qwen2.5-7b-instruct | Δ |
+|---|---|---|---|
+| faithfulness | 0.98 [0.95, 1.00] | 0.94 [0.89, 0.99] | +0.039 [-0.008, +0.093] |
+| answer relevancy | 0.88 [0.83, 0.91] | 0.86 [0.80, 0.91] | -0.012 [-0.063, +0.036] |
+| citation coverage | 0.91 [0.84, 0.97] | 0.68 [0.56, 0.78] | +0.229 [+0.129, +0.338] * |
+| seconds per answer (mean) | 0.47 | 4.61 | — |
 <!-- END:models -->
 
-### 6.4 Judge agreement with a human
+### 6.4 Judge agreement check
 
 <!-- BEGIN:agreement -->
-_Pending: human labels (`python -m ragk8s validation export`, then `agree`)._
+40 answers labelled by an LLM (claude-opus-5-5, 0 / 0.5 / 1) without seeing the judge's scores: this is agreement between two models, not a human validation. Bias > 0 = judge more lenient than the annotator. n/a = one side gives the same value to every answer.
+
+| Metric | Spearman [95% CI] | MAE | Bias (judge - annotator) | Cohen's κ (≥ 0.5) | Mean, annotator / judge |
+|---|---|---|---|---|---|
+| faithfulness | -0.04 [-0.09, -0.03] | 0.04 | -0.01 [-0.05, +0.03] | n/a | 0.99 / 0.97 |
+| answer_relevancy | 0.27 [0.15, 0.46] | 0.13 | -0.11 [-0.15, -0.07] | n/a | 0.97 / 0.87 |
+| context_recall | 0.72 [0.52, 1.00] | 0.01 | +0.01 [+0.00, +0.04] | 1.00 | 0.96 / 0.97 |
 <!-- END:agreement -->
+
+Reading: the levels agree (MAE ≤ 0.13, faithfulness bias within ±0.05), but the
+judge's ability to *rank* answers cannot be tested on this sample: almost every
+answer is faithful and relevant (ceiling effect), so a rank correlation has very
+little variance to work with. The judge appears stricter than the annotator on
+answer relevancy (bias −0.11). Faithfulness and relevancy numbers in 6.2 should be
+read as levels, not as evidence that the judge separates good from bad answers.
 
 ### 6.5 Run conditions
 
@@ -122,8 +157,12 @@ _Pending: human labels (`python -m ragk8s validation export`, then `agree`)._
 | Model | Configuration | Provider | Model digest | Questions | Tokens / answer | s / answer | Code commit | Date (UTC) |
 |---|---|---|---|---|---|---|---|---|
 | qwen2.5:7b-instruct | fixed_hybrid_rerank | ollama | 845dbda0ea48 | 53 | 1342.8 | 4.61 | not recorded | 2026-11-22 13:16 |
-| qwen/qwen3.8-27b | fixed_hybrid_rerank | groq | — | 53 | 1396.7 | 0.47 | 1368703 | 2026-11-22 11:58 |
-| qwen/qwen3.8-27b | structure_hybrid_rerank | groq | — | 53 | 1438.7 | 0.5 | 1368703 (dirty) | 2026-11-22 12:10 |
+| qwen/qwen3.8-27b | fixed_bm25 | groq | — | 53 | 1428.8 | 0.51 | 6a96644 | 2026-11-24 13:08 |
+| qwen/qwen3.8-27b | fixed_dense | groq | — | 53 | 1451.2 | 0.51 | 6a96644 | 2026-11-24 13:08 |
+| qwen/qwen3.8-27b | fixed_hybrid | groq | — | 53 | 1433.8 | 0.5 | 6a96644 | 2026-11-24 13:22 |
+| qwen/qwen3.8-27b | fixed_hybrid_rerank | groq | — | 53 | 1396.7 | 0.47 | 6a96644 | 2026-11-24 13:08 |
+| qwen/qwen3.8-27b | semantic_hybrid_rerank | groq | — | 53 | 1439.6 | 0.48 | 6a96644 | 2026-11-24 13:08 |
+| qwen/qwen3.8-27b | structure_hybrid_rerank | groq | — | 53 | 1438.7 | 0.5 | 6a96644 | 2026-11-24 13:08 |
 <!-- END:runs -->
 
 ## 7. Limitations
@@ -134,15 +173,21 @@ _Pending: human labels (`python -m ragk8s validation export`, then `agree`)._
   validated by the author, not written independently by a human.
 - **Question origin.** 27 questions come from *structure* chunks; results are also
   reported on the page-based subset, which is small.
-- **Single judge.** RAGAS scores depend on one 12B judge; its agreement with a human
-  is measured on a small sample.
+- **Single, unvalidated judge.** RAGAS scores depend on one 12B judge. No human
+  validation is reported: the first human pass was discarded, and the agreement in
+  6.4 is with another LLM, on 40 answers dominated by a ceiling effect.
 - **Preview model and free tier.** `qwen/qwen3.8-27b` is a preview model on Groq; its
   serving is not guaranteed to be deterministic or to stay available.
 - **Traceability gaps, stated as they are.** The reference 7B run on Kaggle has no
   commit in its metadata (no git checkout there); it used commit `23ff591` recorded in
-  the dataset manifest. One application run (`structure_hybrid_rerank`) is flagged
-  `-dirty` because unrelated files (CLI, docs) were edited while it ran; the
-  generation code was unchanged.
+  the dataset manifest. All six 27B runs are recorded at the clean commit `6a96644`;
+  their answers were served from the run cache, whose key covers every input
+  (model, prompt, contexts, decoding parameters).
+- **Application trade-off.** The live app serves `fixed_hybrid` (no reranker: the
+  cross-encoder takes about 5–10 s per query on one vCPU). Its MRR gap with the best
+  configuration is −0.066 [−0.172, +0.036], not significant. Reranked results are
+  shown only for evaluation questions, precomputed. The embedder runs in ONNX fp32
+  (exact parity with PyTorch; int8 drifted).
 - **Corpus scope.** English concepts/tasks/tutorials only, frozen at one commit.
 
 ## 8. Reproducibility

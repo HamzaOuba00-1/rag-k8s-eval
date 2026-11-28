@@ -1,0 +1,61 @@
+{
+  "n_items": 40,
+  "sheet": "eval\\review\\judge_validation_claude.xlsx",
+  "annotator": "claude-opus-5-5",
+  "metrics": {
+    "faithfulness": {
+      "human_label": "supported",
+      "n": 40,
+      "spearman": -0.03673591791853225,
+      "spearman_ci": [
+        -0.08671099695241201,
+        -0.025641025641025637
+      ],
+      "mae": 0.0375,
+      "bias_judge_minus_human": -0.0125,
+      "bias_ci": [
+        -0.05,
+        0.025
+      ],
+      "kappa_binary_0.5": NaN,
+      "human_mean": 0.9875,
+      "judge_mean": 0.975
+    },
+    "answer_relevancy": {
+      "human_label": "relevant",
+      "n": 40,
+      "spearman": 0.2684023924251441,
+      "spearman_ci": [
+        0.14595723435773847,
+        0.4614985781504797
+      ],
+      "mae": 0.13252409461067835,
+      "bias_judge_minus_human": -0.10941609934933332,
+      "bias_ci": [
+        -0.15087635310324835,
+        -0.06607546181394679
+      ],
+      "kappa_binary_0.5": NaN,
+      "human_mean": 0.975,
+      "judge_mean": 0.8655839006506667
+    },
+    "context_recall": {
+      "human_label": "context_covers",
+      "n": 40,
+      "spearman": 0.7161148740394327,
+      "spearman_ci": [
+        0.5198752449100363,
+        1.0
+      ],
+      "mae": 0.0125,
+      "bias_judge_minus_human": 0.0125,
+      "bias_ci": [
+        0.0,
+        0.0375
+      ],
+      "kappa_binary_0.5": 1.0,
+      "human_mean": 0.9625,
+      "judge_mean": 0.975
+    }
+  }
+}

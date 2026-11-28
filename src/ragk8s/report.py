@@ -126,21 +126,34 @@ def models_block() -> str:
     return "\n".join(lines)
 
 
+def _num(value: float, fmt: str = ".2f") -> str:
+    return "n/a" if value != value else format(value, fmt)  # NaN: a side is constant
+
+
 def agreement_block() -> str:
     path = RESULTS / "judge_agreement.json"
     if not path.exists():
-        return "_Pending: human labels (`python -m ragk8s validation export`, then `agree`)._"
+        return "_Pending: judge validation labels (`python -m ragk8s validation export`, then `agree`)._"
     data = json.loads(path.read_text(encoding="utf-8"))
+    annotator = data.get("annotator", "human")
+    if annotator == "human":
+        who = f"{data['n_items']} answers labelled blind by a human (0 / 0.5 / 1)."
+    else:
+        who = (
+            f"{data['n_items']} answers labelled by an LLM ({annotator}, 0 / 0.5 / 1) without seeing the judge's "
+            "scores: this is agreement between two models, not a human validation."
+        )
     lines = [
-        f"{data['n_items']} answers labelled blind by a human (0 / 0.5 / 1). Bias > 0 = judge more lenient than the human.",
+        f"{who} Bias > 0 = judge more lenient than the annotator. n/a = one side gives the same value to every answer.",
         "",
-        "| Metric | Spearman [95% CI] | MAE | Bias (judge - human) | Cohen's κ (≥ 0.5) |",
-        "|---|---|---|---|---|",
+        "| Metric | Spearman [95% CI] | MAE | Bias (judge - annotator) | Cohen's κ (≥ 0.5) | Mean, annotator / judge |",
+        "|---|---|---|---|---|---|",
     ]
     for metric, a in data["metrics"].items():
         lines.append(
-            f"| {metric} | {a['spearman']:.2f} [{a['spearman_ci'][0]:.2f}, {a['spearman_ci'][1]:.2f}] | {a['mae']:.2f} | "
-            f"{a['bias_judge_minus_human']:+.2f} [{a['bias_ci'][0]:+.2f}, {a['bias_ci'][1]:+.2f}] | {a['kappa_binary_0.5']:.2f} |"
+            f"| {metric} | {_num(a['spearman'])} [{_num(a['spearman_ci'][0])}, {_num(a['spearman_ci'][1])}] | "
+            f"{a['mae']:.2f} | {a['bias_judge_minus_human']:+.2f} [{a['bias_ci'][0]:+.2f}, {a['bias_ci'][1]:+.2f}] | "
+            f"{_num(a['kappa_binary_0.5'])} | {a['human_mean']:.2f} / {a['judge_mean']:.2f} |"
         )
     return "\n".join(lines)
 
