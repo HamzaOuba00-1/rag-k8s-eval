@@ -127,6 +127,7 @@ class VisitorLimiter:
         self._key = key or secrets.token_bytes(32)  # new key per process: hashes can't be linked across restarts
         self._hits: dict[str, deque[float]] = {}
         self._lock = threading.Lock()
+        self._calls = 0
 
     def visitor_id(self, ip: str) -> str:
         return hmac.new(self._key, ip.encode(), hashlib.sha256).hexdigest()[:16]
@@ -145,8 +146,17 @@ class VisitorLimiter:
         with self._lock:
             return max(0, self.hourly_limit - len(self._recent(self.visitor_id(ip))))
 
+    def _prune(self) -> None:
+        """Forget visitors with no request in the last hour (memory stays bounded)."""
+        now = self._clock()
+        for vid in [v for v, hits in self._hits.items() if not hits or now - hits[-1] >= 3600]:
+            del self._hits[vid]
+
     def try_use(self, ip: str) -> bool:
         with self._lock:
+            self._calls += 1
+            if self._calls % 256 == 0:
+                self._prune()
             vid = self.visitor_id(ip)
             if len(self._recent(vid)) >= self.hourly_limit:
                 return False

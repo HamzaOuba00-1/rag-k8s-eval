@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createMemoryRouter, RouterProvider } from "react-router";
 import type { AskResponse, Quota, ScoresResponse, SearchResponse } from "./api/client";
@@ -79,7 +79,29 @@ test("ask shows precomputed answers per model with citation links", async () => 
   expect(screen.getByText("kubectl drain").tagName).toBe("CODE");
   await user.click(screen.getByRole("tab", { name: /qwen2.5-7b-instruct/ }));
   expect(screen.getByText(/Use drain/)).toBeInTheDocument();
+  await user.click(screen.getByRole("button", { name: /Show excerpts/ }));
   expect(screen.getByText("Retrieved, not cited")).toBeInTheDocument();
+});
+
+test("ask keeps a thread of questions and a new chat clears it", async () => {
+  const user = userEvent.setup();
+  renderAt("/ask");
+  await user.type(screen.getByLabelText("Question"), "How do I drain a node?{Enter}");
+  expect(await screen.findByText(/answers from the evaluation run/)).toBeInTheDocument();
+  await user.type(screen.getByLabelText("Question"), "What is a Pod?{Enter}");
+  await waitFor(() => expect(screen.getAllByRole("article")).toHaveLength(2));
+  await waitFor(() => expect(screen.queryByRole("status")).toBeNull());
+  expect(screen.getByText("2 questions · this thread is not saved")).toBeInTheDocument();
+  await user.click(screen.getAllByRole("button", { name: /New chat/ })[0]!);
+  expect(screen.queryAllByRole("article")).toHaveLength(0);
+});
+
+test("citations to a non-https URL are not rendered as links", async () => {
+  askBody = { ...precomputed, sources: [{ ...source(1, "Bad"), url: "javascript:alert(1)" }] };
+  renderAt("/ask?q=How%20do%20I%20drain%20a%20node%3F");
+  expect(await screen.findByText(/answers from the evaluation run/)).toBeInTheDocument();
+  expect(screen.queryByRole("link", { name: "[1]" })).toBeNull();
+  expect(screen.getAllByText("[1]", { selector: "span" }).length).toBeGreaterThan(0);
 });
 
 test("ask shows the demo message and keeps the live sources", async () => {

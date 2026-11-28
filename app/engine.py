@@ -105,11 +105,16 @@ def _source_rank(sources: Sequence[Mapping[str, Any]], doc_id: str | None) -> in
 LiveLLM = Callable[[str, Sequence[Hit]], Generation]
 
 
-def groq_llm(api_key: str, model: str | None = None, max_wait: float = 3.0) -> tuple[LiveLLM, str]:
-    """Groq backend for web requests: never sleeps more than ``max_wait`` seconds."""
+def groq_llm(
+    api_key: str, model: str | None = None, max_wait: float = 3.0, timeout: float = 30.0
+) -> tuple[LiveLLM, str]:
+    """Groq backend for web requests: never sleeps more than ``max_wait`` seconds and
+    never waits more than ``timeout`` seconds for an answer (the evaluation allows 120 s)."""
+    import httpx
+
     from ragk8s import config
     from ragk8s.generation import groq_backend
-    from ragk8s.groq_client import GroqClient, UsageLedger
+    from ragk8s.groq_client import BASE_URL, GroqClient, UsageLedger
 
     def short_sleep(seconds: float) -> None:
         if seconds > max_wait:
@@ -117,7 +122,8 @@ def groq_llm(api_key: str, model: str | None = None, max_wait: float = 3.0) -> t
         time.sleep(seconds)
 
     ledger = UsageLedger(Path(tempfile.gettempdir()) / "doctruth_groq_usage.json")
-    client = GroqClient(api_key=api_key, ledger=ledger, sleep=short_sleep, max_retries=1)
+    http = httpx.Client(base_url=BASE_URL, timeout=timeout)
+    client = GroqClient(api_key=api_key, ledger=ledger, sleep=short_sleep, max_retries=1, http=http)
     backend = groq_backend(model or config.GROQ_MODEL, client=client)
     return backend.generate, backend.model
 

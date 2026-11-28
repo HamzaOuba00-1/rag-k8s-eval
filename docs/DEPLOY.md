@@ -115,6 +115,31 @@ The first generation reads the image's files much more slowly (the 91 MB model t
 4.1 s against 0.9 s). Once an instance is up, requests take tens of milliseconds.
 Keeping an instance always on would remove the wait but is not free.
 
+### Security
+
+What the app does on its own (`app/security.py`, `app/quota.py`):
+
+- **Headers on every response**: `Content-Security-Policy` (front end: this origin only;
+  the one inline script of `index.html` is allowed by its SHA-256 hash, computed from
+  the built file at startup; API: `default-src 'none'`), `X-Content-Type-Options`,
+  `X-Frame-Options: DENY`, `Referrer-Policy`, `Permissions-Policy`,
+  `Cross-Origin-Opener-Policy`, `Strict-Transport-Security`.
+- **Request limits**: request bodies over 16 KiB are refused (413), questions are 3 to
+  500 characters, `/api/search` is limited per visitor per hour.
+- **Cost limits**: live answers are capped per day (Cloud Storage counter) and per
+  visitor per hour; at most one instance (`--max-instances=1`); a Groq call waits at
+  most 30 s; the Groq account has no payment method.
+- **No personal data kept**: visitors are counted by an HMAC of their address with a
+  key that changes at each start, in memory only; the app neither logs nor stores
+  questions (they travel in POST bodies, which Cloud Run does not log; a question put
+  in a page URL by hand, such as a shared `/compare?q=` link, appears in the Cloud Run
+  request log like any URL); the chat thread lives in the browser tab only.
+- **Secrets**: the Groq key is read from Secret Manager; it is never in the image or
+  in the repository. Swagger UI is off (it loads scripts from a CDN); the schema is at
+  `/api/openapi.json`.
+- **Rendering**: answers are rendered as text, never as HTML; only `https://` source
+  links are rendered as links.
+
 ## 4. Turn on live answers (after the evaluation is complete)
 
 The app and the evaluation share the Groq account's daily token limit, so live

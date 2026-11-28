@@ -233,7 +233,7 @@ hybrid + rerank contexts of the evaluation runs, copied into one bundle file.
 ```bash
 pip install -e ".[dev,onnx,app]"
 python -m ragk8s app-bundle                 # app_data/bundle.json from results/
-uvicorn app.main:app --port 8080            # http://127.0.0.1:8080/api/docs
+uvicorn app.main:app --port 8080            # http://127.0.0.1:8080/api/openapi.json
 ```
 
 Live answers need `GROQ_API_KEY` in the environment; without it the app runs in demo

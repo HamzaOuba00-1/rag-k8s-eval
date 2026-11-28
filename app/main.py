@@ -20,6 +20,7 @@ from ragk8s import __version__, config
 from . import schemas
 from .engine import LIVE_STRATEGY, Engine, LazyRetrievers, NoReranker, RetrieverLike, groq_llm
 from .quota import GcsCounterStore, MemoryCounterStore, QuotaGate, VisitorLimiter
+from .security import hardening_middleware
 from .settings import Settings
 
 
@@ -97,9 +98,13 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
         title="DocTruth API",
         version=__version__,
         openapi_url="/api/openapi.json",
-        docs_url="/api/docs",
+        # No Swagger UI: it loads scripts from a CDN, which the Content-Security-Policy forbids.
+        # The schema stays public at /api/openapi.json.
+        docs_url=None,
         redoc_url=None,
     )
+    static = settings.static_dir
+    app.middleware("http")(hardening_middleware(static / "index.html"))
 
     @app.get("/api/health", response_model=schemas.Health)
     def health() -> dict[str, Any]:
@@ -144,7 +149,6 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
             "measured_on": b.get("created_at"),
         }
 
-    static = settings.static_dir
     if (static / "index.html").exists():
 
         @app.get("/{path:path}", include_in_schema=False)

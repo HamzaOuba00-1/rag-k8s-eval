@@ -317,3 +317,56 @@ def test_lazy_retrievers_build_each_strategy_once_on_first_use() -> None:
     assert built == ["fixed", "semantic"]
     with pytest.raises(KeyError):
         lazy["other"]
+
+
+def _static_client(tmp_path: Any) -> TestClient:
+    from dataclasses import replace
+
+    (tmp_path / "index.html").write_text(
+        "<html><head><script>document.documentElement.dataset.theme = 'dark';</script></head></html>",
+        encoding="utf-8",
+    )
+    (tmp_path / "assets").mkdir()
+    (tmp_path / "assets" / "index-abc.js").write_text("console.log(1)", encoding="utf-8")
+    return TestClient(create_app(replace(Settings(), static_dir=tmp_path), engine=_engine()))
+
+
+def test_security_headers_and_a_hash_based_csp_on_the_front_end(tmp_path: Any) -> None:
+    import base64
+    import hashlib
+
+    client = _static_client(tmp_path)
+    page = client.get("/ask")
+    assert page.status_code == 200
+    script = "document.documentElement.dataset.theme = 'dark';"
+    digest = base64.b64encode(hashlib.sha256(script.encode()).digest()).decode()
+    csp = page.headers["content-security-policy"]
+    script_src = next(d.strip() for d in csp.split(";") if d.strip().startswith("script-src"))
+    assert script_src == f"script-src 'self' 'sha256-{digest}'"
+    assert "frame-ancestors 'none'" in csp
+    assert page.headers["x-content-type-options"] == "nosniff"
+    assert page.headers["x-frame-options"] == "DENY"
+    assert page.headers["cache-control"] == "no-cache"
+    assert client.get("/assets/index-abc.js").headers["cache-control"].endswith("immutable")
+
+    api = client.get("/api/quota")
+    assert api.headers["content-security-policy"] == "default-src 'none'; frame-ancestors 'none'"
+    assert api.headers["cache-control"] == "no-store"
+
+
+def test_request_bodies_are_size_limited_and_swagger_ui_is_off() -> None:
+    client = _client(_engine())
+    big = client.post("/api/ask", content=b'{"question": "' + b"a" * 20000 + b'"}',
+                      headers={"content-type": "application/json"})
+    assert big.status_code == 413
+    assert client.get("/api/docs").status_code == 404
+    assert client.get("/api/openapi.json").status_code == 200
+
+
+def test_static_files_cannot_escape_the_build_folder(tmp_path: Any) -> None:
+    (tmp_path / "secret.txt").write_text("nope", encoding="utf-8")
+    site = tmp_path / "site"
+    site.mkdir()
+    client = _static_client(site)
+    resp = client.get("/..%2Fsecret.txt")
+    assert "nope" not in resp.text

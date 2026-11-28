@@ -79,3 +79,14 @@ def test_gate_counts_only_allowed_answers() -> None:
     assert gate.acquire("a") is None
     assert gate.acquire("b") == "Today's live answers are used up."
     assert gate.status("b")["remaining_today"] == 0
+
+
+def test_visitor_limiter_forgets_idle_visitors() -> None:
+    t = [0.0]
+    limiter = VisitorLimiter(5, clock=lambda: t[0], key=b"k")
+    for i in range(255):
+        limiter.try_use(f"10.0.0.{i}")
+    assert len(limiter._hits) == 255
+    t[0] = 3601.0
+    limiter.try_use("10.0.1.1")  # 256th call: prunes the visitors idle for an hour
+    assert len(limiter._hits) == 1
