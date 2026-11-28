@@ -160,6 +160,129 @@
   },
   "components": {
     "schemas": {
+      "AgreementRow": {
+        "properties": {
+          "metric": {
+            "type": "string",
+            "title": "Metric"
+          },
+          "n": {
+            "type": "integer",
+            "title": "N"
+          },
+          "spearman": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spearman"
+          },
+          "spearman_ci": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spearman Ci"
+          },
+          "mae": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mae"
+          },
+          "bias": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bias",
+            "description": "Judge minus annotator (> 0: judge more lenient)"
+          },
+          "bias_ci": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bias Ci"
+          },
+          "kappa": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kappa",
+            "description": "Cohen's kappa at the 0.5 threshold; null when one side is constant"
+          },
+          "annotator_mean": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Annotator Mean"
+          },
+          "judge_mean": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Judge Mean"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric",
+          "n",
+          "spearman",
+          "spearman_ci",
+          "mae",
+          "bias",
+          "bias_ci",
+          "kappa",
+          "annotator_mean",
+          "judge_mean"
+        ],
+        "title": "AgreementRow",
+        "description": "Agreement between the judge and the annotator on one RAGAS metric."
+      },
       "Answer": {
         "properties": {
           "model": {
@@ -614,15 +737,13 @@
           "judge_agreement": {
             "anyOf": [
               {
-                "additionalProperties": true,
-                "type": "object"
+                "$ref": "#/components/schemas/JudgeAgreement"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Judge Agreement",
-            "description": "Judge vs human ratings, once complete"
+            "description": "Judge vs annotator on a blind sample, once complete"
           },
           "generated_at": {
             "anyOf": [
@@ -712,6 +833,33 @@
           "bundle_created_at"
         ],
         "title": "Health"
+      },
+      "JudgeAgreement": {
+        "properties": {
+          "annotator": {
+            "type": "string",
+            "title": "Annotator",
+            "description": "Who labelled the sample: 'human' or a model name"
+          },
+          "n_items": {
+            "type": "integer",
+            "title": "N Items"
+          },
+          "metrics": {
+            "items": {
+              "$ref": "#/components/schemas/AgreementRow"
+            },
+            "type": "array",
+            "title": "Metrics"
+          }
+        },
+        "type": "object",
+        "required": [
+          "annotator",
+          "n_items",
+          "metrics"
+        ],
+        "title": "JudgeAgreement"
       },
       "Quota": {
         "properties": {

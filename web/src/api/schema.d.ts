@@ -110,6 +110,38 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * AgreementRow
+         * @description Agreement between the judge and the annotator on one RAGAS metric.
+         */
+        AgreementRow: {
+            /** Metric */
+            metric: string;
+            /** N */
+            n: number;
+            /** Spearman */
+            spearman: number | null;
+            /** Spearman Ci */
+            spearman_ci: number[] | null;
+            /** Mae */
+            mae: number | null;
+            /**
+             * Bias
+             * @description Judge minus annotator (> 0: judge more lenient)
+             */
+            bias: number | null;
+            /** Bias Ci */
+            bias_ci: number[] | null;
+            /**
+             * Kappa
+             * @description Cohen's kappa at the 0.5 threshold; null when one side is constant
+             */
+            kappa: number | null;
+            /** Annotator Mean */
+            annotator_mean: number | null;
+            /** Judge Mean */
+            judge_mean: number | null;
+        };
         /** Answer */
         Answer: {
             /** Model */
@@ -255,13 +287,8 @@ export interface components {
             configs: components["schemas"]["GenerationRow"][];
             /** @description Reference model with the best config */
             reference: components["schemas"]["GenerationRow"] | null;
-            /**
-             * Judge Agreement
-             * @description Judge vs human ratings, once complete
-             */
-            judge_agreement: {
-                [key: string]: unknown;
-            } | null;
+            /** @description Judge vs annotator on a blind sample, once complete */
+            judge_agreement: components["schemas"]["JudgeAgreement"] | null;
             /** Generated At */
             generated_at: string | null;
         };
@@ -288,6 +315,18 @@ export interface components {
             live_llm: boolean;
             /** Bundle Created At */
             bundle_created_at: string | null;
+        };
+        /** JudgeAgreement */
+        JudgeAgreement: {
+            /**
+             * Annotator
+             * @description Who labelled the sample: 'human' or a model name
+             */
+            annotator: string;
+            /** N Items */
+            n_items: number;
+            /** Metrics */
+            metrics: components["schemas"]["AgreementRow"][];
         };
         /** Quota */
         Quota: {

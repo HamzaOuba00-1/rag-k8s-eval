@@ -13,6 +13,8 @@ export function HomePage() {
   const best = sc?.retrieval.find((r) => r.subset === "all" && r.config === sc.best_config);
   const gen = sc?.generation?.configs.find((c) => c.config === sc.best_config) ?? null;
   const refusals = gen?.refusal_rate ? Math.round(gen.refusal_rate.mean * gen.n_impossible) : null;
+  // Answerable questions that were answered (not refused): measured exactly, no LLM judge involved.
+  const answered = gen?.false_refusal_rate ? gen.n_factual - Math.round(gen.false_refusal_rate.mean * gen.n_factual) : null;
 
   const factual = examples.data?.filter((e) => e.category === "factual").slice(0, 3) ?? [];
   const impossible = examples.data?.find((e) => e.category !== "factual");
@@ -52,10 +54,10 @@ export function HomePage() {
             sub={`${best?.n ?? 0} answerable questions`} />
           <ScoreRing label="Correct refusals" value={gen?.refusal_rate?.mean ?? null}
             display={`${refusals}/${gen?.n_impossible}`} sub="questions the docs can't answer" />
-          <ScoreRing label="Faithfulness" value={gen?.faithfulness?.mean ?? null}
-            display={gen?.faithfulness?.mean.toFixed(2)} sub="LLM judge" />
-          <ScoreRing label="Answer relevancy" value={gen?.answer_relevancy?.mean ?? null}
-            display={gen?.answer_relevancy?.mean.toFixed(2)} sub="LLM judge" />
+          <ScoreRing label="Citation coverage" value={gen?.citation_coverage?.mean ?? null}
+            display={gen?.citation_coverage?.mean.toFixed(2)} sub="share of sentences with a citation" />
+          <ScoreRing label="Answered" value={answered === null || !gen ? null : answered / gen.n_factual}
+            display={`${answered}/${gen?.n_factual}`} sub="answerable questions not refused" />
         </div>
       </section>
 

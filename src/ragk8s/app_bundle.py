@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import csv
 import json
+import math
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -141,8 +142,44 @@ def _generation(summary: dict[str, Any] | None) -> dict[str, Any] | None:
         "judge_complete": complete,
         "configs": summary.get("configs", []),
         "reference": summary.get("reference"),
-        "judge_agreement": summary.get("judge_agreement") if complete else None,
+        "judge_agreement": _agreement(summary.get("judge_agreement")) if complete else None,
         "generated_at": summary.get("generated_at"),
+    }
+
+
+def _finite(value: Any) -> Any:
+    """NaN and infinities become null: they are not valid JSON and the API would refuse them."""
+    if isinstance(value, float):
+        return value if math.isfinite(value) else None
+    if isinstance(value, dict):
+        return {k: _finite(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_finite(v) for v in value]
+    return value
+
+
+def _agreement(raw: dict[str, Any] | None) -> dict[str, Any] | None:
+    """results/judge_agreement.json in the shape of app.schemas.JudgeAgreement."""
+    if not raw or not raw.get("metrics"):
+        return None
+    return {
+        "annotator": raw.get("annotator", "human"),
+        "n_items": raw.get("n_items", 0),
+        "metrics": [
+            {
+                "metric": name,
+                "n": m.get("n", 0),
+                "spearman": m.get("spearman"),
+                "spearman_ci": m.get("spearman_ci"),
+                "mae": m.get("mae"),
+                "bias": m.get("bias_judge_minus_human"),
+                "bias_ci": m.get("bias_ci"),
+                "kappa": m.get("kappa_binary_0.5"),
+                "annotator_mean": m.get("human_mean"),
+                "judge_mean": m.get("judge_mean"),
+            }
+            for name, m in raw["metrics"].items()
+        ],
     }
 
 
@@ -193,6 +230,7 @@ def build(
             "onnx_parity": _json_or_none(results / "onnx_parity.json"),
         },
     }
+    bundle = _finite(bundle)
     write_json(out, bundle)
     return {
         "path": str(out),

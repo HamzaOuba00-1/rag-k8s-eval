@@ -1,4 +1,4 @@
-import { api, type GenerationRow } from "../api/client";
+import { api, type GenerationRow, type JudgeAgreement } from "../api/client";
 import { Card, ErrorNote } from "../components/Cards";
 import { ci, configLabel, num, signed, significant } from "../lib/format";
 import { useApi } from "../lib/useApi";
@@ -9,8 +9,8 @@ function GenRows({ rows }: { rows: (GenerationRow | null | undefined)[] }) {
     ["Citation coverage", (r) => ci(r.citation_coverage)],
     ["Correct refusals", (r) => (r.refusal_rate ? `${Math.round(r.refusal_rate.mean * r.n_impossible)}/${r.n_impossible}` : "pending")],
     ["False refusals", (r) => (r.false_refusal_rate ? `${Math.round(r.false_refusal_rate.mean * r.n_factual)}/${r.n_factual}` : "pending")],
-    ["Faithfulness", (r) => ci(r.faithfulness)],
-    ["Answer relevancy", (r) => ci(r.answer_relevancy)],
+    ["Faithfulness (LLM judge)", (r) => ci(r.faithfulness)],
+    ["Answer relevancy (LLM judge)", (r) => ci(r.answer_relevancy)],
     ["Seconds per answer", (r) => num(r.seconds_mean)],
   ];
   return (
@@ -30,6 +30,48 @@ function GenRows({ rows }: { rows: (GenerationRow | null | undefined)[] }) {
         ))}
       </tbody>
     </table>
+  );
+}
+
+const interval = (v: number[] | null | undefined) => (v && v.length === 2 ? ` [${num(v[0])}, ${num(v[1])}]` : "");
+
+function Agreement({ a }: { a: JudgeAgreement }) {
+  const human = a.annotator === "human";
+  return (
+    <>
+      <p className="text-sm text-muted">
+        {a.n_items} answers labelled blind (0 / 0.5 / 1) by {human ? "a human" : <code className="text-xs">{a.annotator}</code>}.
+      </p>
+      {!human && (
+        <p className="mt-1 text-xs text-warn">Agreement between two models, not a human validation.</p>
+      )}
+      <table className="mt-3 w-full text-xs">
+        <thead>
+          <tr className="text-left text-[11px] tracking-wide text-faint uppercase">
+            <th className="py-1 font-normal">Metric</th>
+            <th className="py-1 font-normal">Spearman</th>
+            <th className="py-1 font-normal">MAE</th>
+            <th className="py-1 font-normal">Bias</th>
+            <th className="py-1 font-normal">Means</th>
+          </tr>
+        </thead>
+        <tbody>
+          {a.metrics.map((m) => (
+            <tr key={m.metric} className="border-t border-line">
+              <td className="py-1.5">{m.metric.replace("_", " ")}</td>
+              <td className="py-1.5 tabular-nums">{num(m.spearman)}<span className="text-faint">{interval(m.spearman_ci)}</span></td>
+              <td className="py-1.5 tabular-nums">{num(m.mae)}</td>
+              <td className="py-1.5 tabular-nums">{m.bias === null ? "–" : `${m.bias >= 0 ? "+" : "−"}${Math.abs(m.bias).toFixed(2)}`}</td>
+              <td className="py-1.5 tabular-nums">{num(m.annotator_mean)} / {num(m.judge_mean)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p className="mt-2 text-xs text-muted">
+        Means: annotator / judge. Bias = judge minus annotator. Levels agree, but almost every answer is rated good
+        (ceiling effect), so whether the judge can rank answers is not tested here.
+      </p>
+    </>
   );
 }
 
@@ -102,11 +144,11 @@ export function ScoresPage() {
           </Card>
           <Card>
             <h2 className="mb-2 font-display text-xl">LLM judge</h2>
-            <p className="text-sm text-muted">
-              {gen?.judge_complete
-                ? `Judge vs human ratings: ${JSON.stringify(gen.judge_agreement)}`
-                : "pending: the judge run and its check against human ratings are not complete."}
-            </p>
+            {gen?.judge_complete && gen.judge_agreement ? (
+              <Agreement a={gen.judge_agreement} />
+            ) : (
+              <p className="text-sm text-muted">pending: the judge run and its agreement check are not complete.</p>
+            )}
           </Card>
           <Card>
             <h2 className="mb-2 font-display text-xl">This deployment</h2>

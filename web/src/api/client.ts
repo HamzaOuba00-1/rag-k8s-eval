@@ -12,6 +12,7 @@ export type SearchCell = S["SearchCell"];
 export type ScoresResponse = S["ScoresResponse"];
 export type RetrievalRow = S["RetrievalRow"];
 export type GenerationRow = S["GenerationRow"];
+export type JudgeAgreement = S["JudgeAgreement"];
 export type Estimate = S["Estimate"];
 export type Strategy = SearchCell["strategy"];
 export type Method = SearchCell["method"];

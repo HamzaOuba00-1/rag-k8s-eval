@@ -125,10 +125,25 @@ def test_judge_metrics_stay_null_until_the_judge_run_is_complete(tree: Path) -> 
     assert gen["configs"][1]["faithfulness"] is None and gen["configs"][1]["citation_coverage"] is not None
     assert gen["judge_agreement"] is None
 
+    agreement = {
+        "n_items": 40,
+        "annotator": "claude-opus-5-5",
+        "metrics": {
+            "faithfulness": {
+                "n": 40, "spearman": -0.04, "spearman_ci": [-0.09, -0.03], "mae": 0.04,
+                "bias_judge_minus_human": -0.01, "bias_ci": [-0.05, 0.03], "kappa_binary_0.5": float("nan"),
+                "human_mean": 0.99, "judge_mean": 0.97,
+            }
+        },
+    }
     write_json(
         results / "summary.json",
-        {"configs": [_row("a", True)], "reference": _row("a", True), "judge_agreement": {"spearman": 0.7}},
+        {"configs": [_row("a", True)], "reference": _row("a", True), "judge_agreement": agreement},
     )
     assert app_bundle.build(out, results, results / "retrieval", results / "runs")["judge_complete"] is True
-    gen = json.loads(out.read_text(encoding="utf-8"))["scores"]["generation"]
-    assert gen["judge_agreement"] == {"spearman": 0.7}
+    text = out.read_text(encoding="utf-8")
+    assert "NaN" not in text
+    gen = json.loads(text)["scores"]["generation"]
+    assert gen["judge_agreement"]["annotator"] == "claude-opus-5-5"
+    row = gen["judge_agreement"]["metrics"][0]
+    assert row["metric"] == "faithfulness" and row["bias"] == -0.01 and row["kappa"] is None

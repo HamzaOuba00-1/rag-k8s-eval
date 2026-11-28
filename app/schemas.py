@@ -148,6 +148,27 @@ class GenerationRow(BaseModel):
     context_recall: Estimate | None
 
 
+class AgreementRow(BaseModel):
+    """Agreement between the judge and the annotator on one RAGAS metric."""
+
+    metric: str
+    n: int
+    spearman: float | None
+    spearman_ci: list[float] | None
+    mae: float | None
+    bias: float | None = Field(description="Judge minus annotator (> 0: judge more lenient)")
+    bias_ci: list[float] | None
+    kappa: float | None = Field(description="Cohen's kappa at the 0.5 threshold; null when one side is constant")
+    annotator_mean: float | None
+    judge_mean: float | None
+
+
+class JudgeAgreement(BaseModel):
+    annotator: str = Field(description="Who labelled the sample: 'human' or a model name")
+    n_items: int
+    metrics: list[AgreementRow]
+
+
 class GenerationScores(BaseModel):
     app_model: str | None
     reference_model: str | None
@@ -156,7 +177,7 @@ class GenerationScores(BaseModel):
     judge_complete: bool
     configs: list[GenerationRow]
     reference: GenerationRow | None = Field(description="Reference model with the best config")
-    judge_agreement: dict[str, Any] | None = Field(description="Judge vs human ratings, once complete")
+    judge_agreement: JudgeAgreement | None = Field(description="Judge vs annotator on a blind sample, once complete")
     generated_at: str | None
 
 

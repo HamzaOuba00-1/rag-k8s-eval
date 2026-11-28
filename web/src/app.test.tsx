@@ -62,10 +62,11 @@ function renderAt(path: string) {
   return render(<RouterProvider router={createMemoryRouter(routes, { initialEntries: [path] })} />);
 }
 
-test("home shows measured MRR and pending judge scores", async () => {
+test("home shows measured MRR and pending generation scores", async () => {
   renderAt("/");
   expect(await screen.findByRole("img", { name: "Retrieval MRR: 0.84" })).toBeInTheDocument();
-  expect(screen.getByRole("img", { name: "Faithfulness: pending" })).toBeInTheDocument();
+  expect(screen.getByRole("img", { name: "Citation coverage: pending" })).toBeInTheDocument();
+  expect(screen.queryByRole("img", { name: /Faithfulness/ })).not.toBeInTheDocument();
   expect(await screen.findByText("of 80 left")).toBeInTheDocument();
 });
 
@@ -115,6 +116,34 @@ test("scores list only the main subset and flag the live config", async () => {
   expect(within(list).getByText("live")).toBeInTheDocument();
   expect(screen.getByText(/not significant/)).toBeInTheDocument();
   expect(screen.getAllByText(/pending/).length).toBeGreaterThan(0);
+});
+
+test("scores name an LLM annotator and say it is not a human validation", async () => {
+  const row = {
+    model: "qwen3.8-27b", config: "fixed_hybrid_rerank", chunking: "fixed" as const, retrieval: "hybrid_rerank" as const,
+    n_factual: 45, n_impossible: 8, refusal_rate: est(1), false_refusal_rate: est(0.02), citation_coverage: est(0.91),
+    answers_with_invalid_citation: 0, tokens_mean: 1400, seconds_mean: 0.47, provider: "groq", generated_at: null,
+    judge_complete: true, faithfulness: est(0.98), answer_relevancy: est(0.88), context_precision: est(0.89),
+    context_recall: est(0.97),
+  };
+  const withJudge: ScoresResponse = {
+    ...scores,
+    generation: {
+      app_model: "qwen3.8-27b", reference_model: "qwen2.5-7b-instruct", best_config: "fixed_hybrid_rerank",
+      judge: null, judge_complete: true, configs: [row], reference: { ...row, model: "qwen2.5-7b-instruct" },
+      generated_at: null,
+      judge_agreement: {
+        annotator: "claude-opus-5-5", n_items: 40,
+        metrics: [{ metric: "faithfulness", n: 40, spearman: -0.04, spearman_ci: [-0.09, -0.03], mae: 0.04,
+          bias: -0.01, bias_ci: [-0.05, 0.03], kappa: null, annotator_mean: 0.99, judge_mean: 0.97 }],
+      },
+    },
+  };
+  vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify(withJudge), { status: 200 })));
+  renderAt("/scores");
+  expect(await screen.findByText("claude-opus-5-5")).toBeInTheDocument();
+  expect(screen.getByText(/not a human validation/)).toBeInTheDocument();
+  expect(screen.getByText("−0.01")).toBeInTheDocument();
 });
 
 test("the theme toggle switches between dark and light", async () => {
